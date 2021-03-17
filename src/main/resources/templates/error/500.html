@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>500 Server Error</title>
+</head>
+<body>
+<h1 style="text-align: center">500 Something Went Wrong</h1>
+<hr/>
+<p style="text-align: center">服务器出了点问题。</p>
+</body>
+</html>

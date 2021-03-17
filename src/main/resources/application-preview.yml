@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://47.105.128.150:3306/free-fs?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#开启演示环境，控制所有接口
+fs:
+  isPreview: true

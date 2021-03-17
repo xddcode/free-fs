@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>404 Not Found</title>
+</head>
+<body>
+<h1 style="text-align: center">404 Page Not Found</h1>
+<hr/>
+<p style="text-align: center">访问的页面不存在</p>
+</body>
+</html>

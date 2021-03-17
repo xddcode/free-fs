@@ -1,0 +1,66 @@
+server:
+  port: 8081
+spring:
+  profiles:
+    active: dev
+  datasource:
+    druid:
+      initial-size: 10
+      max-active: 500
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 'x'
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      filters: stat,wall
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js , *.gif ,*.jpg ,*.png ,*.css ,*.ico , /druid/*"
+        session-stat-max-count: 1000
+        profile-enable: true
+        session-stat-enable: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: admin
+        login-password: admin
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.free.fs.model
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: NOT_NULL
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+# 七牛云配置
+qiniu:
+  accessKey: tztaPjnInkFfPRkp5PTEMroqGVzy6Z-VdQknwOzf
+  secretKey: 06N2zvD_Sh-6-_APciC9JMrcBtXGq8WLOKPZsB9p
+  bucket: free-fs
+  path: http://qpqg7780w.hn-bkt.clouddn.com

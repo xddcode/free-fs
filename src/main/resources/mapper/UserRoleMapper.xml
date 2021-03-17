@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.free.fs.mapper.UserRoleMapper">
+
+    <select id="selectRoleCodesById" resultType="java.lang.String">
+		select r.role_code from sys_role r
+		inner join sys_user_role ur on r.id = ur.role_id and ur.user_id = #{userId}
+    </select>
+
+</mapper>

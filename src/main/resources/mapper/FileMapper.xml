@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.free.fs.mapper.FileMapper">
+
+    <select id="selectParentList" resultType="com.free.fs.model.FilePojo">
+        SELECT
+        *
+        FROM
+        (
+          SELECT @r AS _id,
+            ( SELECT @r := parent_id FROM file_info WHERE id = _id ) AS parent_id,@l := @l + 1 AS lvl
+              FROM
+              ( SELECT @r := #{id} id, @l := 0 ) vars,file_info h
+            WHERE
+              @r <![CDATA[ <> ]]> 0
+        ) T1
+        JOIN file_info T2 ON T1._id = T2.id
+        ORDER BY
+        T1.lvl DESC
+    </select>
+</mapper>

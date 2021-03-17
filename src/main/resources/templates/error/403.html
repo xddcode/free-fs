@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>403 Permission Denied</title>
+</head>
+<body>
+<h1 style="text-align: center">403 Permission Denied</h1>
+<hr/>
+<p style="text-align: center">没有访问权限</p>
+</body>
+</html>
