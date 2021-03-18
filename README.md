@@ -20,7 +20,7 @@ Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + 
 - Gitee：[https://gitee.com/dh_free/free-fs](https://gitee.com/dh_free/free-fs)
 - Github：[https://github.com/dh-free/free-fs](https://github.com/dh-free/free-fs)
 
-#### 开发文档： [https://xxxxxxxxxxxxx]()
+#### 开发文档： [http://dh_free.gitee.io/free-fs-doc](http://dh_free.gitee.io/free-fs-doc)
 
 #### 体验地址： [http://47.105.128.150:8081/](http://47.105.128.150:8081/)
 
