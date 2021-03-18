@@ -61,7 +61,7 @@ Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + 
 - idea开发插件: lombok
 - 七牛云存储
 
-##  :book: 项目结构
+##  📁项目结构
 ```
 - sql                         项目数据库文件
 - src
@@ -116,10 +116,11 @@ Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + 
 ##  ❤ 特别鸣谢
 - 感谢 [synchronized](https://eleadmin.com/) 大佬提供的前端模板
 
-####  🔗友情链接
+##  🔗友情链接
 - [EleAdmin](https://eleadmin.com/) 通用型后台管理模板，界面美观、开箱即用拥有丰富的扩展组件和模板页面，适合各类中后台应用。
 - [Echo](https://gitee.com/veal98/Echo) 一套前后端不分离的开源社区系统。
-##  💌反馈交流
+
+##  📧反馈交流
 - QQ交流群：739596094
 
 ##  ☎联系我
