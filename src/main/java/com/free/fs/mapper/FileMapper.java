@@ -1,5 +1,6 @@
 package com.free.fs.mapper;
 
+import com.baomidou.mybatisplus.annotation.SqlParser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.free.fs.model.FilePojo;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,5 +22,6 @@ public interface FileMapper extends BaseMapper<FilePojo> {
      * @param id 根节点
      * @return
      */
+    @SqlParser(filter = true)
     List<FilePojo> selectParentList(Long id);
 }
