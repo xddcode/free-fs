@@ -17,6 +17,8 @@ public class OssProperties {
 
     private String secretKey;
 
+    private String endpoint;
+
     private String bucket;
 
     private String path;
