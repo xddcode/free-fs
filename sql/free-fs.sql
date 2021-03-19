@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2021-03-17 15:10:50
+Date: 2021-03-19 14:16:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,8 +31,9 @@ CREATE TABLE `file_info` (
   `put_time` datetime DEFAULT NULL COMMENT '上传时间',
   `is_dir` tinyint(1) DEFAULT NULL COMMENT '是否目录',
   `parent_id` int(11) DEFAULT NULL,
+  `source` varchar(10) DEFAULT NULL COMMENT '来源',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='文件资源表';
 
 -- ----------------------------
 -- Records of file_info
@@ -47,7 +48,7 @@ CREATE TABLE `sys_auth` (
   `auth_code` varchar(30) DEFAULT NULL,
   `auth_name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COMMENT='权限表';
 
 -- ----------------------------
 -- Records of sys_auth
@@ -72,7 +73,7 @@ CREATE TABLE `sys_role` (
   `role_name` varchar(20) DEFAULT NULL COMMENT '角色名称',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -89,7 +90,7 @@ CREATE TABLE `sys_role_auth` (
   `role_id` int(11) DEFAULT NULL,
   `auth_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='角色权限关联表';
 
 -- ----------------------------
 -- Records of sys_role_auth
@@ -119,7 +120,7 @@ CREATE TABLE `sys_user` (
   `nick_name` varchar(128) DEFAULT NULL COMMENT '昵称',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -136,7 +137,7 @@ CREATE TABLE `sys_user_role` (
   `user_id` int(11) DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';
 
 -- ----------------------------
 -- Records of sys_user_role
