@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -77,6 +78,11 @@ public class FilePojo extends Model<FilePojo> {
      * 父id
      */
     private Long parentId;
+
+    /**
+     * 来源
+     */
+    private String source;
 
     /**
      * 重命名的名称值

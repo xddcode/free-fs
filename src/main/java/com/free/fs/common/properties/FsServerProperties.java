@@ -19,7 +19,7 @@ public class FsServerProperties {
      * 自动化配置
      * type：oss or qiniu
      */
-    private String type;
+    private String type = "qiniu";
 
     /**
      * 七牛配置

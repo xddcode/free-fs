@@ -15,6 +15,12 @@ import com.free.fs.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 用户业务接口实现
+ *
+ * @author dinghao
+ * @date 2021/3/16
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -32,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //给用户设置基本角色
         UserRole ur = new UserRole();
         ur.setUserId(user.getId());
-        ur.setRoleId(roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getRoleCode, "user")).getId());
+        ur.setRoleId(roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getRoleCode, CommonConstant.ROLE_USER)).getId());
         if (userRoleMapper.insert(ur) <= 0) {
             throw new BusinessException("用户新增失败");
         }

@@ -58,9 +58,30 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
-# 七牛云配置
-qiniu:
-  accessKey: tztaPjnInkFfPRkp5PTEMroqGVzy6Z-VdQknwOzf
-  secretKey: 06N2zvD_Sh-6-_APciC9JMrcBtXGq8WLOKPZsB9p
-  bucket: free-fs
-  path: http://qpqg7780w.hn-bkt.clouddn.com
+
+fs:
+  #多租户应用隔离配置
+  tenant:
+    enable: true
+    ignoreTables:
+    - sys_user
+    - sys_user_role
+    - sys_role_auth
+    - sys_role
+    - sys_auth
+
+  # 云存储配置
+  files-server:
+    type: qiniu
+    qiniu:
+      accessKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      secretKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      bucket: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      path: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    #oss配置
+    oss:
+      accessKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      secretKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      endpoint: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      bucket: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      path: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

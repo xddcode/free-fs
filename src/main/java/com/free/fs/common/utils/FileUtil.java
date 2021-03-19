@@ -55,4 +55,13 @@ public class FileUtil {
         }
         return false;
     }
+
+    /**
+     * 获取文件后缀名
+     *
+     * @return
+     */
+    public String getFileSuffix(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
 }

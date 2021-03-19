@@ -1,7 +1,7 @@
 package com.free.fs.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.free.fs.common.properties.QiniuProperties;
+import com.free.fs.common.properties.FsServerProperties;
 import com.free.fs.common.utils.R;
 import com.free.fs.model.Dtree;
 import com.free.fs.model.FilePojo;
@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 /**
- * 文件上传管理
+ * 文件管理
  *
  * @author dinghao
  * @date 2021/3/10
@@ -35,7 +35,7 @@ public class FileController extends BaseController {
 
     private final FileService fileService;
 
-    private final QiniuProperties qiniuProperties;
+    private final FsServerProperties fsServerProperties;
 
     @GetMapping({"", "/list"})
     public R getList(FilePojo pojo) {
@@ -92,7 +92,7 @@ public class FileController extends BaseController {
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-cache");
             response.setContentType("application/octet-stream");
-            String fileName = url.replaceAll(qiniuProperties.getPath() + "/", "");
+            String fileName = url.replaceAll(fsServerProperties.getQiniu().getPath() + "/", "");
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             ServletOutputStream out = response.getOutputStream();
             while ((len = in.read(bs)) != -1) {

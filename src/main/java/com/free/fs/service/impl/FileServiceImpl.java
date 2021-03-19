@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
-import com.free.fs.common.properties.QiniuProperties;
 import com.free.fs.common.utils.R;
 import com.free.fs.common.utils.UploadFileUtil;
 import com.free.fs.mapper.FileMapper;
@@ -12,7 +11,6 @@ import com.free.fs.model.Dtree;
 import com.free.fs.model.FilePojo;
 import com.free.fs.service.FileService;
 import com.qiniu.common.QiniuException;
-import com.qiniu.http.Response;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,8 +34,6 @@ import java.util.stream.Collectors;
 public class FileServiceImpl extends ServiceImpl<FileMapper, FilePojo> implements FileService {
 
     private final UploadFileUtil fileUtil;
-
-    private final QiniuProperties qiniuProperties;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -153,12 +149,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FilePojo> implement
             throw new BusinessException("资源删除失败");
         }
         //在删除七牛云
-        //url是完整路径，七牛删除只需要key，所以截取掉前缀
-        String key = url.replaceAll(qiniuProperties.getPath() + CommonConstant.DIR_SPLIT, "");
-        Response response = fileUtil.delete(key);
-        if (!response.isOK()) {
-            throw new BusinessException("qiniu 删除失败");
-        }
+        fileUtil.delete(url);
         return true;
     }
 
