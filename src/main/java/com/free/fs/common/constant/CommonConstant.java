@@ -24,6 +24,16 @@ public interface CommonConstant {
     String DEFAULT_DIR_TYPE = "dir";
 
     /**
+     * 默认管理员角色code
+     */
+    String ROLE_ADMIN = "admin";
+
+    /**
+     * 默认普通角色code
+     */
+    String ROLE_USER = "user";
+
+    /**
      * 默认树顶级id
      */
     Long ROOT_PARENT_ID = -1L;
@@ -51,4 +61,19 @@ public interface CommonConstant {
     String X_REQUESTED_WITH = "X-Requested-With";
 
     String XML_HTTP_REQUEST = "XMLHttpRequest";
+
+    /**
+     * 云存储类型-oss
+     */
+    String FILE_TYPE_OSS = "oss";
+
+    /**
+     * 云存储类型-七牛
+     */
+    String FILE_TYPE_QINIU = "qiniu";
+
+    /**
+     * 需要租户过滤的字段
+     */
+    String SYSTEM_TENANT_ID = "source";
 }
