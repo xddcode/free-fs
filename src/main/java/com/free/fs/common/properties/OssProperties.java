@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 七牛云配置资源类
+ * oss配置资源类
  *
  * @author dinghao
  * @date 2021/3/10
  */
 @Getter
 @Setter
-public class QiniuProperties {
+public class OssProperties {
 
     private String accessKey;
 
