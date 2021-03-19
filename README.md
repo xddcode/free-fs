@@ -13,7 +13,7 @@
 </div>
 
 ##  📖 项目简介
-Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + Shiro+ Layui等搭配七牛云存储实现的云资源原理系统。包含文件上传、删除、预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
+✨Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + Shiro+ Layui 等搭配七牛云，阿里云OSS实现的云存储管理系统。包含文件上传、删除、预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
 
 #### 源码链接：
 
@@ -40,7 +40,7 @@ Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + 
 - 数据库：MySQL 5.7
 - 权限安全控制：shiro
 - 本地缓存：ehcache
-- 文件上传：七牛云 OSS
+- 文件上传：七牛云 阿里云OSS
 
 前端：
 
