@@ -46,11 +46,11 @@ public interface FileService extends IService<FilePojo> {
     /**
      * 上传文件
      *
-     * @param file
+     * @param files
      * @param dir
      * @return
      */
-    R upload(MultipartFile file, String dir) throws IOException;
+    R upload(MultipartFile[] files, String dir) throws IOException;
 
     /**
      * 删除文件

@@ -85,7 +85,8 @@ layui.config({
     upload.render({
         elem: '#btnUpload',
         url: '/file',
-        size: 102400,
+        accept: 'file',
+        multiple: true,
         data: {
             dirIds: function () {
                 return $('#tvFPId').text();
@@ -130,8 +131,7 @@ layui.config({
             layer.closeAll('loading');
             layer.close(proIndex);
             layer.msg('上传失败', {icon: 2});
-        },
-        accept: 'file'
+        }
     });
 
     // 刷新

@@ -62,9 +62,9 @@ public class FileController extends BaseController {
     }
 
     @PostMapping({"", "/upload"})
-    public R upload(@RequestParam(value = "file") MultipartFile file, String dirIds) {
+    public R upload(@RequestParam(value = "file") MultipartFile[] files, String dirIds) {
         try {
-            return fileService.upload(file, dirIds);
+            return fileService.upload(files, dirIds);
         } catch (IOException e) {
             log.warn(e.getMessage());
             return R.failed("上传失败，服务异常");

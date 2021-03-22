@@ -1,7 +1,9 @@
 package com.free.fs.common.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.*;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
@@ -32,19 +34,19 @@ import java.util.*;
 public class UploadFileUtil {
 
     @Autowired(required = false)
-    private  FsServerProperties fileProperties;
+    private FsServerProperties fileProperties;
 
     @Autowired(required = false)
-    private  UploadManager uploadManager;
+    private UploadManager uploadManager;
 
     @Autowired(required = false)
-    private  BucketManager bucketManager;
+    private BucketManager bucketManager;
 
     @Autowired(required = false)
-    private  Auth auth;
+    private Auth auth;
 
-    @Autowired(required = false)
-    private OSSClient ossClient;
+/*    @Autowired(required = false)
+    private OSSClient ossClient;*/
 
     /**
      * 定义七牛云上传的相关策略
@@ -66,11 +68,17 @@ public class UploadFileUtil {
      *
      * @return
      */
-    public List<OSSObjectSummary> listOss(){
+    public List<OSSObjectSummary> listOss() {
+        OSS ossClient = new OSSClientBuilder().build(
+                fileProperties.getOss().getEndpoint(),
+                fileProperties.getOss().getAccessKey(),
+                fileProperties.getOss().getSecretKey()
+        );
         // 设置最大个数。
         final int maxKeys = 1000;
         // 列举文件。
         ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(fileProperties.getOss().getBucket()).withMaxKeys(maxKeys));
+        ossClient.shutdown();
         return objectListing.getObjectSummaries();
     }
 
@@ -115,12 +123,18 @@ public class UploadFileUtil {
      * @return
      */
     private FilePojo ossUpload(MultipartFile file) throws IOException {
-        InputStream inputStream = null;
+        OSS ossClient = new OSSClientBuilder().build(
+                fileProperties.getOss().getEndpoint(),
+                fileProperties.getOss().getAccessKey(),
+                fileProperties.getOss().getSecretKey()
+        );
         FilePojo pojo = this.buildFilePojo(file);
-        inputStream = file.getInputStream();
-        ossClient.putObject(fileProperties.getOss().getBucket(), pojo.getFileName(), inputStream);
+        byte[] b = file.getBytes();
+        PutObjectRequest putObjectRequest = new PutObjectRequest(fileProperties.getOss().getBucket(), pojo.getFileName(), new ByteArrayInputStream(b));
+        ossClient.putObject(putObjectRequest);
         String url = fileProperties.getOss().getPath() + "/" + pojo.getFileName();
         pojo.setUrl(url);
+        ossClient.shutdown();
         return pojo;
     }
 
@@ -226,7 +240,13 @@ public class UploadFileUtil {
      * @return
      */
     public void deleteOss(String url) {
+        OSS ossClient = new OSSClientBuilder().build(
+                fileProperties.getOss().getEndpoint(),
+                fileProperties.getOss().getAccessKey(),
+                fileProperties.getOss().getSecretKey()
+        );
         String key = url.replaceAll(fileProperties.getOss().getPath() + CommonConstant.DIR_SPLIT, "");
         ossClient.deleteObject(fileProperties.getOss().getBucket(), key);
+        ossClient.shutdown();
     }
 }
