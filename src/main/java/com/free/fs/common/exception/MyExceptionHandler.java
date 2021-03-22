@@ -1,8 +1,7 @@
 package com.free.fs.common.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,9 +16,9 @@ import java.util.Map;
  * @author dinghao
  * @date 2021/3/10
  */
+@Slf4j
 @ControllerAdvice
 public class MyExceptionHandler {
-    private Logger logger = LoggerFactory.getLogger("MyExceptionHandler");
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
@@ -37,7 +36,7 @@ public class MyExceptionHandler {
             String message = ex.getMessage();
             map.put("code", 500);
             map.put("msg", message == null || message.trim().isEmpty() ? "未知错误" : message);
-            logger.error(message, ex);
+            log.error(message, ex);
             ex.printStackTrace();
         }
         // 支持跨域

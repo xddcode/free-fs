@@ -49,12 +49,15 @@
 - Jquery
 - Ajax
 
+## 🛶 系统设计
+![](https://dh_free.gitee.io/images/img/1616399886.png "1616399886.png")
+
 ##  💻 项目开发环境
 - 操作系统：Windows 10
 - 构建工具：Maven
 - 开发工具：Intellij IDEA
 - 应用服务器：Apache Tomcat
-- 接口测试工具：Postman
+- 接口测试工具：Postmanimg/
 - 压力测试工具：Apache JMeter
 - 版本控制工具：Gitee
 - Java 版本：8
