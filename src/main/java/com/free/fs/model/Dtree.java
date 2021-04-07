@@ -1,6 +1,5 @@
 package com.free.fs.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,6 +1,6 @@
 package com.free.fs.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //给用户设置基本角色
         UserRole ur = new UserRole();
         ur.setUserId(user.getId());
-        ur.setRoleId(roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getRoleCode, CommonConstant.ROLE_USER)).getId());
+        ur.setRoleId(roleMapper.selectOne(new LambdaQueryWrapper<Role>().eq(Role::getRoleCode, CommonConstant.ROLE_USER)).getId());
         if (userRoleMapper.insert(ur) <= 0) {
             throw new BusinessException("用户新增失败");
         }

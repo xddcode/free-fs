@@ -13,7 +13,22 @@ layui.config({
     var contextMenu = layui.contextMenu;
     var form = layui.form;
     var dtree = layui.dtree;
-
+    var xhrOnProgress = function (fun) {
+        xhrOnProgress.onprogress = fun; //绑定监听
+        //使用闭包实现监听绑
+        return function () {
+            //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+            var xhr = $.ajaxSettings.xhr();
+            //判断监听函数是否为函数
+            if (typeof xhrOnProgress.onprogress !== 'function')
+                return xhr;
+            //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+            if (xhrOnProgress.onprogress && xhr.upload) {
+                xhr.upload.onprogress = xhrOnProgress.onprogress;
+            }
+            return xhr;
+        }
+    };
     // 渲染文件列表
     function renderList(dirIds) {
         if (!dirIds) {
@@ -87,6 +102,7 @@ layui.config({
         url: '/file',
         accept: 'file',
         multiple: true,
+        size: 1024*20,
         data: {
             dirIds: function () {
                 return $('#tvFPId').text();
@@ -96,35 +112,54 @@ layui.config({
             layer.load(2);
         },
         before: function (obj) {
-            proIndex = layer.open({
+            layer.load(2);
+   /*         proIndex = layer.open({
                 type: 1,
                 title: "上传进度",
                 //closeBtn: 0, //不显示关闭按钮
                 skin: 'layui-layer-demo',
                 area: ['420px', 'auto'],
-                content: '<div style="margin: 10px 20px;"><div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile"><div class="layui-progress-bar" lay-percent="" id="uploadfile"></div></div><p><span id="uploadfilemsg">正在上传</span></p></div>',
+                content: '' +
+                    '<div style="margin: 10px 20px;">' +
+                    '   <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile">' +
+                    '       <div class="layui-progress-bar" lay-percent="0%" id="uploadfile"></div>' +
+                    '   </div>' +
+                    '   <p>' +
+                    '       <span id="uploadfilemsg">正在上传</span>' +
+                    '   </p>' +
+                    '</div>',
                 success: function (layero, index) {
                     layer.setTop(layero); //重点2
                 }
             });
-            element.render();
-        }, progress: function (n, elem) {
-            //上传进度回调 获取进度百分比
-            var percent = n + '%';
-            $("#uploadfile").attr("lay-percent", percent);
-            element.render();
-        },
+            element.render();*/
+        }, /*progress: function (n, elem) {
+            //查询上传进度
+            var intervalId = setInterval(function () {
+                $.get('/file/percent', {}, function (data) {
+                    var percent = data;
+                    if (percent >= 100) {
+                        clearInterval(intervalId);
+                        percent = 100;
+                    }
+                    $("#uploadfile").attr("lay-percent", data + '%');
+                    element.render();
+                });
+            }, 100);
+        },*/
         done: function (res, index, upload) {
             layer.closeAll('loading');
             if (res.code !== 200) {
                 layer.msg(res.msg, {icon: 2});
-                layer.close(proIndex);
-                $("#uploadfilemsg").text("上传失败");
+               // layer.close(proIndex);
+               // $("#uploadfilemsg").text("上传失败");
             } else {
                 layer.msg(res.msg, {icon: 1});
-                $("#uploadfilemsg").text("上传完成");
-                layer.close(proIndex);
+                //$("#uploadfilemsg").text("上传完成");
+               // layer.close(proIndex);
                 renderList();
+                //重置进度条
+                //resetPercent();
             }
         },
         error: function () {
@@ -133,6 +168,116 @@ layui.config({
             layer.msg('上传失败', {icon: 2});
         }
     });
+
+
+    //重置进度条
+    function resetPercent(){
+        $.get('/file/percent/reset', {}, function (res) {
+            console.log("重置进度条");
+        });
+    }
+
+
+    $('#btnUploadSharding').click(function () {
+        layer.open({
+            type: 1,
+            area: ['1000px', '600px'],
+            title: '分片上传',
+            content: $('#uploadShardModel').html(),
+            shade: [0.6, '#393D49'],
+            closeBtn: 2,
+            success: function (layero, index0) {
+                var uploadListView = $('#uploadList')
+                    ,uploadListIns = upload.render({
+                    elem: '#uploadShardList'
+                    ,url: '/file/uploadSharding'
+                    ,accept: 'file'
+                    ,multiple: false
+                    ,auto: false
+                    ,bindAction: '#testListAction'
+                    ,data: {
+                        dirIds: function () {
+                            return $('#tvFPId').text();
+                        }
+                    }
+                    , xhr: xhrOnProgress,
+                    progress: function (value) {
+                        element.progress('uploadList', value + '%')//设置页面进度条
+                    },
+                    xhr: function (index, e) {
+                        //查询上传进度
+                        var intervalId = setInterval(function () {
+                            $.get('/file/percent', {}, function (data) {
+                                var percent = data;
+                                if (percent >= 100) {
+                                    clearInterval(intervalId);
+                                    percent = 100;
+                                }
+                                element.progress('progress_' + index + '', percent + '%');
+                            });
+                        }, 100);
+                    },
+                    choose: function(obj){
+                        var files = this.files = obj.pushFile();
+                        //读取本地文件
+                        obj.preview(function(index, file, result){
+                            console.log(index);
+                            var tr = $(['<tr id="upload-'+ index +'">'
+                                ,'<td>'+ file.name +'</td>'
+                                ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                                ,'<td>等待上传</td>'
+                                ,'<td>' +
+                                '   <div class="layui-progress" lay-showPercent="true" lay-filter="progress_'+index+'">'+
+                                '       <div class="layui-progress-bar" lay-percent="0%"></div>' +
+                                '   </div>' +
+                                ' </td>'
+                                ,'<td>'
+                                ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                                ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                                ,'</td>'
+                                ,'</tr>'].join(''));
+
+                            //单个重传
+                            tr.find('.demo-reload').on('click', function(){
+                                obj.upload(index, file);
+                            });
+
+                            //删除
+                            tr.find('.demo-delete').on('click', function(){
+                                delete files[index]; //删除对应的文件
+                                tr.remove();
+                                uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                            });
+                            uploadListView.append(tr);
+                            element.render();
+                        });
+                    },
+                    done: function(res, index, upload){
+                        if (res.code === 200) { //上传成功
+                            var tr = uploadListView.find('tr#upload-'+ index)
+                                ,tds = tr.children();
+                            tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                            tds.eq(4).html(''); //清空操作
+                            //重置进度条
+                            resetPercent();
+                            renderList();
+                            layer.close(index0);
+                            return delete this.files[index]; //删除文件队列已经上传成功的文件
+                        }
+                        this.error(res.msg, index, upload);
+                    },
+                    error: function(msg,index, upload){
+                        var tr = uploadListView.find('tr#upload-'+ index)
+                            ,tds = tr.children();
+                        tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                        tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                        layer.msg(msg, {icon: 2});
+                    }
+                });
+            }
+        })
+    });
+
 
     // 刷新
     $('#btnRefresh').click(function () {
@@ -566,5 +711,6 @@ layui.config({
             location.replace(url ? url : "/")
         })
     });
+
 
 });

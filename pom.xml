@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
     <artifactId>free-fs</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>free-fs</name>
     <packaging>jar</packaging>
     <description>free-fs 文件管理系统</description>

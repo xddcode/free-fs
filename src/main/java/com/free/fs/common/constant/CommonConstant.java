@@ -19,6 +19,11 @@ public interface CommonConstant {
     String STRING_SPLIT = ",";
 
     /**
+     * 后缀分隔符
+     */
+    String SUFFIX_SPLIT = ".";
+
+    /**
      * 目录默认类型
      */
     String DEFAULT_DIR_TYPE = "dir";
@@ -61,6 +66,11 @@ public interface CommonConstant {
     String X_REQUESTED_WITH = "X-Requested-With";
 
     String XML_HTTP_REQUEST = "XMLHttpRequest";
+
+    /**
+     * 存储类型-本地
+     */
+    String FILE_TYPE_LOCAL = "local";
 
     /**
      * 云存储类型-oss

@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.free.fs.common.utils.R;
 import com.free.fs.model.Dtree;
 import com.free.fs.model.FilePojo;
-import com.qiniu.common.QiniuException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -47,10 +47,18 @@ public interface FileService extends IService<FilePojo> {
      * 上传文件
      *
      * @param files
-     * @param dir
+     * @param dirIds
      * @return
      */
-    R upload(MultipartFile[] files, String dir) throws IOException;
+    R upload(MultipartFile[] files, String dirIds);
+
+    /**
+     * 分片上传大文件
+     *
+     * @param files
+     * @return
+     */
+    R uploadSharding(MultipartFile[] files,String dirIds, HttpSession session);
 
     /**
      * 删除文件
@@ -58,7 +66,15 @@ public interface FileService extends IService<FilePojo> {
      * @param url
      * @return
      */
-    boolean deleteFile(String url) throws QiniuException;
+    boolean delete(String url);
+
+    /**
+     * 下载文件
+     *
+     * @param url
+     * @return
+     */
+    void download(String url, HttpServletResponse response);
 
     /**
      * 新增文件夹
@@ -82,7 +98,7 @@ public interface FileService extends IService<FilePojo> {
      * @param id
      * @return
      */
-    boolean deleteByIds(Long id) throws QiniuException;
+    boolean deleteByIds(Long id);
 
     /**
      * 移动文件

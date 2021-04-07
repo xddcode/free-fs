@@ -22,6 +22,11 @@ public class FsServerProperties {
     private String type = "qiniu";
 
     /**
+     * 本地上传配置
+     */
+    LocalProperties local = new LocalProperties();
+
+    /**
      * 七牛配置
      */
     QiniuProperties qiniu = new QiniuProperties();

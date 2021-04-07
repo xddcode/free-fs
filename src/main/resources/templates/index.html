@@ -54,6 +54,8 @@
                 </button>
                 <button shiro:hasPermission="file:upload" id="btnUpload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>上传文件
                 </button>
+                <button shiro:hasPermission="file:upload" id="btnUploadSharding" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>分片上传
+                </button>
                 <button style="display: none" id="btnDilaog" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe634;</i>弹窗选择
                 </button>
                 <button shiro:hasPermission="dir:manage" id="dirDilaog" class="layui-btn layui-btn-sm icon-btn"><i
@@ -85,6 +87,27 @@
 <div class="layui-footer layui-text">
     copyright © 2021 free-fs all rights reserved.
 </div>
+
+<script type="text/html" id="uploadShardModel">
+    <div class="layui-upload my-form">
+        <button type="button" class="layui-btn layui-btn-normal" id="uploadShardList">选择多文件</button>
+        <div class="layui-upload-list">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th width="20%">文件名</th>
+                    <th width="10%">大小</th>
+                    <th width="10%">状态</th>
+                    <th width="40%">进度</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody id="uploadList"></tbody>
+            </table>
+        </div>
+        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+    </div>
+</script>
 
 <!--新增文件夹表单模态框-->
 <script type="text/html" id="addFolderModel">
