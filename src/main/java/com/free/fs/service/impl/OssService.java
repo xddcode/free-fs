@@ -1,5 +1,6 @@
 package com.free.fs.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.free.fs.common.template.OssTemplate;
 import com.free.fs.model.FilePojo;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,8 +37,9 @@ public class OssService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String objectPath) {
-
-        ossTemplate.delete(objectPath);
+        if(StrUtil.isNotEmpty(objectPath)){
+            ossTemplate.delete(objectPath);
+        }
     }
 
     @Override

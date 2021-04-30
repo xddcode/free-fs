@@ -1,5 +1,6 @@
 package com.free.fs.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.template.QiniuTemplate;
 import com.free.fs.model.FilePojo;
@@ -36,8 +37,9 @@ public class QiniuService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String objectPath) {
-
-        qiniuTemplate.delete(objectPath);
+        if(StrUtil.isNotEmpty(objectPath)){
+            qiniuTemplate.delete(objectPath);
+        }
     }
 
     @Override

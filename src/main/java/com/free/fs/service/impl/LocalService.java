@@ -1,8 +1,8 @@
 package com.free.fs.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.template.LocalTemplate;
-import com.free.fs.common.utils.FileUtil;
 import com.free.fs.model.FilePojo;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,9 @@ public class LocalService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String url) {
-        localTemplate.delete(url);
+        if(StrUtil.isNotEmpty(url)){
+            localTemplate.delete(url);
+        }
     }
 
     @Override
