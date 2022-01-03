@@ -21,7 +21,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
-        <druid-starter>1.1.17</druid-starter>
+        <!--<druid-starter>1.1.17</druid-starter>-->
         <mybatis-plus-boot-starter.version>3.3.0</mybatis-plus-boot-starter.version>
         <hutool.version>5.3.7</hutool.version>
         <fastjson.version>1.2.70</fastjson.version>
@@ -68,11 +68,11 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid-starter}</version>
-        </dependency>
+        <!--        <dependency>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>druid-spring-boot-starter</artifactId>
+                    <version>${druid-starter}</version>
+                </dependency>-->
 
         <dependency>
             <groupId>com.baomidou</groupId>

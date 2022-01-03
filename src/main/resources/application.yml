@@ -4,33 +4,14 @@ spring:
   profiles:
     active: dev
   datasource:
-    druid:
-      initial-size: 10
-      max-active: 500
-      min-idle: 10
-      max-wait: 60000
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      validation-query: SELECT 'x'
-      test-on-borrow: false
-      test-on-return: false
-      test-while-idle: true
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      filters: stat,wall
-      web-stat-filter:
-        enabled: true
-        url-pattern: /*
-        exclusions: "*.js , *.gif ,*.jpg ,*.png ,*.css ,*.ico , /druid/*"
-        session-stat-max-count: 1000
-        profile-enable: true
-        session-stat-enable: false
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        reset-enable: true
-        login-username: admin
-        login-password: admin
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -74,8 +55,7 @@ fs:
     type: local
     local:
       uploadPath: D:/data/upload  #windows
-      #upload-path: /home/data/upload   #linux
-      #nginx映射本地目录的url，需自己配置
+      #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
       ngxinxUrl: http://localhost:4344/resource
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx

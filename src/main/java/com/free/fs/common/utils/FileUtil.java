@@ -4,12 +4,11 @@ import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.model.FilePojo;
 import org.springframework.web.multipart.MultipartFile;
-import sun.net.www.protocol.http.HttpURLConnection;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;

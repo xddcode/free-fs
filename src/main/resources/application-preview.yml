@@ -1,5 +1,6 @@
 spring:
   datasource:
+    type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://xxxxxxxxx:3306/free-fs?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: xxxxxxxxx
     password: xxxxxxxxx
