@@ -547,7 +547,9 @@ layui.config({
                         if (res.code === 200) {
                             layer.close(index);
                             layer.msg(res.msg, {icon: 1});
-                            DTree.refreshTree();
+                            if(DTree){
+                                DTree.refreshTree();
+                            }
                             getDirs(params[0].nodeId);
                         } else {
                             layer.msg(res.msg, {icon: 2});
