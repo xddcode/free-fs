@@ -2,7 +2,6 @@ package com.free.fs.common.config;
 
 import com.free.fs.common.properties.FsServerProperties;
 import com.free.fs.common.template.QiniuTemplate;
-import com.google.gson.Gson;
 import com.qiniu.common.Zone;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;
@@ -59,10 +58,5 @@ public class QiniuAutoConfigure {
     @Bean
     public BucketManager bucketManager() {
         return new BucketManager(auth(), qiniuConfig());
-    }
-
-    @Bean
-    public Gson gson() {
-        return new Gson();
     }
 }

@@ -22,7 +22,7 @@
 
 #### 开发文档： [https://dh_free.gitee.io/free-fs-doc](https://dh_free.gitee.io/free-fs-doc)
 
-#### 体验地址： [http://47.105.128.150:8081/](http://47.105.128.150:8081/)
+#### 体验地址： [https://fs.elites.icu](https://fs.elites.icu)
 
 #### 内置账号
 

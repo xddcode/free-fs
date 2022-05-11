@@ -1,17 +1,18 @@
 server:
   port: 8081
+  undertow:
+    threads:
+      io: 8
+      # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      worker: 256
+    buffer-size: 1024
+    # 是否分配的直接内存(NIO直接分配的堆外内存)
+    direct-buffers: true
 spring:
+  application:
+    name: free-fs
   profiles:
     active: dev
-  datasource:
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 15
-      auto-commit: true
-      idle-timeout: 30000
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -52,7 +53,7 @@ fs:
 
   # 云存储配置
   files-server:
-    type: local
+    type: oss
     local:
       uploadPath: D:/data/upload  #windows
       #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
@@ -69,3 +70,7 @@ fs:
       endpoint: xxxxxxxxxxxxxxxxxxx
       bucket: xxxxxxxxxxxxxxxxxxx
       path: xxxxxxxxxxxxxxxxxxx
+#接口文档配置
+springdoc:
+  swagger-ui:
+    path: /api-docs
