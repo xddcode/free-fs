@@ -12,7 +12,7 @@ spring:
   application:
     name: free-fs
   profiles:
-    active: dev
+    active: preview
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -53,7 +53,7 @@ fs:
 
   # 云存储配置
   files-server:
-    type: oss
+    type: qiniu
     local:
       uploadPath: D:/data/upload  #windows
       #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
@@ -70,7 +70,3 @@ fs:
       endpoint: xxxxxxxxxxxxxxxxxxx
       bucket: xxxxxxxxxxxxxxxxxxx
       path: xxxxxxxxxxxxxxxxxxx
-#接口文档配置
-springdoc:
-  swagger-ui:
-    path: /api-docs

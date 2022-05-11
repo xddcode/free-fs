@@ -35,9 +35,9 @@
 
 后端：
 
-- Spring Boot 2.4.3
-- orm: MyBatis Plus
-- 数据库：MySQL 5.7
+- Spring Boot 2.6.6
+- orm: MyBatis Plus 2.5.1
+- 数据库：MySQL 8.0
 - 权限安全控制：shiro
 - 本地缓存：ehcache
 - 文件上传：七牛云 阿里云OSS
@@ -53,16 +53,15 @@
 ![](https://dh_free.gitee.io/images/img/1616399886.png "1616399886.png")
 
 ##  💻 项目开发环境
-- 操作系统：Windows 10
-- 构建工具：Maven
+- 操作系统：Windows 11、macOS
+- 构建工具：Maven 3.8.1
 - 开发工具：Intellij IDEA
-- 应用服务器：Apache Tomcat
-- 接口测试工具：Postmanimg/
+- 应用服务器：Undertow
+- 接口测试工具：Postman
 - 压力测试工具：Apache JMeter
 - 版本控制工具：Gitee
 - Java 版本：8
 - idea开发插件: lombok
-- 七牛云存储
 
 ##  📁 项目结构
 ```
