@@ -58,6 +58,7 @@ fs:
       uploadPath: D:/data/upload  #windows
       #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
       ngxinxUrl: http://localhost:4344/resource
+    #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx
       secretKey: xxxxxxxxxxxxxxxxxxx
