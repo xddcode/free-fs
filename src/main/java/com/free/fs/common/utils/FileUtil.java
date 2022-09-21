@@ -140,7 +140,7 @@ public class FileUtil {
         String fileExt = orgName.substring(dotPos + 1).toLowerCase();
         // 判断是否是合法的文件后缀
         if (!FileUtil.isFileAllowed(fileExt)) {
-            throw new BusinessException("文类类型不符合要求");
+            throw new BusinessException("文件类型不符合要求");
         }
         String type = "";
         if (FileUtil.isCode(fileExt)) {
