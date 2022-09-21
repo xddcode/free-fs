@@ -37,7 +37,7 @@ public class OssService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String objectPath) {
-        if(StrUtil.isNotEmpty(objectPath)){
+        if (StrUtil.isNotEmpty(objectPath)) {
             ossTemplate.delete(objectPath);
         }
     }

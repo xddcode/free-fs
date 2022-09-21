@@ -28,7 +28,7 @@ public class PutObjectProgressListener implements ProgressListener {
 
     public PutObjectProgressListener(HttpSession mSession, long size) {
         this.session = mSession;
-        this.totalBytes= size;
+        this.totalBytes = size;
     }
 
     @Override

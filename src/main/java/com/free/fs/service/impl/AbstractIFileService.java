@@ -325,7 +325,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         if (filePojo != null && filePojo.getParentId() != null && filePojo.getParentId() != -1) {
             getParentList(list, filePojo.getParentId());
         }
-        if(CollUtil.isNotEmpty(list)){
+        if (CollUtil.isNotEmpty(list)) {
             list.sort(Comparator.comparing(FilePojo::getId));
         }
         return list;

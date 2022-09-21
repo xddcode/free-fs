@@ -7,7 +7,7 @@ package com.free.fs.common.exception;
  * @date 2021/3/10
  */
 public class BusinessException extends IException {
-    
+
     private static final long serialVersionUID = 5450935008012318697L;
 
     public BusinessException() {

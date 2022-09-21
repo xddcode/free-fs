@@ -4,6 +4,7 @@ import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.model.FilePojo;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,12 +32,12 @@ public class FileUtil {
             "xlsx", "xls", "gif", "svg", "txt",
             "zip", "ppt", "doc", "docx", "html",
             "htm", "ico", "mp3", "mp4", "java",
-            "sql", "xml","js","py","php","vue",
-            "sh","cmd","py3","css"
+            "sql", "xml", "js", "py", "php", "vue",
+            "sh", "cmd", "py3", "css"
     };
     public static String[] IMAGE_FILE_EXTD1 = new String[]{"png", "bmp", "jpg", "jpeg", "svg", "gif"};
 
-    public static String[] IMAGE_FILE_CODE = new String[]{"java", "sql", "js", "py", "py3", "php", "vue", "sh", "cmd","css"};
+    public static String[] IMAGE_FILE_CODE = new String[]{"java", "sql", "js", "py", "py3", "php", "vue", "sh", "cmd", "css"};
 
     public static boolean isFileAllowed(String fileName) {
         for (String ext : IMAGE_FILE_EXTD) {
@@ -102,8 +103,7 @@ public class FileUtil {
                 filenameExtension.equalsIgnoreCase(".ppt")) {
             return "application/vnd.ms-powerpoint";
         }
-        if (filenameExtension.equalsIgnoreCase(".docx"))
-        {
+        if (filenameExtension.equalsIgnoreCase(".docx")) {
             return "application/msword";
         }
         if (filenameExtension.equalsIgnoreCase(".xml")) {
@@ -162,7 +162,7 @@ public class FileUtil {
         return pojo;
     }
 
-    public static void downLoad(String url,String path, HttpServletResponse response) {
+    public static void downLoad(String url, String path, HttpServletResponse response) {
         InputStream in = null;
         try {
             URL httpUrl = new URL(url);

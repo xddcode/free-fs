@@ -37,7 +37,7 @@ public class QiniuService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String objectPath) {
-        if(StrUtil.isNotEmpty(objectPath)){
+        if (StrUtil.isNotEmpty(objectPath)) {
             qiniuTemplate.delete(objectPath);
         }
     }

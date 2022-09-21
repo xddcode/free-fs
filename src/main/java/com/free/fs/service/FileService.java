@@ -58,7 +58,7 @@ public interface FileService extends IService<FilePojo> {
      * @param files
      * @return
      */
-    R uploadSharding(MultipartFile[] files,String dirIds, HttpSession session);
+    R uploadSharding(MultipartFile[] files, String dirIds, HttpSession session);
 
     /**
      * 删除文件

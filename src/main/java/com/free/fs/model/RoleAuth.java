@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @TableName("sys_role_auth")
 @EqualsAndHashCode(callSuper = true)
-public class RoleAuth extends Model <RoleAuth>{
+public class RoleAuth extends Model<RoleAuth> {
 
     /**
      * 自增id

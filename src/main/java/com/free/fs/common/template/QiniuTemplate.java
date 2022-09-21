@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ConditionalOnProperty(prefix = "fs.files-server", name = "type", havingValue = "qiniu")
-public class QiniuTemplate{
+public class QiniuTemplate {
 
     /**
      * 每次迭代的长度限制，最大1000，推荐值 1000
@@ -74,7 +74,7 @@ public class QiniuTemplate{
      * @return
      */
     @SneakyThrows
-    public FilePojo upload(MultipartFile file){
+    public FilePojo upload(MultipartFile file) {
         FilePojo pojo = FileUtil.buildFilePojo(file);
         Response response = uploadManager.put(file.getBytes(), pojo.getFileName(), getUploadToken());
         //解析上传成功的结果
@@ -100,7 +100,7 @@ public class QiniuTemplate{
      * @param url 对象路径
      */
     @SneakyThrows
-    public void delete(String url){
+    public void delete(String url) {
         String key = url.replaceAll(fileProperties.getQiniu().getPath() + CommonConstant.DIR_SPLIT, "");
         bucketManager.delete(fileProperties.getQiniu().getBucket(), key);
     }

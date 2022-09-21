@@ -124,7 +124,7 @@ public class FileController extends BaseController {
     public void resetPercent(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("uploadPercent", 0);
-       // ossUploadUtils.initPart();
+        // ossUploadUtils.initPart();
     }
 
     /**
@@ -210,5 +210,4 @@ public class FileController extends BaseController {
         }
         return R.failed("添加失败");
     }
-
 }

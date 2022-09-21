@@ -38,7 +38,7 @@ public class LocalService extends AbstractIFileService {
 
     @Override
     protected void deleteFile(String url) {
-        if(StrUtil.isNotEmpty(url)){
+        if (StrUtil.isNotEmpty(url)) {
             localTemplate.delete(url);
         }
     }

@@ -80,7 +80,7 @@ public class OssTemplate {
         FilePojo pojo = FileUtil.buildFilePojo(file);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(FileUtil.getcontentType(pojo.getFileName().substring(pojo.getFileName().lastIndexOf("."))));
-        PutObjectRequest putObjectRequest = new PutObjectRequest(fileProperties.getOss().getBucket(), pojo.getFileName(),file.getInputStream());
+        PutObjectRequest putObjectRequest = new PutObjectRequest(fileProperties.getOss().getBucket(), pojo.getFileName(), file.getInputStream());
         putObjectRequest.setMetadata(metadata);
         ossClient.putObject(putObjectRequest);
         String url = fileProperties.getOss().getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
@@ -112,7 +112,7 @@ public class OssTemplate {
      * @param response
      */
     @SneakyThrows
-    public void download(String objectName,HttpServletResponse response) {
+    public void download(String objectName, HttpServletResponse response) {
         OSS ossClient = new OSSClientBuilder().build(
                 fileProperties.getOss().getEndpoint(),
                 fileProperties.getOss().getAccessKey(),
@@ -148,7 +148,7 @@ public class OssTemplate {
      * @param session
      */
     @SneakyThrows
-    public FilePojo uploadSharding(MultipartFile file, HttpSession session){
+    public FilePojo uploadSharding(MultipartFile file, HttpSession session) {
         String endpoint = fileProperties.getOss().getEndpoint();
         String accessKeyId = fileProperties.getOss().getAccessKey();
         String accessKeySecret = fileProperties.getOss().getSecretKey();
@@ -194,7 +194,7 @@ public class OssTemplate {
                 uploadPartRequest.setUploadId(uploadId);
                 uploadPartRequest.setPartSize(curPartSize);
                 uploadPartRequest.setPartNumber(i + 1);
-                executorService.execute(new PartUploader(ossClient,file,startPos,uploadPartRequest,partTags,partCount,session,countDownLatch));
+                executorService.execute(new PartUploader(ossClient, file, startPos, uploadPartRequest, partTags, partCount, session, countDownLatch));
             }
             //等待所有线程执行完毕
             countDownLatch.await();
@@ -233,14 +233,14 @@ public class OssTemplate {
         private HttpSession session;
         private CountDownLatch countDownLatch;
 
-        public PartUploader(OSS ossClient,MultipartFile file,long startPos,UploadPartRequest uploadPartRequest,List<PartETag> partTags,int partCount,HttpSession session,CountDownLatch countDownLatch){
+        public PartUploader(OSS ossClient, MultipartFile file, long startPos, UploadPartRequest uploadPartRequest, List<PartETag> partTags, int partCount, HttpSession session, CountDownLatch countDownLatch) {
             this.ossClient = ossClient;
-            this.file=file;
-            this.startPos=startPos;
+            this.file = file;
+            this.startPos = startPos;
             this.uploadPartRequest = uploadPartRequest;
-            this.partTags=partTags;
-            this.partCount=partCount;
-            this.session=session;
+            this.partTags = partTags;
+            this.partCount = partCount;
+            this.session = session;
             this.countDownLatch = countDownLatch;
         }
 
