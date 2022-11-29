@@ -10,9 +10,9 @@ server:
     direct-buffers: true
 spring:
   application:
-    name: free-fs
+    name: free-fs1
   profiles:
-    active: preview
+    active: dev
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
