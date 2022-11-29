@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.free.fs.component.cache.RedisAutoConfiguration,\
+com.free.fs.component.cache.heartbeat.RedisTimer,\
+com.free.fs.component.cache.template.RedisRepository
