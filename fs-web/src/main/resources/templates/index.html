@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Free-FS文件服务器</title>
+    <link rel="icon" type="shortcut icon" th:href="@{/assets/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/assets/modules/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/assets/modules/dtree/dtree.css}">
+    <link rel="stylesheet" th:href="@{/assets/modules/dtree/font/dtreefont.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="layui-container">
+        <div class="layui-logo">
+            <img th:src="@{/assets/img/logo.png}"/><cite><span class="layui-hide-xs">文件服务器</span></cite>
+        </div>
+    </div>
+
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:void(0)" id="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
+        </li>
+        <li class="layui-nav-item" lay-unselect>
+            <a><img src="http://images.nowcoder.com/head/818t.png" class="layui-nav-img"><cite
+                    th:utext="${loginUser.nickName}"></cite></a>
+            <dl class="layui-nav-child">
+                <dd lay-unselect><a href="javascript:void(0)" id="logout" data-url="/logout"><i class="layui-icon layui-icon-logout"></i>退出</a>
+                </dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<a href="https://gitee.com/dh_free" target="_blank" class="github-corner" aria-label="View source on GitHub">
+    <svg width="80" height="80" viewBox="0 0 250 250" style="fill:rgb(64, 201, 198); color:#fff; position: absolute; top: 60px; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+
+<div class="layui-container" style="padding-top: 15px;">
+    <div class="layui-card">
+        <div class="layui-card-header">当前位置：<span id="tvFP">/</span><span id="tvFPId" hidden>/</span></div>
+        <div class="layui-card-body">
+            <div class="btnDiv">
+                <button id="btnBack" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe65c;</i>返回上级
+                </button>
+                <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe669;</i>刷新
+                </button>
+                <button shiro:hasPermission="file:upload" id="btnUpload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>上传文件
+                </button>
+                <button shiro:hasPermission="file:upload" id="btnUploadSharding" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>分片上传
+                </button>
+                <button style="display: none" id="btnDilaog" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe634;</i>弹窗选择
+                </button>
+                <button shiro:hasPermission="dir:manage" id="dirDilaog" class="layui-btn layui-btn-sm icon-btn"><i
+                        class="layui-icon layui-icon-app"></i>目录管理
+                </button>
+            </div>
+            <hr>
+            <div class="file-list">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 下拉菜单 -->
+<div class="dropdown-menu dropdown-anchor-top-left" id="dropdownFile">
+    <div class="dropdown-anchor"></div>
+    <ul>
+        <li><a shiro:hasPermission="file:view" id="open"><i class="layui-icon layui-icon-file"></i>&emsp;查看&emsp;</a></li>
+        <li><a shiro:hasPermission="file:copy" id="copy"><i class="layui-icon layui-icon-release"></i>&emsp;复制&emsp;</a></li>
+        <li><a shiro:hasPermission="file:move" id="move"><i class="layui-icon layui-icon-location"></i>&emsp;移动&emsp;</a></li>
+        <li><a shiro:hasPermission="file:rename" id="rename"><i class="layui-icon layui-icon-survey"></i>&emsp;重命名&emsp;</a></li>
+        <li><a shiro:hasPermission="file:download" id="download"><i class="layui-icon layui-icon-download-circle"></i>&emsp;下载&emsp;</a></li>
+        <li><a shiro:hasPermission="file:delete" id="del" style="color: red !important;"><i class="layui-icon layui-icon-delete" style="font-size: 19px;"></i>&nbsp;&nbsp;&nbsp;删除&emsp;</a></li>
+    </ul>
+</div>
+
+<div class="layui-footer layui-text">
+    copyright © 2022 free-fs all rights reserved.
+</div>
+
+<script type="text/html" id="uploadShardModel">
+    <div class="layui-upload my-form">
+        <button type="button" class="layui-btn layui-btn-normal" id="uploadShardList">选择多文件</button>
+        <div class="layui-upload-list">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th width="20%">文件名</th>
+                    <th width="10%">大小</th>
+                    <th width="10%">状态</th>
+                    <th width="40%">进度</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody id="uploadList"></tbody>
+            </table>
+        </div>
+        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+    </div>
+</script>
+
+<!--新增文件夹表单模态框-->
+<script type="text/html" id="addFolderModel">
+    <form class="layui-form my-form" id="addFolderForm" lay-filter="addFolderForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文件夹名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="folderName" required lay-verify="required" placeholder="请输入文件夹名称" autocomplete="off"
+                       class="layui-input" id="folderName">
+            </div>
+        </div>
+        <div class="layui-form-item form-text-right">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="addFolderBtn">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary"  id="closeFolderBtn">取消</button>
+        </div>
+    </form>
+</script>
+
+<!--重命名表单模态框-->
+<script type="text/html" id="editRenameModel">
+    <form class="layui-form my-form" id="editTreeNodeForm" lay-filter="editTreeNodeForm">
+        <input type="hidden" name="id" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" autocomplete="off"
+                       class="layui-input layui-disabled" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">修改名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="rename" required lay-verify="required" placeholder="请输入名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item form-text-right">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="editTreeNodeBtn">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="closeRenameBtn">取消</button>
+        </div>
+    </form>
+</script>
+
+<!--目录管理模态框-->
+<script type="text/html" id="dirModel">
+    <form class="layui-form my-form" id="dirForm" lay-filter="dirForm" style="overflow:auto;">
+        <input type="hidden" name="id">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-inline mr0">
+                    <input id="searchDirInput" class="layui-input" type="text" placeholder="输入查询节点内容"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn icon-btn layui-btn-sm" id="searchDirTreeBtn">
+                    <i class="layui-icon">&#xe615;</i>搜索
+                </button>
+                <button type="button" class="layui-btn icon-btn layui-btn-primary layui-btn-sm" id="refreshDirTreeBtn">
+                    <i class="layui-icon">&#xe669;</i>刷新
+                </button>
+            </div>
+        </div>
+        <ul id="dirTree" class="dtree" data-id="-1"></ul>
+        <div class="layui-form-item form-text-right">
+            <button type="button" class="layui-btn layui-btn-primary" id="dirCloseBtn">取消</button>
+        </div>
+    </form>
+</script>
+
+<!--文件移动表单模态框-->
+<script type="text/html" id="moveModel">
+    <form class="layui-form my-form" id="moveForm" lay-filter="moveForm" style="overflow:auto;">
+        <input type="hidden" name="id">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-inline mr0">
+                    <input id="searchMoveInput" class="layui-input" type="text" placeholder="输入查询节点内容"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn icon-btn layui-btn-sm" id="searchMoveTreeBtn">
+                    <i class="layui-icon">&#xe615;</i>搜索
+                </button>
+                <button type="button" class="layui-btn icon-btn layui-btn-primary layui-btn-sm" id="refreshMoveTreeBtn">
+                    <i class="layui-icon">&#xe669;</i>刷新
+                </button>
+            </div>
+        </div>
+        <ul id="moveDirTree" class="dtree" data-id="-1"></ul>
+        <div class="layui-form-item form-text-right">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="moveSubmitBtn">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="moveCloseBtn">取消</button>
+        </div>
+    </form>
+</script>
+
+<!-- 渲染模板 -->
+<script id="fileTpl" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <div class="file-list-item" data-id="{{item.id}}" data-dir="{{item.isDir}}" data-url="{{item.url}}" data-name="{{item.name}}">
+        <div class="file-list-img">
+            {{# if(item.isImg){ }}
+            <img src="{{item.url}}"/>
+            {{# }else{ }}
+            <img src="assets/img/fti/{{item.type}}.png"/>
+            {{# } }}
+        </div>
+        <div class="file-list-name">
+            {{# if(item.isDir){ }}
+            {{item.name}}
+            {{# }else{ }}
+            {{item.name}}.{{item.suffix}}
+            {{# } }}
+        </div>
+    </div>
+    {{#  }); }}
+    {{# if(d.length<=0){ }}
+    <div class="list-empty">
+        <i class="layui-icon layui-icon-face-surprised"></i>
+        <div>没有文件</div>
+    </div>
+    {{# } }}
+</script>
+
+<script type="text/javascript" th:src="@{/assets/modules/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/modules/clipboard.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/index.js}"></script>
+
+</body>
+</html>

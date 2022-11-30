@@ -1,0 +1,76 @@
+server:
+  port: 8081
+  undertow:
+    threads:
+      io: 8
+      # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      worker: 256
+    buffer-size: 1024
+    # 是否分配的直接内存(NIO直接分配的堆外内存)
+    direct-buffers: true
+spring:
+  application:
+    name: free-fs1
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML
+
+############## mybatis plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+    banner: false
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.free.fs.*.model
+
+fs:
+  #多租户应用隔离配置
+  tenant:
+    enable: true
+    ignoreTables:
+    - sys_user
+    - sys_user_role
+    - sys_role_auth
+    - sys_role
+    - sys_auth
+
+  # 云存储配置
+  files-server:
+    type: qiniu
+    local:
+      uploadPath: D:/data/upload  #windows
+      #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
+      ngxinxUrl: http://localhost:4344/resource
+    #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
+    qiniu:
+      accessKey: xxxxxxxxxxxxxxxxxxx
+      secretKey: xxxxxxxxxxxxxxxxxxx
+      bucket: xxxxxxxxxxxxxxxxxxx
+      path: xxxxxxxxxxxxxxxxxxx
+    #oss配置
+    oss:
+      accessKey: xxxxxxxxxxxxxxxxxxx
+      secretKey: xxxxxxxxxxxxxxxxxxx
+      endpoint: xxxxxxxxxxxxxxxxxxx
+      bucket: xxxxxxxxxxxxxxxxxxx
+      path: xxxxxxxxxxxxxxxxxxx

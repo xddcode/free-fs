@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Free-FS文件服务器</title>
+    <link rel="icon" type="shortcut icon" th:href="@{/assets/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/assets/modules/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/assets/modules/dtree/dtree.css}">
+    <link rel="stylesheet" th:href="@{/assets/modules/dtree/font/dtreefont.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+    <style>
+        html, body {
+            background: white;
+        }
+
+        .btnDiv {
+            text-align: right;
+        }
+
+        @media screen and (max-width: 420px) {
+            .btnDiv {
+                padding-top: 30px;
+                text-align: left;
+            }
+        }
+
+        .bottomBar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            text-align: right;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .showBB {
+            padding-bottom: 50px;
+        }
+
+        .showBB .bottomBar {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<div style="padding: 15px;">
+    <div style="position: absolute;left: 15px;">当前位置：<span id="tvFP">/</span><span id="tvFPId" hidden>/</span></div>
+    <div class="btnDiv">
+        <button id="btnBack" class="layui-btn layui-btn-sm layui-btn-primary icon-btn">
+            <i class="layui-icon">&#xe65c;</i>上级
+        </button>
+        <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary icon-btn">
+            <i class="layui-icon">&#xe669;</i>刷新
+        </button>
+        <button id="btnUpload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn" style="margin-right: 0;">
+            <i class="layui-icon">&#xe681;</i>上传
+        </button>
+    </div>
+
+    <div class="file-list">
+    </div>
+
+    <div class="bottomBar">
+        <button id="btnSel" class="layui-btn layui-btn-sm layui-btn-normal icon-btn">完成选择</button>
+    </div>
+</div>
+
+<!-- 下拉菜单 -->
+<div class="dropdown-menu dropdown-anchor-top-left" id="dropdownFile">
+    <div class="dropdown-anchor"></div>
+    <ul>
+        <li><a id="open"><i class="layui-icon layui-icon-file"></i>&emsp;查看&emsp;</a></li>
+        <li><a id="sel"><i class="layui-icon layui-icon-release"></i>&emsp;选择&emsp;</a></li>
+    </ul>
+</div>
+
+<!-- 渲染模板 -->
+<script id="fileTpl" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <div class="file-list-item" data-id="{{item.id}}" data-dir="{{item.isDir}}" data-url="{{item.url}}" data-name="{{item.name}}">
+        <div class="file-list-img {{item.hasSm?'media':''}}">
+            {{# if(item.isImg){ }}
+            <img src="{{item.url}}"/>
+            {{# }else{ }}
+            <img src="assets/img/fti/{{item.type}}.png"/>
+            {{# } }}
+        </div>
+        <div class="file-list-name">
+            {{# if(item.isDir){ }}
+            {{item.name}}
+            {{# }else{ }}
+            {{item.name}}.{{item.suffix}}
+            {{# } }}
+        </div>
+        {{# if(!item.isDir && multi=='true'){ }}
+        <div class="file-list-ck layui-form">
+            <input type="checkbox" name="imgCk" lay-skin="primary" lay-filter="imgCk"/>
+        </div>
+        {{# } }}
+    </div>
+    {{#  }); }}
+    {{# if(d.length<=0){ }}
+    <div class="list-empty">
+        <i class="layui-icon layui-icon-face-surprised"></i>
+        <div>没有文件</div>
+    </div>
+    {{# } }}
+</script>
+
+<script type="text/javascript" th:src="@{/assets/modules/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/assets/modules/clipboard.min.js}"></script>
+<script>
+    var multi, maxNum;
+    layui.use(['jquery', 'layer', 'form', 'upload', 'laytpl', 'util','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var upload = layui.upload;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+        var element = layui.element;
+
+        multi = 'true';
+        maxNum = 10;
+
+        if (multi && multi === 'true') {
+            $('body').addClass('showBB');
+        }
+
+        // 渲染文件列表
+        function renderList(dirIds) {
+            if (!dirIds) {
+                dirIds = $('#tvFPId').text();
+            }
+            layer.load(2);
+            $.get('/file', {
+                dirIds: dirIds
+            }, function (res) {
+                layer.closeAll('loading');
+                if (res.code === 200) {
+                    laytpl(fileTpl.innerHTML).render(res.data, function (html) {
+                        $('#btnSel').text('完成选择');
+                        $('.file-list').html(html);
+                        form.render('checkbox');
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            });
+        }
+
+        renderList();
+
+        var proIndex;
+        // 上传文件事件
+        upload.render({
+            elem: '#btnUpload',
+            url: '/file',
+            accept: 'file',
+            multiple: true,
+            data: {
+                dirIds: function () {
+                    return $('#tvFPId').text();
+                }
+            },
+            choose: function (obj) {
+                layer.load(2);
+            },
+            before: function (obj) {
+                proIndex = layer.open({
+                    type: 1,
+                    title: "上传进度",
+                    //closeBtn: 0, //不显示关闭按钮
+                    skin: 'layui-layer-demo',
+                    area: ['420px', 'auto'],
+                    content: '<div style="margin: 10px 20px;"><div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile"><div class="layui-progress-bar" lay-percent="" id="uploadfile"></div></div><p><span id="uploadfilemsg">正在上传</span></p></div>',
+                    success: function (layero, index) {
+                        layer.setTop(layero); //重点2
+                    }
+                });
+                element.render();
+            }, progress: function (n, elem) {
+                //上传进度回调 获取进度百分比
+                var percent = n + '%';
+                $("#uploadfile").attr("lay-percent", percent);
+                element.render();
+            },
+            done: function (res, index, upload) {
+                layer.closeAll('loading');
+                if (res.code !== 200) {
+                    layer.msg(res.msg, {icon: 2});
+                    layer.close(proIndex);
+                    $("#uploadfilemsg").text("上传失败");
+                } else {
+                    layer.msg(res.msg, {icon: 1});
+                    $("#uploadfilemsg").text("上传完成");
+                    layer.close(proIndex);
+                    renderList();
+                }
+            },
+            error: function () {
+                layer.closeAll('loading');
+                layer.close(proIndex);
+                layer.msg('上传失败', {icon: 2});
+            }
+
+        });
+
+        // 刷新
+        $('#btnRefresh').click(function () {
+            renderList();
+        });
+
+        var mUrl;
+        var name;
+        var id;
+        // 列表点击事件
+        $('body').on('click', '.file-list-item', function (e) {
+            var isDir = $(this).data('dir');
+            name = $(this).data('name');
+            id = $(this).data('id');
+            mUrl = $(this).data('url');
+            $('#copy').attr('data-clipboard-text', mUrl);
+            if (isDir) {
+                getDirs(id);
+            } else {
+                var $target = $(this).find('.file-list-img');
+                $('#dropdownFile').css({
+                    'top': $target.offset().top + 90,
+                    'left': $target.offset().left + 25
+                });
+                $('#dropdownFile').addClass('dropdown-opened');
+                if (e !== void 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        });
+
+        //获取目录
+        function getDirs(id){
+            $.get('/file/getDirs', {id: id}, function (res) {
+                $('#tvFP').text(res.data.dirs === '' ? '/' : res.data.dirs);
+                $('#tvFPId').text(res.data.dirIds === '' ? '/' : res.data.dirIds);
+                renderList(res.data.dirIds);
+            });
+        }
+
+        // 返回上级
+        $('#btnBack').click(function () {
+            var cDir = $('#tvFP').text();
+            var cDirId = $('#tvFPId').text();
+            if (cDir === '/') {
+                layer.msg('已经是根目录', {icon: 2})
+            } else {
+                cDir = cDir.substring(0, cDir.lastIndexOf('/'));
+                cDirId = cDirId.substring(0, cDirId.lastIndexOf('/'));
+                if (!cDir) {
+                    cDir = '/';
+                    cDirId = '/';
+                }
+                $('#tvFP').text(cDir);
+                $('#tvFPId').text(cDirId);
+                renderList(cDirId);
+            }
+        });
+
+
+        // 点击空白隐藏下拉框
+        $('html').off('click.dropdown').on('click.dropdown', function () {
+            $('#copy').attr('data-clipboard-text', '');
+            $('#dropdownFile').removeClass('dropdown-opened');
+        });
+
+        // 打开
+        $('#open').click(function () {
+            window.open(mUrl);
+        });
+        // 选择
+        $('#sel').click(function () {
+            if (!multi || multi == 'false') {
+                var urls = [];
+                urls.push(mUrl);
+                parent.mFsUrls = urls;
+                parent.layer.close(parent.layer.getFrameIndex(window.name));
+            } else {
+                /*var $ck = $('.file-list-item[data-url="' + mUrl + '"] input[name="imgCk"]');
+                $ck.prop('checked', !$ck.prop('checked'));
+                form.render('checkbox');
+                $ck.parents('.file-list-item').toggleClass('active');
+                $('#btnSel').text('完成选择(' + $('input[name="imgCk"]:checked').length + ')');*/
+                $('.file-list-item[data-url="' + mUrl + '"] .layui-form-checkbox').trigger('click');
+            }
+        });
+
+        // 多选框事件
+        $('body').on('click', '.file-list-ck', function (e) {
+            if (e !== void 0) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        // 完成选择按钮
+        $('#btnSel').click(function () {
+            var urls = [];
+            $('input[name="imgCk"]:checked').each(function () {
+                urls.push($(this).parents('.file-list-item').data('url'));
+            });
+            if (urls.length <= 0) {
+                layer.msg('请选择', {icon: 2});
+                return;
+            }
+            if (maxNum && parseInt(maxNum) > 1 && urls.length > maxNum) {
+                layer.msg('最多只能选择' + maxNum + '个', {icon: 2});
+                return;
+            }
+            parent.mFsUrls = urls;
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        });
+
+        // 监听复选框选中
+        form.on('checkbox(imgCk)', function (data) {
+            var ckSize = $('input[name="imgCk"]:checked').length;
+            if (data.elem.checked) {
+                if (maxNum && parseInt(maxNum) > 1 && ckSize > maxNum) {
+                    layer.msg('最多只能选择' + maxNum + '个', {icon: 2});
+                    $(data.elem).prop('checked', false);
+                    form.render('checkbox');
+                    return;
+                }
+                $(data.elem).parents('.file-list-item').addClass('active');
+            } else {
+                $(data.elem).parents('.file-list-item').removeClass('active');
+            }
+            $('#btnSel').text('完成选择(' + ckSize + ')');
+        });
+
+    });
+
+</script>
+</body>
+</html>

@@ -6,37 +6,22 @@ package com.free.fs.common.exception;
  * @author dinghao
  * @date 2021/3/10
  */
-public class BusinessException extends IException {
+public class BusinessException extends RuntimeException {
 
-    private static final long serialVersionUID = 5450935008012318697L;
+    private static final long serialVersionUID = 6610083281801529147L;
 
-    public BusinessException() {
-        super();
-    }
+    private Integer code;
 
     public BusinessException(String message) {
         super(message);
     }
 
     public BusinessException(Integer code, String message) {
-        super(code, message);
+        super(message);
+        this.code = code;
     }
 
-    @Override
     public Integer getCode() {
-        Integer code = super.getCode();
-        if (code == null) {
-            code = 500;
-        }
-        return code;
-    }
-
-    @Override
-    public String getMessage() {
-        String message = super.getMessage();
-        if (message == null) {
-            message = "服务器错误";
-        }
-        return message;
+        return this.code;
     }
 }

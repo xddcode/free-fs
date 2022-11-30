@@ -1,0 +1,573 @@
+html, body {
+    background: #EEEEEE;
+}
+
+.layui-layout-right {
+    position: absolute !important;
+    right: 20px !important;
+    top: 0 !important;
+}
+
+@media screen and (min-width: 1200px) {
+    .layui-container {
+        width: 1145px;
+    }
+}
+
+a {
+    cursor: pointer;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.icon-btn {
+    padding: 0 10px;
+}
+
+.btnDiv .layui-btn {
+    margin-bottom: 15px;
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.btnDiv .layui-btn:last-child {
+    margin-right: 0;
+}
+
+.layui-layer {
+    max-width: 100%;
+}
+
+/** 导航栏样式 */
+.header .layui-nav .layui-this:after, .header .layui-nav-bar {
+    height: 2px;
+    background-color: #03152A;
+}
+
+.header .layui-nav-item .layui-icon {
+    font-size: 16px;
+}
+
+.header {
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    height: 60px;
+    line-height: 50px;
+}
+
+.header .layui-nav {
+    background: transparent;
+    padding: 0;
+}
+
+.header .layui-nav .layui-nav-item {
+    height: 50px;
+    line-height: 50px;
+}
+
+.header a {
+    color: #333 !important;
+    padding: 0 15px !important;
+}
+
+.header a:hover {
+    color: #333;
+}
+
+.header .layui-nav-child a {
+    color: #333 !important;
+}
+
+.header .layui-nav .layui-nav-more {
+    border-color: #666 transparent transparent;
+}
+
+.header .layui-nav .layui-nav-mored {
+    border-color: transparent transparent #666;
+}
+
+.header .layui-nav-child dd {
+    text-align: center;
+}
+
+.header .layui-logo {
+    width: auto;
+    color: #333;
+    font-size: 18px;
+    font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    transition: all .3s;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.header .layui-logo img {
+    height: 60px;
+}
+
+.header .layui-logo cite {
+    font-style: normal;
+}
+
+/** //导航栏样式end */
+
+/** 文件列表样式 */
+
+.file-list-item {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    width: 90px;
+    text-align: center;
+    vertical-align: top;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+}
+
+.file-list-item:hover {
+    color: #1E9FFF;
+}
+
+.file-list-item.active .file-list-img:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.file-list-item .file-list-img {
+    width: 90px;
+    height: 90px;
+    position: relative;
+}
+
+.file-list-item .file-list-img img {
+    width: 56px;
+    height: 56px;
+    margin-top: 17px;
+}
+
+.file-list-item .file-list-img.media img {
+    width: 90px;
+    height: 90px;
+    margin-top: 0;
+}
+
+.file-list-item .file-list-name {
+    word-wrap: break-word;
+    text-align: center;
+    line-height: normal;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.file-list-item .file-list-ck {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: right;
+}
+
+.file-list-item .file-list-ck .layui-form-checkbox {
+    padding: 0;
+}
+
+.list-empty {
+    text-align: center;
+    color: rgba(0, 0, 0, .45);
+    padding: 50px 0;
+}
+
+.list-empty .layui-icon {
+    font-size: 60px;
+    line-height: 60px;
+}
+
+.list-empty .layui-icon + div {
+    padding-top: 6px;
+}
+
+/** //文件列表样式end */
+
+/** 下拉列表样式 */
+
+/** 遮罩层 */
+html.dropdown-no-scroll {
+    overflow: hidden;
+}
+
+.dropdown-menu-shade {
+    z-index: 9999998;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(0, 0, 0);
+    opacity: 0.3;
+}
+
+.dropdown-menu-shade.no-shade {
+    opacity: 0;
+}
+
+/** 夜间主题 */
+.dropdown-menu.dark .dropdown-anchor, .dropdown-menu.dark .dropdown-anchor::after {
+    border-color: #32363F;
+}
+
+.dropdown-menu.dark ul {
+    background: #32363F
+}
+
+.dropdown-menu.dark ul li > a, .dropdown-menu.dark ul li label {
+    color: #a1a8b8
+}
+
+.dropdown-menu.dark ul li > a:hover, .dropdown-menu.dark ul li label:hover {
+    background-color: #272b34;
+}
+
+.dropdown-menu.dark ul li {
+    border-color: #484e58;
+}
+
+.dropdown-menu.dark ul li.title {
+    background: #474c58;
+    color: #868b9a;
+}
+
+/** 白色主题 */
+.dropdown-menu {
+    position: absolute;
+    z-index: 9999999;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+    display: none;
+}
+
+.dropdown-menu.fixed {
+    position: fixed;
+}
+
+.dropdown-opened {
+    display: block;
+}
+
+.dropdown-menu ul {
+    min-width: 100px;
+    list-style: none;
+    background: #ffffff;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+}
+
+.dropdown-menu ul li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 18px;
+    border-bottom: 1px solid #e6e6e6;
+    cursor: pointer;
+}
+
+.dropdown-menu ul li:last-child {
+    border: none;
+}
+
+.dropdown-menu ul li > a, .dropdown-menu ul li label {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    line-height: 18px;
+    padding: 10px 15px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.dropdown-menu ul li > a:hover, .dropdown-menu ul li label:hover {
+    background-color: #eeeeee;
+}
+
+/** 禁用样式 */
+.dropdown-menu ul li > a.disabled, .dropdown-menu ul li > a.disabled:hover, .dropdown-menu ul li label.disabled, .dropdown-menu ul li label.disabled:hover {
+    cursor: not-allowed;
+    background: none;
+    color: #999;
+}
+
+/** 标题样式 */
+.dropdown-menu ul li.title {
+    padding: 5px 15px;
+    background: #f6f6f6;
+    color: #999;
+    font-family: "Roboto", "Open Sans", sans-serif;
+    font-size: 12px;
+}
+
+/** 小箭头 */
+.dropdown-menu .dropdown-anchor {
+    border: 7px solid #fff;
+}
+
+.dropdown-menu .dropdown-anchor, .dropdown-menu .dropdown-anchor::after {
+    position: absolute;
+    content: '';
+    display: inline-block;
+}
+
+.dropdown-menu .dropdown-anchor::after {
+    border: 6px solid #fff;
+}
+
+/** 上边箭头 */
+.dropdown-menu.dropdown-anchor-top-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-right .dropdown-anchor {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    top: -14px;
+}
+
+.dropdown-menu.dropdown-anchor-top-left .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-top-center .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-top-right .dropdown-anchor::after {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    margin-top: -5px;
+    margin-left: -6px;
+}
+
+.dropdown-menu.dropdown-anchor-top-left:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-top-center:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-top-right:not(.dropdown-overlay-trigger) {
+    margin-top: 10px;
+}
+
+.dropdown-menu.dropdown-anchor-top-left.dropdown-anchor-top-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-center.dropdown-anchor-top-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-right.dropdown-anchor-top-left .dropdown-anchor {
+    left: 15px;
+}
+
+.dropdown-menu.dropdown-anchor-top-left.dropdown-anchor-top-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-center.dropdown-anchor-top-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-right.dropdown-anchor-top-center .dropdown-anchor {
+    left: calc(50% - 7px)
+}
+
+.dropdown-menu.dropdown-anchor-top-left.dropdown-anchor-top-right .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-center.dropdown-anchor-top-right .dropdown-anchor, .dropdown-menu.dropdown-anchor-top-right.dropdown-anchor-top-right .dropdown-anchor {
+    left: calc(100% - 28px);
+}
+
+/** 下边箭头 */
+.dropdown-menu.dropdown-anchor-bottom-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-right .dropdown-anchor {
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    top: 100%;
+}
+
+.dropdown-menu.dropdown-anchor-bottom-left .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-bottom-center .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-bottom-right .dropdown-anchor::after {
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    margin-top: -7px;
+    margin-left: -6px;
+}
+
+.dropdown-menu.dropdown-anchor-bottom-left:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-bottom-center:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-bottom-right:not(.dropdown-overlay-trigger) {
+    margin-top: -10px;
+}
+
+.dropdown-menu.dropdown-anchor-bottom-left.dropdown-anchor-bottom-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-center.dropdown-anchor-bottom-left .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-right.dropdown-anchor-bottom-left .dropdown-anchor {
+    left: 15px;
+}
+
+.dropdown-menu.dropdown-anchor-bottom-left.dropdown-anchor-bottom-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-center.dropdown-anchor-bottom-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-right.dropdown-anchor-bottom-center .dropdown-anchor {
+    left: calc(50% - 7px);
+}
+
+.dropdown-menu.dropdown-anchor-bottom-left.dropdown-anchor-bottom-right .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-center.dropdown-anchor-bottom-right .dropdown-anchor, .dropdown-menu.dropdown-anchor-bottom-right.dropdown-anchor-bottom-right .dropdown-anchor {
+    left: calc(100% - 28px);
+}
+
+/** 左边箭头 */
+.dropdown-menu.dropdown-anchor-left-top:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-left-center:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-left-bottom:not(.dropdown-overlay-trigger) {
+    margin-left: 10px;
+}
+
+.dropdown-menu.dropdown-anchor-left-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-bottom .dropdown-anchor {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    left: -14px;
+}
+
+.dropdown-menu.dropdown-anchor-left-top .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-left-center .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-left-bottom .dropdown-anchor::after {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    margin-left: -5px;
+    margin-top: -6px;
+}
+
+.dropdown-menu.dropdown-anchor-left-top.dropdown-anchor-left-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-center.dropdown-anchor-left-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-bottom.dropdown-anchor-left-top .dropdown-anchor {
+    top: 11px;
+}
+
+.dropdown-menu.dropdown-anchor-left-top.dropdown-anchor-left-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-center.dropdown-anchor-left-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-bottom.dropdown-anchor-left-center .dropdown-anchor {
+    top: calc(50% - 7px);
+}
+
+.dropdown-menu.dropdown-anchor-left-top.dropdown-anchor-left-bottom .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-center.dropdown-anchor-left-bottom .dropdown-anchor, .dropdown-menu.dropdown-anchor-left-bottom.dropdown-anchor-left-bottom .dropdown-anchor {
+    top: calc(100% - 26px);
+}
+
+/** 右边箭头 */
+.dropdown-menu.dropdown-anchor-right-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-bottom .dropdown-anchor {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    left: 100%;
+}
+
+.dropdown-menu.dropdown-anchor-right-top .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-right-center .dropdown-anchor::after, .dropdown-menu.dropdown-anchor-right-bottom .dropdown-anchor::after {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    margin-left: -7px;
+    margin-top: -6px;
+}
+
+.dropdown-menu.dropdown-anchor-right-top:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-right-center:not(.dropdown-overlay-trigger), .dropdown-menu.dropdown-anchor-right-bottom:not(.dropdown-overlay-trigger) {
+    margin-left: -10px;
+}
+
+.dropdown-menu.dropdown-anchor-right-top.dropdown-anchor-right-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-center.dropdown-anchor-right-top .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-bottom.dropdown-anchor-right-top .dropdown-anchor {
+    top: 11px;
+}
+
+.dropdown-menu.dropdown-anchor-right-top.dropdown-anchor-right-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-center.dropdown-anchor-right-center .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-bottom.dropdown-anchor-right-center .dropdown-anchor {
+    top: calc(50% - 7px);
+}
+
+.dropdown-menu.dropdown-anchor-right-top.dropdown-anchor-right-bottom .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-center.dropdown-anchor-right-bottom .dropdown-anchor, .dropdown-menu.dropdown-anchor-right-bottom.dropdown-anchor-right-bottom .dropdown-anchor {
+    top: calc(100% - 26px);
+}
+
+/** 按钮里面三角形样式 */
+.icon-btn .layui-icon-triangle-d {
+    margin-right: 0;
+    font-size: 14px;
+}
+
+.layui-icon-triangle-d.top {
+    transform: rotate(180deg);
+    display: inline-table;
+}
+
+.layui-icon-triangle-d.left {
+    transform: rotate(90deg);
+    display: inline-table;
+}
+
+.layui-icon-triangle-d.right {
+    transform: rotate(-90deg);
+    display: inline-table;
+}
+
+/** //下拉列表样式end */
+
+/** 滚动条样式美化 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #A6A6A6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #7f7f7f;
+}
+
+@media screen and (max-width: 750px) {
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+.mini-bar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.layui-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 44px;
+    line-height: 44px;
+    padding: 0 15px;
+    background-color: #ffffff;
+}
+
+.layui-text {
+    line-height: 44px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.my-form {
+    padding: 15px;
+}
+
+.form-text-right {
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+}
+@keyframes octocat-wave {
+    0%, 100% {
+        transform: rotate(0)
+    }
+    20%, 60% {
+        transform: rotate(-25deg)
+    }
+    40%, 80% {
+        transform: rotate(10deg)
+    }
+}
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+        animation: none
+    }
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+    }
+}
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.free</groupId>
+        <artifactId>fs-modules</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>fs-modules-file</artifactId>
+    <packaging>jar</packaging>
+
+    <description>
+        free-fs - 文件服务
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.free</groupId>
+            <artifactId>fs-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.free</groupId>
+            <artifactId>cache-component</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.free</groupId>
+            <artifactId>db-component</artifactId>
+        </dependency>
+    </dependencies>
+</project>

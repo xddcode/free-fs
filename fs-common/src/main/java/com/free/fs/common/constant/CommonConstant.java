@@ -86,4 +86,20 @@ public interface CommonConstant {
      * 需要租户过滤的字段
      */
     String SYSTEM_TENANT_ID = "source";
+
+
+    /**
+     * 时区
+     */
+    String TIME_ZONE_GMT8 = "GMT+8";
+
+    /**
+     * 公共日期格式
+     */
+    String MONTH_FORMAT = "yyyy-MM";
+    String DATE_FORMAT = "yyyy-MM-dd";
+    String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    String SIMPLE_MONTH_FORMAT = "yyyyMM";
+    String SIMPLE_DATE_FORMAT = "yyyyMMdd";
+    String SIMPLE_DATETIME_FORMAT = "yyyyMMddHHmmss";
 }

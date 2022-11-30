@@ -16,7 +16,8 @@
     </description>
 
     <modules>
-        <module>fs-db-component</module>
-        <module>fs-cache-component</module>
+        <module>db-component</module>
+        <module>cache-component</module>
+        <module>upload-component</module>
     </modules>
 </project>

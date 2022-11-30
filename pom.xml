@@ -14,6 +14,8 @@
     <modules>
         <module>fs-component</module>
         <module>fs-common</module>
+        <module>fs-modules</module>
+        <module>fs-web</module>
     </modules>
 
     <properties>
@@ -28,6 +30,7 @@
         <java.version>8</java.version>
         <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <hutool.version>5.7.22</hutool.version>
+        <transmittable.version>2.12.1</transmittable.version>
         <qiniu.version>7.10.2</qiniu.version>
         <aliyun-sdk-oss>3.8.1</aliyun-sdk-oss>
         <commons-lang3.version>3.12.0</commons-lang3.version>
@@ -87,6 +90,35 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 自定义组件 start-->
+            <dependency>
+                <groupId>com.free</groupId>
+                <artifactId>fs-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.free</groupId>
+                <artifactId>cache-component</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.free</groupId>
+                <artifactId>db-component</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.free</groupId>
+                <artifactId>fs-modules-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.free</groupId>
+                <artifactId>fs-modules-system</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 自定义组件 end-->
 
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -129,11 +161,6 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.fusesource</groupId>
@@ -170,6 +197,12 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable.version}</version>
             </dependency>
 
             <!-- qiniu-java-sdk -->
