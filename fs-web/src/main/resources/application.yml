@@ -47,12 +47,13 @@ fs:
   #多租户应用隔离配置
   tenant:
     enable: true
+    tenant-id: source
     ignoreTables:
-    - sys_user
-    - sys_user_role
-    - sys_role_auth
-    - sys_role
-    - sys_auth
+      - sys_user
+      - sys_user_role
+      - sys_role_auth
+      - sys_role
+      - sys_auth
 
   # 云存储配置
   files-server:

@@ -73,6 +73,11 @@ public interface CommonConstant {
     String FILE_TYPE_LOCAL = "local";
 
     /**
+     * 租户信息头(应用)
+     */
+    String TENANT_HEADER = "x-tenant-header";
+
+    /**
      * 云存储类型-oss
      */
     String FILE_TYPE_OSS = "oss";

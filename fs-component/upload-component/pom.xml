@@ -8,7 +8,7 @@
         <artifactId>fs-component</artifactId>
         <version>${revision}</version>
     </parent>
-    <artifactId>db-component</artifactId>
+    <artifactId>upload-component</artifactId>
     <packaging>jar</packaging>
 
     <description>

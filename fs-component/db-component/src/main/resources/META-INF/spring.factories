@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.free.fs.component.db.MybatisPlusAutoConfigure
+com.free.fs.component.db.MybatisPlusAutoConfigure,\
+com.free.fs.component.db.TenantAutoConfigure,\
+com.free.fs.component.db.filter.TenantFilter
