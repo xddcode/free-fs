@@ -2,6 +2,7 @@ package com.free.fs.component.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.http.Consts;
 
 /**
  * 上传文件，返回结果
@@ -16,13 +17,4 @@ public class PutResponse {
     private String path;
 
     private String url;
-
-    private Integer code = Consts.CODE_SUCCESS;
-
-    private Exception error;
-
-    public boolean isSuccess() {
-        return null != getCode() && getCode() == Consts.CODE_SUCCESS;
-    }
-
 }
