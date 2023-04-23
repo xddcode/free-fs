@@ -13,7 +13,6 @@ import lombok.Setter;
 @Setter
 public class LocalProperties {
 
-    private String uploadPath;
-
-    private String ngxinxUrl;
+    private String uploadDir;
+    private String uploadMapping;
 }

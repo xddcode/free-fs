@@ -16,7 +16,7 @@ layui.use(['jquery', 'layer', 'form'], function () {
                 });
             } else {
                 layer.closeAll('loading');
-                layer.msg(res.msg, {icon: 5});
+                layer.msg(res.msg, {icon: 5, time: 500});
                 $('img.login-captcha').trigger('click');
             }
         }, 'JSON');

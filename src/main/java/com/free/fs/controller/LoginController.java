@@ -4,14 +4,13 @@ import com.free.fs.common.utils.R;
 import com.free.fs.common.utils.StringUtil;
 import com.free.fs.model.User;
 import com.free.fs.service.UserService;
-import com.wf.captcha.ArithmeticCaptcha;
+import com.ramostear.captcha.HappyCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,13 +53,8 @@ public class LoginController extends BaseController {
      * 生成验证码 算术类型
      */
     @RequestMapping("/assets/captcha")
-    public void captcha(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
-        captcha.setLen(2);
-        captcha.getArithmeticString();
-        captcha.text();
-        request.getSession().setAttribute("captcha", captcha.text());
-        captcha.out(response.getOutputStream());
+    public void captcha(HttpServletRequest request, HttpServletResponse response){
+        HappyCaptcha.require(request,response).build().finish();
     }
 
     /**
@@ -72,8 +66,9 @@ public class LoginController extends BaseController {
         if (StringUtil.isBlank(username, password)) {
             return R.failed("账号或密码不能为空");
         }
-        String sessionCode = (String) request.getSession().getAttribute("captcha");
-        if (code == null || !sessionCode.equals(code.trim().toLowerCase())) {
+        //Verification Captcha
+        boolean flag = HappyCaptcha.verification(request,code,true);
+        if (!flag) {
             return R.failed("验证码不正确");
         }
         try {

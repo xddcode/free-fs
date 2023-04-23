@@ -12,7 +12,7 @@ spring:
   application:
     name: free-fs
   profiles:
-    active: preview
+    active: dev
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -45,19 +45,20 @@ fs:
   tenant:
     enable: true
     ignoreTables:
-    - sys_user
-    - sys_user_role
-    - sys_role_auth
-    - sys_role
-    - sys_auth
+      - sys_user
+      - sys_user_role
+      - sys_role_auth
+      - sys_role
+      - sys_auth
 
   # 云存储配置
   files-server:
-    type: qiniu
+    type: local
     local:
-      uploadPath: D:/data/upload  #windows
-      #nginx映射本地目录的url，需自己配置本地目录映射（不会的百度nginx映射本地目录）
-      ngxinxUrl: http://localhost:4344/resource
+      # 文件上传地址, 这里的意思就是本地模式下，上传的文件会保存到 `uploadPath`路径里，然后通过 `uploadMapping` 映射
+      # 通俗点就是 E:/upload/xxx.jpg 会映射到 http://localhost:8081/uploads/xxx.jpg
+      uploadDir: E:/upload/
+      uploadMapping: /uploads
     #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx

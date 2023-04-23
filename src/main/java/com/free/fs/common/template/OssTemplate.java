@@ -1,12 +1,10 @@
 package com.free.fs.common.template;
 
-import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.*;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
-import com.free.fs.common.properties.FsServerProperties;
+import com.free.fs.common.properties.OssProperties;
 import com.free.fs.common.utils.FileUtil;
 import com.free.fs.model.FilePojo;
 import lombok.SneakyThrows;
@@ -14,12 +12,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,8 +46,14 @@ public class OssTemplate {
      */
     private static int uploadedPart = 0;
 
-    @Resource
-    private FsServerProperties fileProperties;
+    private final OSS ossClient;
+
+    private final OssProperties ossProperties;
+
+    public OssTemplate(OSS ossClient, OssProperties ossProperties) {
+        this.ossClient = ossClient;
+        this.ossProperties = ossProperties;
+    }
 
     /**
      * 查询oss的资源列表
@@ -52,13 +61,8 @@ public class OssTemplate {
      * @return
      */
     public List<OSSObjectSummary> list() {
-        OSS ossClient = new OSSClientBuilder().build(
-                fileProperties.getOss().getEndpoint(),
-                fileProperties.getOss().getAccessKey(),
-                fileProperties.getOss().getSecretKey()
-        );
         // 列举文件。
-        ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(fileProperties.getOss().getBucket()).withMaxKeys(LIMIT));
+        ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(ossProperties.getBucket()).withMaxKeys(LIMIT));
         ossClient.shutdown();
         return objectListing.getObjectSummaries();
     }
@@ -72,18 +76,13 @@ public class OssTemplate {
      */
     @SneakyThrows
     public FilePojo upload(MultipartFile file) {
-        OSS ossClient = new OSSClientBuilder().build(
-                fileProperties.getOss().getEndpoint(),
-                fileProperties.getOss().getAccessKey(),
-                fileProperties.getOss().getSecretKey()
-        );
         FilePojo pojo = FileUtil.buildFilePojo(file);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(FileUtil.getcontentType(pojo.getFileName().substring(pojo.getFileName().lastIndexOf("."))));
-        PutObjectRequest putObjectRequest = new PutObjectRequest(fileProperties.getOss().getBucket(), pojo.getFileName(), file.getInputStream());
+        PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucket(), pojo.getFileName(), file.getInputStream());
         putObjectRequest.setMetadata(metadata);
         ossClient.putObject(putObjectRequest);
-        String url = fileProperties.getOss().getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
+        String url = ossProperties.getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
         pojo.setUrl(url);
         ossClient.shutdown();
         return pojo;
@@ -95,13 +94,8 @@ public class OssTemplate {
      * @param objectPath 对象路径
      */
     public void delete(String objectPath) {
-        OSS ossClient = new OSSClientBuilder().build(
-                fileProperties.getOss().getEndpoint(),
-                fileProperties.getOss().getAccessKey(),
-                fileProperties.getOss().getSecretKey()
-        );
-        String key = objectPath.replaceAll(fileProperties.getOss().getPath() + CommonConstant.DIR_SPLIT, "");
-        ossClient.deleteObject(fileProperties.getOss().getBucket(), key);
+        String key = objectPath.replaceAll(ossProperties.getPath() + CommonConstant.DIR_SPLIT, "");
+        ossClient.deleteObject(ossProperties.getBucket(), key);
         ossClient.shutdown();
     }
 
@@ -113,16 +107,10 @@ public class OssTemplate {
      */
     @SneakyThrows
     public void download(String objectName, HttpServletResponse response) {
-        OSS ossClient = new OSSClientBuilder().build(
-                fileProperties.getOss().getEndpoint(),
-                fileProperties.getOss().getAccessKey(),
-                fileProperties.getOss().getSecretKey()
-        );
-
-        String fileName = objectName.replaceAll(fileProperties.getOss().getPath() + "/", "");
+        String fileName = objectName.replaceAll(ossProperties.getPath() + "/", "");
         response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
 
-        OSSObject ossObject = ossClient.getObject(fileProperties.getOss().getBucket(), fileName);
+        OSSObject ossObject = ossClient.getObject(ossProperties.getBucket(), fileName);
         BufferedInputStream in = new BufferedInputStream(ossObject.getObjectContent());
         BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
         byte[] buffer = new byte[1024];
@@ -149,12 +137,7 @@ public class OssTemplate {
      */
     @SneakyThrows
     public FilePojo uploadSharding(MultipartFile file, HttpSession session) {
-        String endpoint = fileProperties.getOss().getEndpoint();
-        String accessKeyId = fileProperties.getOss().getAccessKey();
-        String accessKeySecret = fileProperties.getOss().getSecretKey();
-        String bucketName = fileProperties.getOss().getBucket();
 
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         FilePojo pojo = FileUtil.buildFilePojo(file);
 
         List<PartETag> partTags = Collections.synchronizedList(new ArrayList<>());
@@ -162,7 +145,7 @@ public class OssTemplate {
         metadata.setContentType(FileUtil.getcontentType(pojo.getFileName().substring(pojo.getFileName().lastIndexOf("."))));
 
         //获取分片上传id
-        InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(bucketName, pojo.getFileName());
+        InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(ossProperties.getBucket(), pojo.getFileName());
         request.setObjectMetadata(metadata);
         InitiateMultipartUploadResult result = ossClient.initiateMultipartUpload(request);
         String uploadId = result.getUploadId();
@@ -189,7 +172,7 @@ public class OssTemplate {
                 long startPos = i * PART_SIZE;
                 long curPartSize = (i + 1 == partCount) ? (fileLength - startPos) : PART_SIZE;
                 UploadPartRequest uploadPartRequest = new UploadPartRequest();
-                uploadPartRequest.setBucketName(bucketName);
+                uploadPartRequest.setBucketName(ossProperties.getBucket());
                 uploadPartRequest.setKey(pojo.getFileName());
                 uploadPartRequest.setUploadId(uploadId);
                 uploadPartRequest.setPartSize(curPartSize);
@@ -209,9 +192,9 @@ public class OssTemplate {
             // 按升序排列零件编号
             partTags.sort(Comparator.comparingInt(PartETag::getPartNumber));
             log.info("Completing to upload multiparts");
-            CompleteMultipartUploadRequest completeMultipartUploadRequest = new CompleteMultipartUploadRequest(bucketName, pojo.getFileName(), uploadId, partTags);
+            CompleteMultipartUploadRequest completeMultipartUploadRequest = new CompleteMultipartUploadRequest(ossProperties.getBucket(), pojo.getFileName(), uploadId, partTags);
             ossClient.completeMultipartUpload(completeMultipartUploadRequest);
-            String url = fileProperties.getOss().getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
+            String url = ossProperties.getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
             pojo.setUrl(url);
             return pojo;
         } finally {

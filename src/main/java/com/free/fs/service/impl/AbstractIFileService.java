@@ -35,12 +35,9 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         String dirIds = pojo.getDirIds();
         if (StringUtils.isNotEmpty(dirIds)) {
             dirIds = dirIds.substring(dirIds.lastIndexOf(CommonConstant.DIR_SPLIT) + 1);
-            if (StringUtils.isNotEmpty(dirIds)) {
-                wrapper.eq(FilePojo::getParentId, Long.parseLong(dirIds));
-            } else {
-                wrapper.eq(FilePojo::getParentId, CommonConstant.ROOT_PARENT_ID);
-            }
         }
+        wrapper.eq(FilePojo::getParentId, StringUtils.isEmpty(dirIds) ? CommonConstant.ROOT_PARENT_ID : Long.parseLong(dirIds));
+
         wrapper.orderByDesc(FilePojo::getIsDir, FilePojo::getPutTime);
         return baseMapper.selectList(wrapper);
     }
@@ -53,19 +50,17 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
                         .eq(pojo.getIsDir() != null && pojo.getIsDir(), FilePojo::getIsDir, pojo.getIsDir())
                         .orderByDesc(FilePojo::getIsDir, FilePojo::getPutTime)
         );
-        List<Dtree> dtrees = new ArrayList<>();
-        filePojos.forEach(item -> {
+        List<Dtree> dtrees = filePojos.stream().map(item -> {
             Dtree dtree = new Dtree();
             BeanUtils.copyProperties(item, dtree);
             dtree.setTitle(item.getName());
-            //设置图标
             if (dtree.getIsDir()) {
                 dtree.setIconClass(CommonConstant.DTREE_ICON_1);
             } else {
                 dtree.setIconClass(CommonConstant.DTREE_ICON_2);
             }
-            dtrees.add(dtree);
-        });
+            return dtree;
+        }).collect(Collectors.toList());
         return dtrees.stream()
                 .filter(m -> m.getParentId() == -1)
                 .peek((m) -> m.setChildren(getChildrens(m, dtrees)))
@@ -125,14 +120,18 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
      * @return
      */
     private String recursionFindName(String sname, String rname, Long parentId, int flag) {
-        Long count = baseMapper.selectCount(new LambdaQueryWrapper<FilePojo>()
-                .eq(FilePojo::getName, rname)
-                .eq(FilePojo::getIsDir, Boolean.FALSE)
-                .eq(FilePojo::getParentId, parentId));
-        if (count > 0) {
-            flag++;
-            rname = sname + "(" + flag + ")";
-            return recursionFindName(sname, rname, parentId, flag);
+        boolean exists = true;
+        while (exists) {
+            Long count = baseMapper.selectCount(new LambdaQueryWrapper<FilePojo>()
+                    .eq(FilePojo::getName, rname)
+                    .eq(FilePojo::getIsDir, Boolean.FALSE)
+                    .eq(FilePojo::getParentId, parentId));
+            if (count > 0) {
+                flag++;
+                rname = sname + "(" + flag + ")";
+            } else {
+                exists = false;
+            }
         }
         return flag > 0 ? sname + "(" + flag + ")" : sname;
     }
@@ -240,9 +239,9 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         FilePojo updPojo = new FilePojo();
         updPojo.setId(pojo.getId());
         updPojo.setName(pojo.getRename());
+        baseMapper.updateById(updPojo);
         return baseMapper.updateById(updPojo) > 0;
     }
-
 
     @Transactional(rollbackFor = Exception.class)
     @Override

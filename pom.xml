@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
     <artifactId>free-fs</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <name>free-fs</name>
     <packaging>jar</packaging>
     <description>free-fs 文件管理系统</description>
@@ -22,8 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <hutool.version>5.7.22</hutool.version>
-        <fastjson.version>2.0.2</fastjson.version>
+        <hutool.version>5.8.15</hutool.version>
+        <fastjson2.version>2.0.29</fastjson2.version>
         <qiniu.version>7.10.2</qiniu.version>
         <aliyun-sdk-oss>3.8.1</aliyun-sdk-oss>
         <commons-lang3.version>3.12.0</commons-lang3.version>
@@ -36,8 +36,7 @@
         <shiro.version>1.9.0</shiro.version>
         <thymeleaf-extras-shiro.version>2.1.0</thymeleaf-extras-shiro.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
-        <hutool.version>5.3.7</hutool.version>
+        <happy-captcha.version>1.0.1</happy-captcha.version>
         <!-- docker插件配置 -->
         <docker.image.prefix>ccr.ccs.tencentyun.com/freefs</docker.image.prefix>
     </properties>
@@ -112,9 +111,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
 
         <!-- qiniu-java-sdk -->
@@ -172,19 +171,11 @@
             <artifactId>shiro-spring</artifactId>
             <version>${shiro.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
             <version>${shiro.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.whvcse</groupId>
-            <artifactId>easy-captcha</artifactId>
-            <version>${easy-captcha.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.github.theborakompanioni</groupId>
             <artifactId>thymeleaf-extras-shiro</artifactId>
@@ -198,6 +189,11 @@
             <version>${hutool.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ramostear</groupId>
+            <artifactId>Happy-Captcha</artifactId>
+            <version>${happy-captcha.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * 七牛云配置
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "fs.files-server", name = "type", havingValue = "qiniu")
-@Import(QiniuTemplate.class)
 @RequiredArgsConstructor
 public class QiniuAutoConfigure {
 
@@ -58,5 +56,11 @@ public class QiniuAutoConfigure {
     @Bean
     public BucketManager bucketManager() {
         return new BucketManager(auth(), qiniuConfig());
+    }
+
+    @Bean
+    public QiniuTemplate qiniuTemplate() {
+
+        return new QiniuTemplate(uploadManager(), bucketManager(), auth(), fileProperties.getQiniu());
     }
 }

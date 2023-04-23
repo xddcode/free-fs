@@ -4,8 +4,9 @@ import com.free.fs.common.properties.FsServerProperties;
 import com.free.fs.common.template.LocalTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 
 /**
  * 本地上传配置
@@ -15,9 +16,15 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "fs.files-server", name = "type", havingValue = "local")
-@Import(LocalTemplate.class)
 @RequiredArgsConstructor
 public class LocalAutoConfigure {
 
+    private final Environment environment;
     private final FsServerProperties fileProperties;
+
+    @Bean
+    public LocalTemplate localTemplate() {
+
+        return new LocalTemplate(environment, fileProperties.getLocal());
+    }
 }

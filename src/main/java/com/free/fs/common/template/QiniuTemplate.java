@@ -1,8 +1,8 @@
 package com.free.fs.common.template;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.free.fs.common.constant.CommonConstant;
-import com.free.fs.common.properties.FsServerProperties;
+import com.free.fs.common.properties.QiniuProperties;
 import com.free.fs.common.utils.FileUtil;
 import com.free.fs.model.FilePojo;
 import com.qiniu.http.Response;
@@ -16,7 +16,6 @@ import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
@@ -29,22 +28,21 @@ public class QiniuTemplate {
      */
     private static final int LIMIT = 1000;
 
-    @Resource
-    private FsServerProperties fileProperties;
-
-    @Resource
-    private UploadManager uploadManager;
-
-    @Resource
-    private BucketManager bucketManager;
-
-    @Resource
-    private Auth auth;
-
+    private final UploadManager uploadManager;
+    private final BucketManager bucketManager;
+    private final Auth auth;
+    private final QiniuProperties qiniuProperties;
     /**
      * 定义七牛云上传的相关策略
      */
     private StringMap putPolicy;
+
+    public QiniuTemplate(UploadManager uploadManager, BucketManager bucketManager, Auth auth, QiniuProperties qiniuProperties) {
+        this.uploadManager = uploadManager;
+        this.bucketManager = bucketManager;
+        this.auth = auth;
+        this.qiniuProperties = qiniuProperties;
+    }
 
     /**
      * 查询七牛的资源列表
@@ -57,7 +55,7 @@ public class QiniuTemplate {
         //指定目录分隔符，列出所有公共前缀（模拟列出目录效果）。缺省值为空字符串
         String delimiter = "";
         //列举空间文件列表
-        BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(fileProperties.getQiniu().getBucket(), prefix, LIMIT, delimiter);
+        BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(qiniuProperties.getBucket(), prefix, LIMIT, delimiter);
         FileInfo[] items = new FileInfo[0];
         while (fileListIterator.hasNext()) {
             //处理获取的file list结果
@@ -79,7 +77,7 @@ public class QiniuTemplate {
         Response response = uploadManager.put(file.getBytes(), pojo.getFileName(), getUploadToken());
         //解析上传成功的结果
         DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
-        String url = fileProperties.getQiniu().getPath() + CommonConstant.DIR_SPLIT + putRet.key;
+        String url = qiniuProperties.getPath() + CommonConstant.DIR_SPLIT + putRet.key;
         pojo.setUrl(url);
         return pojo;
     }
@@ -91,7 +89,7 @@ public class QiniuTemplate {
      * @return
      */
     private String getUploadToken() {
-        return this.auth.uploadToken(fileProperties.getQiniu().getBucket(), null, 3600, putPolicy);
+        return this.auth.uploadToken(qiniuProperties.getBucket(), null, 3600, putPolicy);
     }
 
     /**
@@ -101,8 +99,8 @@ public class QiniuTemplate {
      */
     @SneakyThrows
     public void delete(String url) {
-        String key = url.replaceAll(fileProperties.getQiniu().getPath() + CommonConstant.DIR_SPLIT, "");
-        bucketManager.delete(fileProperties.getQiniu().getBucket(), key);
+        String key = url.replaceAll(qiniuProperties.getPath() + CommonConstant.DIR_SPLIT, "");
+        bucketManager.delete(qiniuProperties.getBucket(), key);
     }
 
     /**
@@ -111,6 +109,6 @@ public class QiniuTemplate {
      * @param url 对象路径
      */
     public void download(String url, HttpServletResponse response) {
-        FileUtil.downLoad(url, fileProperties.getQiniu().getPath(), response);
+        FileUtil.downLoad(url, qiniuProperties.getPath(), response);
     }
 }

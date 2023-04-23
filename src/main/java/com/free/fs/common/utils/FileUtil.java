@@ -33,7 +33,7 @@ public class FileUtil {
             "zip", "ppt", "doc", "docx", "html",
             "htm", "ico", "mp3", "mp4", "java",
             "sql", "xml", "js", "py", "php", "vue",
-            "sh", "cmd", "py3", "css"
+            "sh", "cmd", "py3", "css","md"
     };
     public static String[] IMAGE_FILE_EXTD1 = new String[]{"png", "bmp", "jpg", "jpeg", "svg", "gif"};
 
