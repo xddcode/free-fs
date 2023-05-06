@@ -19,7 +19,7 @@
 
 - Gitee：[https://gitee.com/dh_free/free-fs](https://gitee.com/dh_free/free-fs)
 - Github：[https://github.com/dh-free/free-fs](https://github.com/dh-free/free-fs)
-
+#### Vue3版本正在开发中......(敬请期待)
 #### 开发文档： [https://dh_free.gitee.io/free-fs-doc](https://dh_free.gitee.io/free-fs-doc)
 
 #### 体验地址： [https://fs.elites.icu](https://fs.elites.icu)
