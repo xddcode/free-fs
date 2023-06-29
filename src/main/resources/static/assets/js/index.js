@@ -466,7 +466,9 @@ layui.config({
 
     // 打开
     $('#open').click(function () {
-        window.open(mUrl);
+        //使用kkFileView预览文件
+        var url = mUrl;
+        window.open('https://fs.elites.ink/preview/onlinePreview?url='+encodeURIComponent(Base64.encode(url)));
     });
 
     //移动按钮点击事件

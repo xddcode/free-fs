@@ -15,4 +15,6 @@ public class LocalProperties {
 
     private String uploadDir;
     private String uploadMapping;
+
+    private String domain;
 }

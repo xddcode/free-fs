@@ -13,7 +13,8 @@
 </div>
 
 ##  📖 项目简介
-✨Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + Shiro+ Layui 等搭配七牛云，阿里云OSS实现的云存储管理系统。包含文件上传、删除、预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
+✨Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + Shiro+ Layui 等搭配七牛云， 阿里云OSS实现的云存储管理系统。
+包含文件上传、删除、在线预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
 
 #### 源码链接：
 
@@ -22,7 +23,7 @@
 #### Vue3版本正在开发中......(敬请期待)
 #### 开发文档： [https://dh_free.gitee.io/free-fs-doc](https://dh_free.gitee.io/free-fs-doc)
 
-#### 体验地址： [https://fs.elites.icu](https://fs.elites.icu)
+#### 体验地址： [https://fs.elites.ink](https://fs.elites.ink)
 
 #### 内置账号
 
@@ -48,6 +49,11 @@
 - Layui v2.5.5
 - Jquery
 - Ajax
+
+
+文件在线预览解决方案：
+
+- [kkfileview](https://kkfileview.keking.cn/)
 
 ## 🛶 系统设计
 ![](https://dh_free.gitee.io/images/img/1616399886.png "1616399886.png")
@@ -127,5 +133,5 @@
 
 ##  ☎ 联系我
 - 有什么问题也可以添加我的微信，请注明来意！
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/145547_114a3b71_4951941.jpeg "wechat.jpg")
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/145547_114a3b71_4951941.jpeg "wechat.jpg")
 

@@ -3,6 +3,7 @@ package com.free.fs.common.template;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.properties.LocalProperties;
 import com.free.fs.common.utils.FileUtil;
+import com.free.fs.common.utils.StringUtil;
 import com.free.fs.model.FilePojo;
 import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,13 +37,13 @@ public class LocalTemplate {
         //保存文件
         file.transferTo(new File(folder + CommonConstant.DIR_SPLIT + pojo.getFileName()));
         // 返回上传文件的访问路径
-        String url = getServerUrl() + "/uploads" + CommonConstant.DIR_SPLIT + pojo.getFileName();
+        String url = getServerUrl() + localProperties.getUploadMapping() + CommonConstant.DIR_SPLIT + pojo.getFileName();
         pojo.setUrl(url);
         return pojo;
     }
 
     public void delete(String url) {
-        String key = url.replaceAll(getServerUrl() + "/uploads" + CommonConstant.DIR_SPLIT, "");
+        String key = url.replaceAll(getServerUrl() + localProperties.getUploadMapping() + CommonConstant.DIR_SPLIT, "");
         File file = new File(localProperties.getUploadDir() + CommonConstant.DIR_SPLIT + key);
         if (file.exists()) {
             file.delete();
@@ -50,10 +51,13 @@ public class LocalTemplate {
     }
 
     public void download(String url, HttpServletResponse response) {
-        FileUtil.downLoad(url, getServerUrl() + "/uploads", response);
+        FileUtil.downLoad(url, getServerUrl() + localProperties.getUploadMapping(), response);
     }
 
     public String getServerUrl() {
+        if (StringUtil.isNotBlank(localProperties.getDomain())) {
+            return localProperties.getDomain();
+        }
         String serverUrl;
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();

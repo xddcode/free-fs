@@ -24,9 +24,9 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 文件上传路径:把上传文件地址file:E:/upload/  映射为 /uploads/**
-        registry.addResourceHandler(fsServerProperties.getLocal().getUploadMapping() + "/**")  // /images/**
-                .addResourceLocations("file:" + fsServerProperties.getLocal().getUploadDir());  // file:E:/upload/
+        // 文件上传路径:把上传文件地址file:/data/free-fs/xxx.jpg  映射为 /uploads/**
+        registry.addResourceHandler(fsServerProperties.getLocal().getUploadMapping() + "/**")
+                .addResourceLocations("file:" + fsServerProperties.getLocal().getUploadDir());
     }
 
     /**

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
-    <artifactId>free-fs</artifactId>
+    <artifactId>free-fs2</artifactId>
     <version>1.2.1</version>
     <name>free-fs</name>
     <packaging>jar</packaging>
@@ -212,7 +212,7 @@
                         <id>default</id>
                         <goals>
                             <!--如果package时不想用docker打包,就注释掉这个goal-->
-                            <goal>build</goal>
+                            <!--<goal>build</goal>-->
                             <!--<goal>push</goal>-->
                         </goals>
                     </execution>

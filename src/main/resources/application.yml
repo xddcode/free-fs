@@ -57,8 +57,10 @@ fs:
     local:
       # 文件上传地址, 这里的意思就是本地模式下，上传的文件会保存到 `uploadPath`路径里，然后通过 `uploadMapping` 映射
       # 通俗点就是 E:/upload/xxx.jpg 会映射到 http://localhost:8081/uploads/xxx.jpg
-      uploadDir: E:/upload/
+      uploadDir: /data/free-fs/upload/
       uploadMapping: /uploads
+      # 生产环境请填写公网地址或者域名，如果不写，默认http://127.0.0.1:8081/
+      domain: https://fs.elites.ink
     #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx
