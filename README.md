@@ -13,7 +13,7 @@
 </div>
 
 ##  📖 项目简介
-✨Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatisPlus + MySQL + Shiro+ Layui 等搭配七牛云， 阿里云OSS实现的云存储管理系统。
+✨Free-Fs 开源文件管理系统：基于 SpringBoot2.x + MyBatis Plus + MySQL + Sa-Token + Layui 等搭配七牛云， 阿里云OSS实现的云存储管理系统。
 包含文件上传、删除、在线预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
 
 #### 源码链接：
@@ -36,16 +36,17 @@
 
 后端：
 
-- Spring Boot 2.6.6
-- orm: MyBatis Plus 2.5.1
+- 核心框架：Spring Boot 2.6.6
+- orm: MyBatis Plus
 - 数据库：MySQL 8.0
-- 权限安全控制：shiro
-- 本地缓存：ehcache
-- 文件上传：七牛云 阿里云OSS
-
+- 权限安全控制：Sa-Token
+- 本地缓存：Ehcache
+- 文件上传：本地、七牛云、阿里云OSS
+- 第三方登录：JustAuth
+- 模板渲染：Thymeleaf
+- 
 前端：
 
-- Thymeleaf
 - Layui v2.5.5
 - Jquery
 - Ajax
@@ -65,8 +66,8 @@
 - 应用服务器：Undertow
 - 接口测试工具：Postman
 - 压力测试工具：Apache JMeter
-- 版本控制工具：Gitee
-- Java 版本：8
+- 版本控制工具：Github、Gitee
+- Java 版本：8+
 - idea开发插件: lombok
 
 ##  📁 项目结构
@@ -77,12 +78,13 @@
     - java
     - com.free.fs
       - common                公共模块
-        - aspect              自定义切面
+        - annotation          自定义注解
+        - aop                 自定义切面
         - config              系统基本配置，web跨域和七牛云配置
         - constant            系统常量
+        - domain              公共领域对象
         - exception           全局异常处理和自定义异常
         - properties          资源读取类
-        - shiro               shiro配置与自定义认证和授权
         - utils               系统工具类
       - controller            控制层
       - mapper                mapper接口层
@@ -92,13 +94,11 @@
       - xxApplication.java    启动类
   - resources
     - mapper                  mybatis mapper.xml
-    - shiro                   缓存配置文件
     - static                  静态资源包存放js css 第三方插件
     - templates               静态页面 html
     - application.yml         配置文件
     - application-dev.yml     开发环境配置
     - application-pro.yml     生产环境配置
-    - application-preview.yml 演示环境配置
 
 ```
 ##  👀 界面预览
