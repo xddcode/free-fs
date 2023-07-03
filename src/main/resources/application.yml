@@ -12,7 +12,7 @@ spring:
   application:
     name: free-fs
   profiles:
-    active: dev
+    active: prod
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -47,9 +47,9 @@ fs:
     ignoreTables:
       - sys_user
       - sys_user_role
-      - sys_role_auth
+      - sys_role_permission
       - sys_role
-      - sys_auth
+      - sys_permission
 
   # 云存储配置
   files-server:
@@ -60,7 +60,7 @@ fs:
       uploadDir: /data/free-fs/upload/
       uploadMapping: /uploads
       # 生产环境请填写公网地址或者域名，如果不写，默认http://127.0.0.1:8081/
-      domain: https://fs.elites.ink
+      #domain: https://fs.elites.ink
     #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx
@@ -74,3 +74,34 @@ fs:
       endpoint: xxxxxxxxxxxxxxxxxxx
       bucket: xxxxxxxxxxxxxxxxxxx
       path: xxxxxxxxxxxxxxxxxxx
+
+
+# 第三方登录配置
+justauth:
+  enabled: true
+  type:
+    GITEE:
+      client-id: 9430a180ea8axxxxxxxxxxxxxxxxxxxxxx07c38d22be88xxxxxxdfb8c
+      client-secret: b10aexxxxxxe2c16b50b56869460741f04xxxxxxxxxxxxxxxxxxxdb409ee
+      redirect-uri: http://xxxxxxxx/oauth/callback/gitee
+    GITHUB:
+      client-id: ea6f9xxxxxx03f5b0fd
+      client-secret: c60524386xxxxxx9cbef3caa7cxxxxxxxxxxe71474d
+      redirect-uri: http://xxxxxx/oauth/callback/github
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: free-fs-token
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 86400
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: 3600
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: true
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: true

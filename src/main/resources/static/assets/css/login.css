@@ -141,6 +141,23 @@ body:before {
 .layui-link {
     color: #5FB878 !important;
 }
+
 .pull-right {
     float: right;
+}
+
+.oauth {
+    line-height: 30px;
+    margin: 0 0 8px 0;
+    color: #9b9b9b;
+    text-align: center;
+}
+
+.oauth span {
+    vertical-align: middle
+}
+
+.oauth a {
+    vertical-align: middle;
+    margin-left: 10px
 }

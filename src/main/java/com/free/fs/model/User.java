@@ -40,12 +40,23 @@ public class User extends Model<User> {
     /**
      * 昵称
      */
-    private String nickName;
+    private String nickname;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 唯一uuid
+     */
+    private String uuid;
 
     /**
      * 注册时间
      */
     private Date createTime;
+
 
     /**
      * 角色集合

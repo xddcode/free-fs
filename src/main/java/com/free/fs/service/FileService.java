@@ -1,8 +1,8 @@
 package com.free.fs.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.free.fs.common.utils.R;
-import com.free.fs.model.Dtree;
+import com.free.fs.common.domain.R;
+import com.free.fs.common.domain.Dtree;
 import com.free.fs.model.FilePojo;
 import org.springframework.web.multipart.MultipartFile;
 

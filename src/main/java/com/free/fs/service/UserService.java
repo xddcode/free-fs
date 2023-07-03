@@ -12,6 +12,16 @@ import com.free.fs.model.User;
 public interface UserService extends IService<User> {
 
     /**
+     * 登录
+     *
+     * @param username
+     * @param password
+     * @param rememberMe
+     * @return
+     */
+    boolean doLogin(String username, String password, boolean rememberMe);
+
+    /**
      * 新增用户
      *
      * @param user

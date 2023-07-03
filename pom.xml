@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
-    <artifactId>free-fs2</artifactId>
-    <version>1.2.1</version>
+    <artifactId>free-fs</artifactId>
+    <version>1.2.2</version>
     <name>free-fs</name>
     <packaging>jar</packaging>
     <description>free-fs 文件管理系统</description>
@@ -27,16 +27,16 @@
         <qiniu.version>7.10.2</qiniu.version>
         <aliyun-sdk-oss>3.8.1</aliyun-sdk-oss>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <thumbnailator.version>0.4.17</thumbnailator.version>
+        <thumbnailator.version>0.4.19</thumbnailator.version>
         <tika.version>2.3.0</tika.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <commons-codec.version>1.13</commons-codec.version>
         <sigar.version>1.6.4</sigar.version>
-        <shiro.version>1.9.0</shiro.version>
-        <thymeleaf-extras-shiro.version>2.1.0</thymeleaf-extras-shiro.version>
         <commons-codec.version>1.10</commons-codec.version>
         <happy-captcha.version>1.0.1</happy-captcha.version>
+        <JustAuth.version>1.4.0</JustAuth.version>
+
+        <sa-token.version>1.35.0.RC</sa-token.version>
         <!-- docker插件配置 -->
         <docker.image.prefix>ccr.ccs.tencentyun.com/freefs</docker.image.prefix>
     </properties>
@@ -104,11 +104,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
@@ -167,19 +162,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>${shiro.version}</version>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>${sa-token.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
-            <version>${shiro.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.theborakompanioni</groupId>
-            <artifactId>thymeleaf-extras-shiro</artifactId>
-            <version>${thymeleaf-extras-shiro.version}</version>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dialect-thymeleaf</artifactId>
+            <version>${sa-token.version}</version>
         </dependency>
 
         <!-- hutool java工具类库  -->
@@ -194,6 +184,13 @@
             <artifactId>Happy-Captcha</artifactId>
             <version>${happy-captcha.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.xkcoding.justauth</groupId>
+            <artifactId>justauth-spring-boot-starter</artifactId>
+            <version>${JustAuth.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

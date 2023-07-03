@@ -21,7 +21,7 @@
         </div>
         <div class="layui-form-item layui-input-icon-group">
             <i class="layui-icon layui-icon-user"></i>
-            <input class="layui-input" name="nickName" placeholder="请输入昵称" autocomplete="off"
+            <input class="layui-input" name="nickname" placeholder="请输入昵称" autocomplete="off"
                    lay-verType="tips" lay-verify="required" required/>
         </div>
         <div class="layui-form-item layui-input-icon-group">
@@ -31,8 +31,8 @@
         </div>
         <div class="layui-form-item layui-input-icon-group">
             <i class="layui-icon layui-icon-password"></i>
-            <input class="layui-input" name="password2" placeholder="请再次输入登录密码" type="password"
-                   lay-verType="tips" lay-verify="equalTo" lay-equalTo="[name=password]" required/>
+            <input class="layui-input" name="password2" placeholder="请确认密码" type="password"
+                   lay-verType="tips" lay-verify="required|confirmPass" required/>
         </div>
         <div class="layui-form-item layui-input-icon-group login-captcha-group">
             <i class="layui-icon layui-icon-auz"></i>
@@ -42,7 +42,7 @@
         </div>
         <div class="layui-form-item">
             <a th:href="@{/login}" class="layui-link">返回登录</a>
-<!--            <a href="forget.html" class="layui-link pull-right">忘记密码</a>-->
+            <!--            <a href="forget.html" class="layui-link pull-right">忘记密码</a>-->
         </div>
         <div class="layui-form-item" style="margin-bottom: 20px;">
             <button class="layui-btn layui-btn-fluid" lay-filter="regSubmit" lay-submit>注册</button>

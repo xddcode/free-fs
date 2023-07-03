@@ -1,16 +1,13 @@
 package com.free.fs.controller;
 
-import com.free.fs.common.utils.R;
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.free.fs.common.domain.R;
 import com.free.fs.common.utils.StringUtil;
 import com.free.fs.model.User;
 import com.free.fs.service.UserService;
 import com.ramostear.captcha.HappyCaptcha;
 import lombok.RequiredArgsConstructor;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequiredArgsConstructor
-public class LoginController extends BaseController {
+public class LoginController {
 
     private final UserService userService;
 
@@ -34,7 +31,7 @@ public class LoginController extends BaseController {
      */
     @GetMapping("/login")
     public String login() {
-        if (getLoginUser() != null) {
+        if (StpUtil.isLogin()) {
             return "redirect:index";
         }
         return "login";
@@ -53,8 +50,8 @@ public class LoginController extends BaseController {
      * 生成验证码 算术类型
      */
     @RequestMapping("/assets/captcha")
-    public void captcha(HttpServletRequest request, HttpServletResponse response){
-        HappyCaptcha.require(request,response).build().finish();
+    public void captcha(HttpServletRequest request, HttpServletResponse response) {
+        HappyCaptcha.require(request, response).build().finish();
     }
 
     /**
@@ -66,22 +63,14 @@ public class LoginController extends BaseController {
         if (StringUtil.isBlank(username, password)) {
             return R.failed("账号或密码不能为空");
         }
-        //Verification Captcha
-        boolean flag = HappyCaptcha.verification(request,code,true);
+        boolean flag = HappyCaptcha.verification(request, code, true);
         if (!flag) {
             return R.failed("验证码不正确");
         }
-        try {
-            UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
-            SecurityUtils.getSubject().login(token);
+        if (userService.doLogin(username, password, rememberMe)) {
             return R.succeed("登录成功");
-        } catch (UnknownAccountException e) {
-            return R.failed("用户不存在");
-        } catch (IncorrectCredentialsException e) {
-            return R.failed("密码错误");
-        } catch (ExcessiveAttemptsException eae) {
-            return R.failed("操作频繁，请稍后再试");
         }
+        return R.failed("登录失败");
     }
 
     /**
@@ -90,13 +79,38 @@ public class LoginController extends BaseController {
     @PostMapping("/reg")
     @ResponseBody
     public R register(User user, HttpServletRequest request, String code) {
-        String sessionCode = (String) request.getSession().getAttribute("captcha");
-        if (code == null || !sessionCode.equals(code.trim().toLowerCase())) {
+        boolean flag = HappyCaptcha.verification(request, code, true);
+        if (!flag) {
             return R.failed("验证码不正确");
         }
         if (userService.addUser(user)) {
             return R.succeed("注册成功");
         }
         return R.failed("注册失败");
+    }
+
+    /**
+     * 完善密码
+     */
+    @PostMapping("/informationPass")
+    @ResponseBody
+    public R informationPass(User user) {
+        //注册
+        if (userService.addUser(user)) {
+            //登录
+            User u = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, user.getUsername()));
+            StpUtil.login(u.getId(), true);
+            return R.succeed("注册成功");
+        }
+        return R.succeed("注册失败");
+    }
+
+    /**
+     * 登出
+     */
+    @GetMapping("/logout")
+    public String logout() {
+        StpUtil.logout();
+        return "redirect:login";
     }
 }

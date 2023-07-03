@@ -1,4 +1,4 @@
-package com.free.fs.common.utils;
+package com.free.fs.common.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

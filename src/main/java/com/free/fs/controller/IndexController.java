@@ -1,5 +1,9 @@
 package com.free.fs.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.free.fs.model.User;
+import com.free.fs.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,18 +11,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class IndexController extends BaseController {
+@RequiredArgsConstructor
+public class IndexController {
+
+    private final UserService userService;
 
     /**
      * 主页
      */
     @GetMapping({"", "/index"})
     public String index(Model model) {
-        if (getLoginUser() == null) {
-            return "redirect:login";
+        if (!StpUtil.isLogin()) {
+            return "redirect:/login";
         }
+        Long userId = StpUtil.getLoginIdAsLong();
+        User loginUser = userService.getById(userId);
         // 登录用户信息
-        model.addAttribute("loginUser", getLoginUser());
+        model.addAttribute("loginUser", loginUser);
         return "index";
     }
 

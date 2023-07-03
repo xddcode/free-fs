@@ -84,6 +84,11 @@ public class FilePojo extends Model<FilePojo> {
     private String source;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 重命名的名称值
      */
     @TableField(exist = false)

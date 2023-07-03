@@ -1,13 +1,14 @@
 package com.free.fs.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
-import com.free.fs.common.utils.R;
+import com.free.fs.common.domain.R;
 import com.free.fs.mapper.FileMapper;
-import com.free.fs.model.Dtree;
+import com.free.fs.common.domain.Dtree;
 import com.free.fs.model.FilePojo;
 import com.free.fs.service.FileService;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
             dirIds = dirIds.substring(dirIds.lastIndexOf(CommonConstant.DIR_SPLIT) + 1);
         }
         wrapper.eq(FilePojo::getParentId, StringUtils.isEmpty(dirIds) ? CommonConstant.ROOT_PARENT_ID : Long.parseLong(dirIds));
-
+        wrapper.eq(FilePojo::getUserId, StpUtil.getLoginIdAsLong());
         wrapper.orderByDesc(FilePojo::getIsDir, FilePojo::getPutTime);
         return baseMapper.selectList(wrapper);
     }
@@ -48,16 +49,18 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         List<FilePojo> filePojos = baseMapper.selectList(
                 new LambdaQueryWrapper<FilePojo>()
                         .eq(pojo.getIsDir() != null && pojo.getIsDir(), FilePojo::getIsDir, pojo.getIsDir())
+                        .eq(FilePojo::getUserId, StpUtil.getLoginIdAsLong())
                         .orderByDesc(FilePojo::getIsDir, FilePojo::getPutTime)
         );
         List<Dtree> dtrees = filePojos.stream().map(item -> {
             Dtree dtree = new Dtree();
             BeanUtils.copyProperties(item, dtree);
-            dtree.setTitle(item.getName());
             if (dtree.getIsDir()) {
                 dtree.setIconClass(CommonConstant.DTREE_ICON_1);
+                dtree.setTitle(item.getName());
             } else {
                 dtree.setIconClass(CommonConstant.DTREE_ICON_2);
+                dtree.setTitle(item.getName() + CommonConstant.SUFFIX_SPLIT + item.getSuffix());
             }
             return dtree;
         }).collect(Collectors.toList());
@@ -104,6 +107,8 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
             }
             int flag = 0;
             filePojo.setName(recursionFindName(filePojo.getName(), filePojo.getName(), filePojo.getParentId(), flag));
+
+            filePojo.setUserId(StpUtil.getLoginIdAsLong());
             if (baseMapper.insert(filePojo) <= 0) {
                 return R.failed("文件：" + file.getOriginalFilename() + "上传失败");
             }
@@ -160,6 +165,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
             }
             int flag = 0;
             filePojo.setName(recursionFindName(filePojo.getName(), filePojo.getName(), filePojo.getParentId(), flag));
+            filePojo.setUserId(StpUtil.getLoginIdAsLong());
             if (baseMapper.insert(filePojo) <= 0) {
                 return R.failed("文件：" + file.getOriginalFilename() + "上传失败");
             }
@@ -178,11 +184,19 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(String url) {
+        //判断是否个人资源
+        FilePojo filePojo = baseMapper.selectOne(new LambdaQueryWrapper<FilePojo>().eq(FilePojo::getUrl, url));
+        if (filePojo == null) {
+            throw new BusinessException("资源不存在！");
+        }
+        if (!filePojo.getUserId().equals(StpUtil.getLoginIdAsLong())) {
+            throw new BusinessException("你无权删除此资源！");
+        }
         //先删除数据库
         if (baseMapper.delete(new LambdaQueryWrapper<FilePojo>().eq(FilePojo::getUrl, url)) <= 0) {
-            throw new BusinessException("资源删除失败");
+            throw new BusinessException("资源删除失败！");
         }
-        //在删除七牛云
+        //在删除文件
         deleteFile(url);
         return true;
     }
@@ -207,12 +221,14 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         pojo.setType(CommonConstant.DEFAULT_DIR_TYPE);
         pojo.setIsDir(Boolean.TRUE);
         pojo.setIsImg(Boolean.FALSE);
+        pojo.setUserId(StpUtil.getLoginIdAsLong());
         //判断文件夹名称在当前目录中是否存在
         Long count = baseMapper.selectCount(
                 new LambdaQueryWrapper<FilePojo>()
                         .eq(FilePojo::getName, pojo.getName())
                         .eq(FilePojo::getIsDir, Boolean.TRUE)
                         .eq(FilePojo::getParentId, pojo.getParentId())
+                        .eq(FilePojo::getUserId, pojo.getUserId())
         );
         if (count > 0) {
             throw new BusinessException("当前目录名称已存在，请修改后重试！");
@@ -232,6 +248,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
                         .eq(FilePojo::getName, pojo.getRename())
                         .eq(FilePojo::getIsDir, p.getIsDir())
                         .eq(FilePojo::getParentId, p.getParentId())
+                        .eq(FilePojo::getUserId, p.getUserId())
         );
         if (count > 0) {
             throw new BusinessException("当前目录已存在该名称,请修改后重试！");
@@ -252,7 +269,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
         List<String> keys = new ArrayList<>();
         this.selectPermissionChildById(id, idList, keys);
         idList.add(id);
-        //删除七牛云里的资源
+        //删除云资源
         FilePojo pojo = baseMapper.selectById(id);
         keys.add(pojo.getFileName());
         for (String key : keys) {

@@ -5,6 +5,14 @@ layui.use(['jquery', 'layer', 'form'], function () {
 
     $('.login-wrapper').removeClass('layui-hide');
 
+    // 校验两次密码是否一致
+    form.verify({
+        confirmPass: function (value) {
+            if ($('input[name=password]').val() !== value)
+                return '两次密码输入不一致！';
+        }
+    });
+
     // 登录表单提交
     form.on('submit(loginSubmit)', function (obj) {
         obj.field.rememberMe = !!obj.field.remember;
@@ -45,5 +53,23 @@ layui.use(['jquery', 'layer', 'form'], function () {
     $('img.login-captcha').click(function () {
         this.src = captchaUrl + '?t=' + (new Date).getTime();
     }).trigger('click');
+
+    // 完善密码表单提交
+    form.on('submit(informationPassSubmit)', function (obj) {
+        layer.load(2);
+        obj.field.avatar = $('#avatar').attr('src');
+        console.log(obj.field);
+        $.post('/informationPass', obj.field, function (res) {
+            if (200 === res.code) {
+                layer.msg(res.msg, {icon: 1, time: 1500}, function () {
+                    location.replace('/index');
+                });
+            } else {
+                layer.closeAll('loading');
+                layer.msg(res.msg, {icon: 5});
+            }
+        }, 'JSON');
+        return false;
+    });
 
 });

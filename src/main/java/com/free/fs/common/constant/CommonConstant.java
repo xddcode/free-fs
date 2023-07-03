@@ -53,16 +53,6 @@ public interface CommonConstant {
      */
     String DTREE_ICON_2 = "dtree-icon-normal-file";
 
-    /**
-     * 密码加密盐值
-     */
-    String DEFAULT_SALT = "freefs";
-
-    /**
-     * 密码加密散列次数
-     */
-    int DEFAULT_HASH_COUNT = 3;
-
     String X_REQUESTED_WITH = "X-Requested-With";
 
     String XML_HTTP_REQUEST = "XMLHttpRequest";

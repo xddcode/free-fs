@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,8 +35,11 @@
             <a href="javascript:void(0)" id="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
         </li>
         <li class="layui-nav-item" lay-unselect>
-            <a><img src="http://images.nowcoder.com/head/818t.png" class="layui-nav-img"><cite
-                    th:utext="${loginUser.nickName}"></cite></a>
+            <a>
+                <img th:src="${#strings.isEmpty(loginUser.avatar) ? 'http://images.nowcoder.com/head/818t.png' : loginUser.avatar}"
+                     class="layui-nav-img"/>
+                <cite th:utext="${loginUser.nickname}"/>
+            </a>
             <dl class="layui-nav-child">
                 <dd lay-unselect><a href="javascript:void(0)" id="logout" data-url="/logout"><i
                         class="layui-icon layui-icon-logout"></i>退出</a>
@@ -67,16 +70,16 @@
                 </button>
                 <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary icon-btn"><i class="layui-icon">&#xe669;</i>刷新
                 </button>
-                <button shiro:hasPermission="file:upload" id="btnUpload"
+                <button sa:hasPermission="file:upload" id="btnUpload"
                         class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>上传文件
                 </button>
-                <button shiro:hasPermission="file:upload" id="btnUploadSharding"
+                <button sa:hasPermission="file:upload" id="btnUploadSharding"
                         class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>分片上传
                 </button>
                 <button style="display: none" id="btnDilaog" class="layui-btn layui-btn-sm layui-btn-primary icon-btn">
                     <i class="layui-icon">&#xe634;</i>弹窗选择
                 </button>
-                <button shiro:hasPermission="dir:manage" id="dirDilaog" class="layui-btn layui-btn-sm icon-btn"><i
+                <button sa:hasPermission="dir:manage" id="dirDilaog" class="layui-btn layui-btn-sm icon-btn"><i
                         class="layui-icon layui-icon-app"></i>目录管理
                 </button>
 
@@ -96,23 +99,23 @@
 <div class="dropdown-menu dropdown-anchor-top-left" id="dropdownFile">
     <div class="dropdown-anchor"></div>
     <ul>
-        <li><a shiro:hasPermission="file:view" id="open"><i class="layui-icon layui-icon-file"></i>&emsp;预览&emsp;</a>
+        <li><a sa:hasPermission="file:view" id="open"><i class="layui-icon layui-icon-file"></i>&emsp;预览&emsp;</a>
         </li>
-        <li><a shiro:hasPermission="file:copy" id="copy"><i
+        <li><a sa:hasPermission="file:copy" id="copy"><i
                 class="layui-icon layui-icon-release"></i>&emsp;复制&emsp;</a></li>
-        <li><a shiro:hasPermission="file:move" id="move"><i class="layui-icon layui-icon-location"></i>&emsp;移动&emsp;</a>
+        <li><a sa:hasPermission="file:move" id="move"><i class="layui-icon layui-icon-location"></i>&emsp;移动&emsp;</a>
         </li>
-        <li><a shiro:hasPermission="file:rename" id="rename"><i class="layui-icon layui-icon-survey"></i>&emsp;重命名&emsp;</a>
+        <li><a sa:hasPermission="file:rename" id="rename"><i class="layui-icon layui-icon-survey"></i>&emsp;重命名&emsp;</a>
         </li>
-        <li><a shiro:hasPermission="file:download" id="download"><i class="layui-icon layui-icon-download-circle"></i>&emsp;下载&emsp;</a>
+        <li><a sa:hasPermission="file:download" id="download"><i class="layui-icon layui-icon-download-circle"></i>&emsp;下载&emsp;</a>
         </li>
-        <li><a shiro:hasPermission="file:delete" id="del" style="color: red !important;"><i
+        <li><a sa:hasPermission="file:delete" id="del" style="color: red !important;"><i
                 class="layui-icon layui-icon-delete" style="font-size: 19px;"></i>&nbsp;&nbsp;&nbsp;删除&emsp;</a></li>
     </ul>
 </div>
 
 <div class="layui-footer layui-text">
-    copyright © 2022 free-fs all rights reserved.
+    copyright © 2023 free-fs all rights reserved.
 </div>
 
 <script type="text/html" id="uploadShardModel">

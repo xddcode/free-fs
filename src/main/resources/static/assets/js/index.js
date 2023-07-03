@@ -29,6 +29,7 @@ layui.config({
             return xhr;
         }
     };
+
     // 渲染文件列表
     function renderList(dirIds) {
         if (!dirIds) {
@@ -102,7 +103,7 @@ layui.config({
         url: '/file',
         accept: 'file',
         multiple: true,
-        size: 1024*20,
+        size: 1024 * 20,
         data: {
             dirIds: function () {
                 return $('#tvFPId').text();
@@ -113,26 +114,26 @@ layui.config({
         },
         before: function (obj) {
             layer.load(2);
-   /*         proIndex = layer.open({
-                type: 1,
-                title: "上传进度",
-                //closeBtn: 0, //不显示关闭按钮
-                skin: 'layui-layer-demo',
-                area: ['420px', 'auto'],
-                content: '' +
-                    '<div style="margin: 10px 20px;">' +
-                    '   <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile">' +
-                    '       <div class="layui-progress-bar" lay-percent="0%" id="uploadfile"></div>' +
-                    '   </div>' +
-                    '   <p>' +
-                    '       <span id="uploadfilemsg">正在上传</span>' +
-                    '   </p>' +
-                    '</div>',
-                success: function (layero, index) {
-                    layer.setTop(layero); //重点2
-                }
-            });
-            element.render();*/
+            /*         proIndex = layer.open({
+                         type: 1,
+                         title: "上传进度",
+                         //closeBtn: 0, //不显示关闭按钮
+                         skin: 'layui-layer-demo',
+                         area: ['420px', 'auto'],
+                         content: '' +
+                             '<div style="margin: 10px 20px;">' +
+                             '   <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile">' +
+                             '       <div class="layui-progress-bar" lay-percent="0%" id="uploadfile"></div>' +
+                             '   </div>' +
+                             '   <p>' +
+                             '       <span id="uploadfilemsg">正在上传</span>' +
+                             '   </p>' +
+                             '</div>',
+                         success: function (layero, index) {
+                             layer.setTop(layero); //重点2
+                         }
+                     });
+                     element.render();*/
         }, /*progress: function (n, elem) {
             //查询上传进度
             var intervalId = setInterval(function () {
@@ -151,12 +152,12 @@ layui.config({
             layer.closeAll('loading');
             if (res.code !== 200) {
                 layer.msg(res.msg, {icon: 2});
-               // layer.close(proIndex);
-               // $("#uploadfilemsg").text("上传失败");
+                // layer.close(proIndex);
+                // $("#uploadfilemsg").text("上传失败");
             } else {
                 layer.msg(res.msg, {icon: 1});
                 //$("#uploadfilemsg").text("上传完成");
-               // layer.close(proIndex);
+                // layer.close(proIndex);
                 renderList();
                 //重置进度条
                 //resetPercent();
@@ -171,7 +172,7 @@ layui.config({
 
 
     //重置进度条
-    function resetPercent(){
+    function resetPercent() {
         $.get('/file/percent/reset', {}, function (res) {
             console.log("重置进度条");
         });
@@ -188,14 +189,14 @@ layui.config({
             closeBtn: 2,
             success: function (layero, index0) {
                 var uploadListView = $('#uploadList')
-                    ,uploadListIns = upload.render({
+                    , uploadListIns = upload.render({
                     elem: '#uploadShardList'
-                    ,url: '/file/uploadSharding'
-                    ,accept: 'file'
-                    ,multiple: false
-                    ,auto: false
-                    ,bindAction: '#testListAction'
-                    ,data: {
+                    , url: '/file/uploadSharding'
+                    , accept: 'file'
+                    , multiple: false
+                    , auto: false
+                    , bindAction: '#testListAction'
+                    , data: {
                         dirIds: function () {
                             return $('#tvFPId').text();
                         }
@@ -217,33 +218,33 @@ layui.config({
                             });
                         }, 100);
                     },
-                    choose: function(obj){
+                    choose: function (obj) {
                         var files = this.files = obj.pushFile();
                         //读取本地文件
-                        obj.preview(function(index, file, result){
+                        obj.preview(function (index, file, result) {
                             console.log(index);
-                            var tr = $(['<tr id="upload-'+ index +'">'
-                                ,'<td>'+ file.name +'</td>'
-                                ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
-                                ,'<td>等待上传</td>'
-                                ,'<td>' +
-                                '   <div class="layui-progress" lay-showPercent="true" lay-filter="progress_'+index+'">'+
+                            var tr = $(['<tr id="upload-' + index + '">'
+                                , '<td>' + file.name + '</td>'
+                                , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+                                , '<td>等待上传</td>'
+                                , '<td>' +
+                                '   <div class="layui-progress" lay-showPercent="true" lay-filter="progress_' + index + '">' +
                                 '       <div class="layui-progress-bar" lay-percent="0%"></div>' +
                                 '   </div>' +
                                 ' </td>'
-                                ,'<td>'
-                                ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                                ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
-                                ,'</td>'
-                                ,'</tr>'].join(''));
+                                , '<td>'
+                                , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                                , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                                , '</td>'
+                                , '</tr>'].join(''));
 
                             //单个重传
-                            tr.find('.demo-reload').on('click', function(){
+                            tr.find('.demo-reload').on('click', function () {
                                 obj.upload(index, file);
                             });
 
                             //删除
-                            tr.find('.demo-delete').on('click', function(){
+                            tr.find('.demo-delete').on('click', function () {
                                 delete files[index]; //删除对应的文件
                                 tr.remove();
                                 uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
@@ -252,10 +253,10 @@ layui.config({
                             element.render();
                         });
                     },
-                    done: function(res, index, upload){
+                    done: function (res, index, upload) {
                         if (res.code === 200) { //上传成功
-                            var tr = uploadListView.find('tr#upload-'+ index)
-                                ,tds = tr.children();
+                            var tr = uploadListView.find('tr#upload-' + index)
+                                , tds = tr.children();
                             tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
                             tds.eq(4).html(''); //清空操作
                             //重置进度条
@@ -266,9 +267,9 @@ layui.config({
                         }
                         this.error(res.msg, index, upload);
                     },
-                    error: function(msg,index, upload){
-                        var tr = uploadListView.find('tr#upload-'+ index)
-                            ,tds = tr.children();
+                    error: function (msg, index, upload) {
+                        var tr = uploadListView.find('tr#upload-' + index)
+                            , tds = tr.children();
                         tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
                         tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
                         layer.msg(msg, {icon: 2});
@@ -306,10 +307,10 @@ layui.config({
                     toolbarShow: [],
                     toolbarWay: "fixed",
                     formatter: {
-                        title: function(data) {
-                            if (data.isDir){
+                        title: function (data) {
+                            if (data.isDir) {
                                 var s = data.title;
-                                if (data.children){
+                                if (data.children) {
                                     s += ' <span style=\'color:blue\'>(' + data.children.length + ')</span>';
                                 }
                                 return s;
@@ -327,7 +328,7 @@ layui.config({
                                 var nodeMoveids = [];
                                 //禁用所选目录的子集目录
                                 for (var k in param) {
-                                    if (param[k].recordData.isDir){
+                                    if (param[k].recordData.isDir) {
                                         ids.push(param[k].nodeId);
                                     }
                                     nodeMoveids.push(param[k].nodeId);
@@ -336,7 +337,7 @@ layui.config({
                                     ids.push(node.nodeId);
                                 }
                                 nodeMoveids.push(node.nodeId);
-                                openMoveModel(node.context,ids,nodeMoveids);
+                                openMoveModel(node.context, ids, nodeMoveids);
                             }
                         },
                         {
@@ -344,30 +345,50 @@ layui.config({
                             icon: "dtree-icon-bianji",
                             title: "编辑",
                             handler: function (node) {
-                                openEditName(node.context,node.nodeId,node.recordData.isDir);
+                                openEditName(node.recordData.name, node.nodeId, node.recordData.isDir);
                             }
                         }, {
                             toolbarId: "delNode",
                             icon: "dtree-icon-roundclose",
                             title: "删除",
                             handler: function (node) {
-                                var index = layer.confirm('上级文件夹删除会把所有子文件也一起删除，你可要想好？', {
-                                    btn: ['想好了', '再想想']
-                                }, function () {
-                                    layer.load(2);
-                                    $.post('/file/deleteByIds', {id: node.nodeId}, function (res) {
-                                        layer.closeAll('loading');
-                                        if (res.code === 200) {
-                                            layer.msg(res.msg, {icon: 1});
-                                            DTree.refreshTree();
-                                            getDirs(node.nodeId);
-                                        } else {
-                                            layer.msg(res.msg, {icon: 2});
-                                        }
+                                if (node.recordData.isDir) {
+                                    var index = layer.confirm('该文件夹内所有文件都将被删除，你可想好了？', {
+                                        btn: ['想好了', '再想想']
+                                    }, function () {
+                                        layer.load(2);
+                                        $.post('/file/deleteByIds', {id: node.nodeId}, function (res) {
+                                            layer.closeAll('loading');
+                                            if (res.code === 200) {
+                                                layer.msg(res.msg, {icon: 1});
+                                                DTree.refreshTree();
+                                                getDirs(node.nodeId);
+                                            } else {
+                                                layer.msg(res.msg, {icon: 2});
+                                            }
+                                        });
+                                    }, function () {
+                                        layer.close(index);
                                     });
-                                }, function () {
-                                    layer.close(index);
-                                });
+                                } else {
+                                    var index = layer.confirm('确认删除此文件么？', {
+                                        btn: ['确认', '取消']
+                                    }, function () {
+                                        layer.load(2);
+                                        $.post('/file/deleteByIds', {id: node.nodeId}, function (res) {
+                                            layer.closeAll('loading');
+                                            if (res.code === 200) {
+                                                layer.msg(res.msg, {icon: 1});
+                                                DTree.refreshTree();
+                                                getDirs(node.nodeId);
+                                            } else {
+                                                layer.msg(res.msg, {icon: 2});
+                                            }
+                                        });
+                                    }, function () {
+                                        layer.close(index);
+                                    });
+                                }
                             }
                         }
                     ],
@@ -431,7 +452,7 @@ layui.config({
     });
 
     //获取目录
-    function getDirs(id){
+    function getDirs(id) {
         $.get('/file/getDirs', {id: id}, function (res) {
             $('#tvFP').text(res.data.dirs === '' ? '/' : res.data.dirs);
             $('#tvFPId').text(res.data.dirIds === '' ? '/' : res.data.dirIds);
@@ -468,7 +489,7 @@ layui.config({
     $('#open').click(function () {
         //使用kkFileView预览文件
         var url = mUrl;
-        window.open('https://fs.elites.ink/preview/onlinePreview?url='+encodeURIComponent(Base64.encode(url)));
+        window.open('https://fs.elites.ink/preview/onlinePreview?url=' + encodeURIComponent(Base64.encode(url)));
     });
 
     //移动按钮点击事件
@@ -549,7 +570,7 @@ layui.config({
                         if (res.code === 200) {
                             layer.close(index);
                             layer.msg(res.msg, {icon: 1});
-                            if(DTree){
+                            if (DTree) {
                                 DTree.refreshTree();
                             }
                             getDirs(params[0].nodeId);
@@ -575,11 +596,11 @@ layui.config({
 
     //重命名
     $('#rename').click(function () {
-        openEditName(name,id,false);
+        openEditName(name, id, false);
     });
 
     //打开重命名弹窗
-    function openEditName(name,id,isDir) {
+    function openEditName(name, id, isDir) {
         layer.open({
             type: 1,
             area: ['450px', '250px'],
@@ -604,9 +625,9 @@ layui.config({
                             if (DTree) {
                                 DTree.refreshTree();
                             }
-                            if (isDir){
+                            if (isDir) {
                                 getDirs(data.field.id);
-                            } else{
+                            } else {
                                 renderList();
                             }
                         } else {
@@ -662,7 +683,7 @@ layui.config({
             fixed: false,
             resize: false,
             end: function () {
-                if (typeof(mFsUrls) !== "undefined" && mFsUrls.length > 0) {
+                if (typeof (mFsUrls) !== "undefined" && mFsUrls.length > 0) {
                     layer.msg('你选择了：' + JSON.stringify(mFsUrls), {icon: 1});
                     mFsUrls = undefined;
                 }

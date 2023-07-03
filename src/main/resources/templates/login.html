@@ -37,6 +37,29 @@
         <div class="layui-form-item">
             <button class="layui-btn layui-btn-fluid" lay-filter="loginSubmit" lay-submit>登录</button>
         </div>
+        <div class="oauth">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>第三方登录</legend>
+            </fieldset>
+            <a href="/oauth/render/github">
+                <img th:src="@{/assets/img/oauth/github.png}" width="30" height="30" title="GitHub">
+            </a>
+            <a href="/oauth/render/gitee">
+                <img th:src="@{/assets/img/oauth/gitee.png}" width="22" height="22"
+                     style="vertical-align:middle;margin-left: 2px"
+                     title="Gitee">
+            </a>
+            <!--            <a href="/oauth/render/qq">
+                            <img th:src="@{/assets/img/oauth/qq.png}" width="30" height="30" title="QQ">
+                        </a>
+                        <a href="/oauth/render/baidu">
+                            <img th:src="@{/assets/img/oauth/baidu.png}" width="30" height="30" title="百度">
+                        </a>-->
+
+            <!--<img src="weiboIcon" width="22" height="22" style="vertical-align:middle;margin-left: 2px" title="微博">
+            <img src="zhifubaoIcon" width="22" height="22" style="vertical-align:middle;margin-left: 2px" title="支付宝">-->
+
+        </div>
     </form>
 </div>
 

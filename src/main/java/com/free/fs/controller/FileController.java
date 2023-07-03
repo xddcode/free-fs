@@ -1,13 +1,14 @@
 package com.free.fs.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.alibaba.fastjson2.JSON;
-import com.free.fs.common.utils.R;
-import com.free.fs.model.Dtree;
+import com.free.fs.common.annotation.Preview;
+import com.free.fs.common.domain.R;
+import com.free.fs.common.domain.Dtree;
 import com.free.fs.model.FilePojo;
 import com.free.fs.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("file")
 @RequiredArgsConstructor
-public class FileController extends BaseController {
+public class FileController {
 
     private final FileService fileService;
 
@@ -86,11 +87,11 @@ public class FileController extends BaseController {
      * @param dirIds
      * @return
      */
+    @Preview()
     @PostMapping({"", "/upload"})
     public R upload(@RequestParam(value = "file") MultipartFile[] files, String dirIds) {
 
         return fileService.upload(files, dirIds);
-
     }
 
     /**
@@ -134,7 +135,7 @@ public class FileController extends BaseController {
      * @param url
      * @param response
      */
-    @RequiresPermissions("file:download")
+    @SaCheckPermission("file:download")
     @GetMapping("/downLoad")
     public void downLoad(String url, HttpServletResponse response) {
         fileService.download(url, response);
@@ -160,6 +161,7 @@ public class FileController extends BaseController {
      * @param ids
      * @param parentId
      */
+    @SaCheckPermission("file:move")
     @PostMapping("/move")
     public R move(String ids, Long parentId) {
         if (fileService.move(ids, parentId)) {
@@ -173,7 +175,7 @@ public class FileController extends BaseController {
      *
      * @param url
      */
-    @RequiresPermissions("file:delete")
+    @SaCheckPermission("file:delete")
     @PostMapping("/deleteFile")
     public R deleteFile(String url) {
         if (fileService.delete(url)) {
@@ -188,7 +190,7 @@ public class FileController extends BaseController {
      *
      * @param id
      */
-    @RequiresPermissions("file:delete")
+    @SaCheckPermission("file:delete")
     @PostMapping("/deleteByIds")
     public R deleteByIds(Long id) {
         if (fileService.deleteByIds(id)) {
@@ -203,7 +205,7 @@ public class FileController extends BaseController {
      *
      * @param pojo
      */
-    @RequiresPermissions("dir:add")
+    @SaCheckPermission("dir:add")
     @PostMapping("/addFolder")
     public R addFolder(FilePojo pojo) {
         if (fileService.addFolder(pojo)) {
