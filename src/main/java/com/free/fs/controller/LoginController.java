@@ -34,7 +34,7 @@ public class LoginController {
         if (StpUtil.isLogin()) {
             return "redirect:index";
         }
-        return "login";
+        return "login2";
     }
 
     /**
@@ -43,7 +43,7 @@ public class LoginController {
     @GetMapping("/reg")
     public String reg() {
 
-        return "reg";
+        return "reg2";
     }
 
     /**

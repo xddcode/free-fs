@@ -59,14 +59,15 @@ layui.config({
         click: function (e, event) {
             layer.open({
                 type: 1,
-                area: ['450px', '200px'],
+                area: ['270px', '280px'],
                 title: '新建文件夹',
                 content: $("#addFolderModel").html(),
-                shade: 0,
-                closeBtn: 2,
+                shadeClose: true,
                 success: function (layero, index) {
                     //重置表单
                     $("#addFolderForm")[0].reset();
+                    $('#folderName').val('新建文件夹'); // 设置输入框的值为‘新建文件夹’
+                    $('#folderName').select(); // 选择输入框的文本
                     //新增文件夹监听提交
                     form.on('submit(addFolderBtn)', function (data) {
                         var name = $('#folderName').val();

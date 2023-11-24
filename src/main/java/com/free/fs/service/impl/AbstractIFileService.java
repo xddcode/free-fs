@@ -231,7 +231,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
                         .eq(FilePojo::getUserId, pojo.getUserId())
         );
         if (count > 0) {
-            throw new BusinessException("当前目录名称已存在，请修改后重试！");
+            throw new BusinessException("当前目录名称已存在，请修改名称！");
         }
         return baseMapper.insert(pojo) > 0;
     }
@@ -240,7 +240,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
     @Override
     public boolean updateByName(FilePojo pojo) {
         if (pojo.getName().equals(pojo.getRename())) {
-            throw new BusinessException("当前名称与原始名称相同，请修改后重试！");
+            throw new BusinessException("当前名称与原始名称相同，请修改名称！");
         }
         FilePojo p = baseMapper.selectById(pojo.getId());
         Long count = baseMapper.selectCount(
@@ -251,7 +251,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileP
                         .eq(FilePojo::getUserId, p.getUserId())
         );
         if (count > 0) {
-            throw new BusinessException("当前目录已存在该名称,请修改后重试！");
+            throw new BusinessException("当前目录已存在该名称,请修改名称！");
         }
         FilePojo updPojo = new FilePojo();
         updPojo.setId(pojo.getId());
