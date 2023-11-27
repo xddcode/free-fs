@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class R<T> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -7583882240838909179L;
     private T data;
     private Integer code;

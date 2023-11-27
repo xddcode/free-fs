@@ -5,12 +5,12 @@ import com.free.fs.common.properties.LocalProperties;
 import com.free.fs.common.utils.FileUtil;
 import com.free.fs.common.utils.StringUtil;
 import com.free.fs.model.FilePojo;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

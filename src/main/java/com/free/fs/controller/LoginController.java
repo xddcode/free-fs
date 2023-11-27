@@ -3,19 +3,16 @@ package com.free.fs.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.free.fs.common.domain.R;
+import com.free.fs.common.utils.CaptchaUtil;
 import com.free.fs.common.utils.StringUtil;
 import com.free.fs.model.User;
 import com.free.fs.service.UserService;
-import com.ramostear.captcha.HappyCaptcha;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * LoginController
@@ -34,7 +31,7 @@ public class LoginController {
         if (StpUtil.isLogin()) {
             return "redirect:index";
         }
-        return "login2";
+        return "login";
     }
 
     /**
@@ -43,15 +40,7 @@ public class LoginController {
     @GetMapping("/reg")
     public String reg() {
 
-        return "reg2";
-    }
-
-    /**
-     * 生成验证码 算术类型
-     */
-    @RequestMapping("/assets/captcha")
-    public void captcha(HttpServletRequest request, HttpServletResponse response) {
-        HappyCaptcha.require(request, response).build().finish();
+        return "reg";
     }
 
     /**
@@ -63,7 +52,7 @@ public class LoginController {
         if (StringUtil.isBlank(username, password)) {
             return R.failed("账号或密码不能为空");
         }
-        boolean flag = HappyCaptcha.verification(request, code, true);
+        boolean flag = CaptchaUtil.verify(request, code);
         if (!flag) {
             return R.failed("验证码不正确");
         }
@@ -79,7 +68,7 @@ public class LoginController {
     @PostMapping("/reg")
     @ResponseBody
     public R register(User user, HttpServletRequest request, String code) {
-        boolean flag = HappyCaptcha.verification(request, code, true);
+        boolean flag = CaptchaUtil.verify(request, code);
         if (!flag) {
             return R.failed("验证码不正确");
         }

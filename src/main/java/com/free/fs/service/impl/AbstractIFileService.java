@@ -11,13 +11,13 @@ import com.free.fs.mapper.FileMapper;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.model.FilePojo;
 import com.free.fs.service.FileService;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 

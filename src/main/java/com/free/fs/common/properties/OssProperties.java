@@ -13,9 +13,9 @@ import lombok.Setter;
 @Setter
 public class OssProperties {
 
-    private String accessKey;
+    private String accessKeyId;
 
-    private String secretKey;
+    private String accessKeySecret;
 
     private String endpoint;
 

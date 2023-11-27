@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,8 @@ import java.util.List;
 @TableName("sys_user")
 @EqualsAndHashCode(callSuper = true)
 public class User extends Model<User> {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 自增id

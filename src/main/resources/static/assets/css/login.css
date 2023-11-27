@@ -1,4 +1,3 @@
-
 body {
     background-image: url("../../assets/img/bg-login3.png");
     background-repeat: no-repeat;
@@ -25,35 +24,6 @@ body:before {
     z-index: 2;
 }
 
-.login-logo {
-    width: auto;
-    color: #333;
-    font-size: 18px;
-    font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    transition: all .3s;
-    cursor: pointer;
-    display: inline-block;
-}
-
-.login-logo img {
-    height: 60px;
-}
-
-.login-logo cite {
-    font-style: normal;
-}
-
-.login-captcha {
-    height: 40px;
-    width: 120px;
-    cursor: pointer;
-    box-sizing: border-box;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 .login-wrapper > .layui-form {
     padding: 25px 30px;
     background-color: #fff;
@@ -62,26 +32,7 @@ body:before {
     border-radius: 4px;
 }
 
-@media screen and (min-height: 550px) {
-    .login-wrapper {
-        margin: -250px auto 0;
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        width: 100%;
-    }
-}
-
-.layui-form-item a:not(.layui-btn) {
-    color: #01aaed;
-}
-
-.layui-form-item a:hover {
-    text-decoration: underline;
-}
-
-/*.login-wrapper > .layui-form > h2 {
+.login-wrapper > .layui-form > h2 {
     color: #333;
     font-size: 18px;
     text-align: center;
@@ -119,12 +70,17 @@ body:before {
     text-align: center;
 }
 
+.login-wrapper > .layui-form > .layui-form-item.login-captcha-group {
+    padding-right: 135px;
+}
 
-.login-captcha {
-    height: 40px;
+.login-wrapper > .layui-form > .layui-form-item.login-captcha-group > .login-captcha {
+    height: 46px;
     width: 120px;
     cursor: pointer;
     box-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px !important;
     position: absolute;
     right: 0;
     top: 0;
@@ -149,6 +105,32 @@ body:before {
 
 .login-wrapper > .layui-form > .layui-form-item.login-oauth-group > a > .layui-icon {
     font-size: 26px;
+}
+
+.login-copyright {
+    color: #eee;
+    padding-bottom: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+@media screen and (min-height: 550px) {
+    .login-wrapper {
+        margin: -250px auto 0;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+
+    .login-copyright {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
 }
 
 .layui-btn {
@@ -178,4 +160,4 @@ body:before {
 .oauth a {
     vertical-align: middle;
     margin-left: 10px
-}*/
+}

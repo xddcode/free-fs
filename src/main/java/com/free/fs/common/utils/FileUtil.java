@@ -3,10 +3,10 @@ package com.free.fs.common.utils;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.model.FilePojo;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -34,7 +34,7 @@ public class FileUtil {
             "htm", "ico", "mp3", "mp4", "java",
             "sql", "xml", "js", "py", "php", "vue",
             "sh", "cmd", "py3", "css", "md", "csv",
-            "rar","zip"
+            "rar", "zip", "json"
     };
     public static String[] IMAGE_FILE_EXTD1 = new String[]{"png", "bmp", "jpg", "jpeg", "svg", "gif"};
 

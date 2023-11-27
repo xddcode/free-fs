@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.free</groupId>
     <artifactId>free-fs</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <name>free-fs</name>
     <packaging>jar</packaging>
     <description>free-fs 文件管理系统</description>
@@ -12,29 +12,26 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.6</version>
+        <version>3.1.2</version>
         <relativePath/>
     </parent>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>8</java.version>
-        <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <hutool.version>5.8.15</hutool.version>
+        <java.version>17</java.version>
+        <mybatis-plus-boot-starter.version>3.5.4.1</mybatis-plus-boot-starter.version>
+        <hutool.version>5.8.23</hutool.version>
         <fastjson2.version>2.0.29</fastjson2.version>
-        <qiniu.version>7.10.2</qiniu.version>
-        <aliyun-sdk-oss>3.8.1</aliyun-sdk-oss>
+        <qiniu.version>7.13.1</qiniu.version>
+        <aliyun-sdk-oss>3.10.2</aliyun-sdk-oss>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <thumbnailator.version>0.4.19</thumbnailator.version>
-        <tika.version>2.3.0</tika.version>
+        <tika.version>2.7.0</tika.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <sigar.version>1.6.4</sigar.version>
-        <commons-codec.version>1.10</commons-codec.version>
-        <happy-captcha.version>1.0.1</happy-captcha.version>
-        <JustAuth.version>1.4.0</JustAuth.version>
+        <commons-codec.version>1.13</commons-codec.version>
+        <captcha.version>3.0.0</captcha.version>
+<!--        <JustAuth.version>1.4.0</JustAuth.version>-->
 
         <sa-token.version>1.35.0.RC</sa-token.version>
         <!-- docker插件配置 -->
@@ -42,17 +39,18 @@
     </properties>
 
     <dependencies>
+        <!--Spring boot Web容器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!-- web 容器使用 undertow 性能更强 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
@@ -66,6 +64,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
         </dependency>
 
         <dependency>
@@ -90,7 +89,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <!-- 编译阶段生效 -->
+            <scope>provided</scope>
         </dependency>
 
         <!-- redis -->
@@ -156,14 +156,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.fusesource</groupId>
-            <artifactId>sigar</artifactId>
-            <version>${sigar.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
         <dependency>
@@ -179,17 +173,18 @@
             <version>${hutool.version}</version>
         </dependency>
 
+        <!-- 验证码 -->
         <dependency>
-            <groupId>com.ramostear</groupId>
-            <artifactId>Happy-Captcha</artifactId>
-            <version>${happy-captcha.version}</version>
+            <groupId>io.github.eternalstone</groupId>
+            <artifactId>captcha-core</artifactId>
+            <version>${captcha.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.xkcoding.justauth</groupId>
-            <artifactId>justauth-spring-boot-starter</artifactId>
-            <version>${JustAuth.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.xkcoding.justauth</groupId>-->
+<!--            <artifactId>justauth-spring-boot-starter</artifactId>-->
+<!--            <version>${JustAuth.version}</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

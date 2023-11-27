@@ -3,9 +3,8 @@ package com.free.fs.common.utils;
 import com.aliyun.oss.event.ProgressEvent;
 import com.aliyun.oss.event.ProgressEventType;
 import com.aliyun.oss.event.ProgressListener;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * oss上传进度监听

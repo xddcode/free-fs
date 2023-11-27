@@ -7,18 +7,19 @@ import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.properties.OssProperties;
 import com.free.fs.common.utils.FileUtil;
 import com.free.fs.model.FilePojo;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -63,7 +64,6 @@ public class OssTemplate {
     public List<OSSObjectSummary> list() {
         // 列举文件。
         ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(ossProperties.getBucket()).withMaxKeys(LIMIT));
-        ossClient.shutdown();
         return objectListing.getObjectSummaries();
     }
 
@@ -74,18 +74,20 @@ public class OssTemplate {
      * @param file
      * @return
      */
-    @SneakyThrows
     public FilePojo upload(MultipartFile file) {
-        FilePojo pojo = FileUtil.buildFilePojo(file);
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(FileUtil.getcontentType(pojo.getFileName().substring(pojo.getFileName().lastIndexOf("."))));
-        PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucket(), pojo.getFileName(), file.getInputStream());
-        putObjectRequest.setMetadata(metadata);
-        ossClient.putObject(putObjectRequest);
-        String url = ossProperties.getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
-        pojo.setUrl(url);
-        ossClient.shutdown();
-        return pojo;
+        try {
+            FilePojo pojo = FileUtil.buildFilePojo(file);
+            PutObjectResult result = ossClient.putObject(ossProperties.getBucket(), pojo.getFileName(), file.getInputStream());
+            if (result == null) {
+                throw new BusinessException("上传文件失败");
+            }
+            String url = ossProperties.getPath() + CommonConstant.DIR_SPLIT + pojo.getFileName();
+            pojo.setUrl(url);
+            return pojo;
+        } catch (IOException e) {
+            log.error("上传文件失败", e);
+            throw new BusinessException("上传文件失败");
+        }
     }
 
     /**
@@ -94,9 +96,13 @@ public class OssTemplate {
      * @param objectPath 对象路径
      */
     public void delete(String objectPath) {
-        String key = objectPath.replaceAll(ossProperties.getPath() + CommonConstant.DIR_SPLIT, "");
-        ossClient.deleteObject(ossProperties.getBucket(), key);
-        ossClient.shutdown();
+        try {
+            String key = objectPath.replaceAll(ossProperties.getPath() + CommonConstant.DIR_SPLIT, "");
+            ossClient.deleteObject(ossProperties.getBucket(), key);
+        } catch (Exception e) {
+            log.error("删除文件失败", e);
+            throw new BusinessException("删除文件失败");
+        }
     }
 
     /**
@@ -108,7 +114,7 @@ public class OssTemplate {
     @SneakyThrows
     public void download(String objectName, HttpServletResponse response) {
         String fileName = objectName.replaceAll(ossProperties.getPath() + "/", "");
-        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
 
         OSSObject ossObject = ossClient.getObject(ossProperties.getBucket(), fileName);
         BufferedInputStream in = new BufferedInputStream(ossObject.getObjectContent());
@@ -118,15 +124,9 @@ public class OssTemplate {
         while ((lenght = in.read(buffer)) != -1) {
             out.write(buffer, 0, lenght);
         }
-
-        if (out != null) {
-            out.flush();
-            out.close();
-        }
-        if (in != null) {
-            in.close();
-        }
-        ossClient.shutdown();
+        out.flush();
+        out.close();
+        in.close();
     }
 
     /**
@@ -199,7 +199,6 @@ public class OssTemplate {
             return pojo;
         } finally {
             executorService.shutdown();
-            ossClient.shutdown();
         }
     }
 

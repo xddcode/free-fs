@@ -3,13 +3,12 @@ package com.free.fs.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.free.fs.common.template.OssTemplate;
 import com.free.fs.model.FilePojo;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * oss业务实现

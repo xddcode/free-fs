@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
+
 /**
  * 角色权限关联表实体
  *
@@ -16,6 +18,8 @@ import lombok.EqualsAndHashCode;
 @TableName("sys_role_permission")
 @EqualsAndHashCode(callSuper = true)
 public class RolePermission extends Model<RolePermission> {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 自增id

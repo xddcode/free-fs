@@ -19,13 +19,14 @@ public class IndexController {
     /**
      * 主页
      */
-    @GetMapping({"", "/index"})
+    @GetMapping({"/", "/index"})
     public String index(Model model) {
         if (!StpUtil.isLogin()) {
             return "redirect:/login";
         }
         Long userId = StpUtil.getLoginIdAsLong();
         User loginUser = userService.getById(userId);
+        System.out.println(loginUser);
         // 登录用户信息
         model.addAttribute("loginUser", loginUser);
         return "index";

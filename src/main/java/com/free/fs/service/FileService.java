@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.free.fs.common.domain.R;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.model.FilePojo;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 

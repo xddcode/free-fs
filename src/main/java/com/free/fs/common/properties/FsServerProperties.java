@@ -19,7 +19,7 @@ public class FsServerProperties {
      * 自动化配置
      * type：oss or qiniu
      */
-    private String type = "qiniu";
+    private String type = "local";
 
     /**
      * 本地上传配置
