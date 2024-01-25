@@ -455,8 +455,11 @@ layui.config({
     //获取目录
     function getDirs(id) {
         $.get('/file/getDirs/' + id, {}, function (res) {
+            // 目录结构文本
             $('#tvFP').text(res.data.dirs === '' ? '/' : res.data.dirs);
+            // 目录结构ids
             $('#tvFPId').text(res.data.dirIds === '' ? '/' : res.data.dirIds);
+            // reload
             renderList(res.data.dirIds);
         });
     }

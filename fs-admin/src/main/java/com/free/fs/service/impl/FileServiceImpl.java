@@ -328,6 +328,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     @Override
     public Map<String, Object> getDirs(Long id) {
         Map<String, Object> map = new HashMap<>();
+        // 通过pid获取目录结构
         List<FileInfo> filePojos = this.getParentList(new ArrayList<>(), id);
         StringBuilder dir = new StringBuilder(CommonConstant.DIR_SPLIT);
         StringBuilder dirIds = new StringBuilder(CommonConstant.DIR_SPLIT);
@@ -343,14 +344,18 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     }
 
     private List<FileInfo> getParentList(List<FileInfo> list, Long id) {
+        // 获取当前的目录
         FileInfo fileInfo = this.getById(id);
-        list.add(fileInfo);
-        if (fileInfo != null && fileInfo.getParentId() != null && fileInfo.getParentId() != -1) {
-            getParentList(list, fileInfo.getParentId());
+        if (fileInfo != null) {
+            if (fileInfo.getParentId() != null && fileInfo.getParentId() != -1) {
+                getParentList(list, fileInfo.getParentId());
+            }
+            list.add(fileInfo);
         }
-        if (CollUtil.isNotEmpty(list)) {
-            list.sort(Comparator.comparing(FileInfo::getId));
-        }
+        // 不排了, no.48行拿的最后一个目录, 通过id排序可能会导致,目录展示的层级不对
+//        if (CollUtil.isNotEmpty(list)) {
+//            list.sort(Comparator.comparing(FileInfo::getId));
+//        }
         return list;
     }
 }

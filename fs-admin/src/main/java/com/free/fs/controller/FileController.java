@@ -1,8 +1,10 @@
 package com.free.fs.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.collection.ListUtil;
 import com.alibaba.fastjson2.JSON;
 import com.free.fs.common.annotation.Preview;
+import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.FileInfo;
@@ -64,8 +66,15 @@ public class FileController {
      */
     @GetMapping("/getDirTree")
     public String getDirTree(FileInfo info) {
+        // update Yann 增加一个根目录提供移动
+        Dtree dtree = new Dtree();
+        dtree.setId(-1L);
+        dtree.setTitle("根目录");
+        dtree.setIconClass(CommonConstant.DTREE_ICON_1);
+        dtree.setIsDir(true);
         List<Dtree> list = fileService.getDirTreeList(info);
-        return JSON.toJSONString(Result.ok(list));
+        dtree.setChildren(list);
+        return JSON.toJSONString(Result.ok(ListUtil.of(dtree)));
     }
 
     /**
