@@ -325,14 +325,16 @@ layui.config({
                             title: "移动",
                             handler: function (node) {
                                 var param = dtree.getChildParam(DTree, node.nodeId);
+                                // 待移动的不能选中
                                 var ids = [];
+                                // 需要移动的node
                                 var nodeMoveids = [];
-                                //禁用所选目录的子集目录
+                                // 禁用所选目录的子集目录
                                 for (var k in param) {
                                     if (param[k].recordData.isDir) {
                                         ids.push(param[k].nodeId);
                                     }
-                                    nodeMoveids.push(param[k].nodeId);
+                                    //nodeMoveids.push(param[k].nodeId);
                                 }
                                 if (node.recordData.isDir) {
                                     ids.push(node.nodeId);
@@ -560,6 +562,7 @@ layui.config({
                 //文件移动表单提交
                 form.on('submit(moveSubmitBtn)', function (data) {
                     var params = dtree.getCheckbarNodesParam("moveDirTree");
+
                     if (params.length === 0) {
                         layer.msg("请选择一个要移动到的目录！", {icon: 2});
                         return false;
