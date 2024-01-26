@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常处理
@@ -87,6 +88,11 @@ public class GlobalExceptionHandler {
         FieldError fieldError = ex.getFieldError();
         assert fieldError != null;
         return Result.error(fieldError.getDefaultMessage());
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result<?> handle404Exception(NoResourceFoundException e) {
+        return defHandler(e.getMessage(), e);
     }
 
     /**

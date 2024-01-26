@@ -44,6 +44,7 @@
         <captcha.version>3.0.0</captcha.version>
         <JustAuth.version>1.16.6</JustAuth.version>
         <sa-token.version>1.37.0</sa-token.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.30</lombok.version>
 
         <!-- maven插件版本 -->
@@ -129,11 +130,6 @@
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-dialect-thymeleaf</artifactId>
-                <version>${sa-token.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>commons-fileupload</groupId>
@@ -190,6 +186,13 @@
                 <groupId>me.zhyd.oauth</groupId>
                 <artifactId>JustAuth</artifactId>
                 <version>${JustAuth.version}</version>
+            </dependency>
+
+            <!-- 接口文档 -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
 
             <dependency>

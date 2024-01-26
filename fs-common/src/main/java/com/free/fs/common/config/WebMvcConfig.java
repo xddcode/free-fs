@@ -2,10 +2,13 @@ package com.free.fs.common.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
+import com.free.fs.common.security.PermitResource;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * 默认SpringMVC拦截器
@@ -15,6 +18,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @AllArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private PermitResource permitResource;
 
 //    private final FsServerProperties fsServerProperties;
 //
@@ -30,8 +36,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        List<String> excludePaths = permitResource.getPermitList();
+        String prefix = permitResource.getPrefix();
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin())).addPathPatterns("/file/**")
-                .excludePathPatterns("/login", "/reg", "/informationPass", "/uploads/**,/assets/**", "/oauth/**");
+        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin())).addPathPatterns(prefix)
+                .excludePathPatterns(excludePaths.toArray(new String[0]));
     }
 }

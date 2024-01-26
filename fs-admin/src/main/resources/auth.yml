@@ -1,0 +1,16 @@
+auth:
+  prefix: /api/**
+  ignore_urls:
+    - /api/v1/auth/**
+    - /uploads/**
+    - /assets/**
+    - /actuator/**
+    - /v3/api-docs/**
+    - /webjars/**
+    - /swagger/**
+    - /swagger-resources/**
+    - /swagger-ui.html
+    - /swagger-ui/**
+    - /doc.html
+    - /favicon.ico
+    - /

@@ -27,4 +27,7 @@ public class UserDto implements Serializable {
 
     @NotBlank(message = "验证码不能为空")
     private String code;
+
+    @NotBlank(message = "验证码UUID不能为空")
+    private String imgUUID;
 }

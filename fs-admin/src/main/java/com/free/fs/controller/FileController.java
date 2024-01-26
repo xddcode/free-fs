@@ -9,6 +9,8 @@ import com.free.fs.common.domain.Dtree;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.FileInfo;
 import com.free.fs.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -27,44 +29,30 @@ import java.util.Map;
  * @date 2021/3/10
  */
 @Slf4j
+@Tag(name = "文件管理")
 @RestController
-@RequestMapping("file")
+@RequestMapping("/api/v1/file")
 @RequiredArgsConstructor
 public class FileController {
 
     private final FileService fileService;
 
-    /**
-     * 获取文件列表
-     *
-     * @param dirIds
-     * @return
-     */
-    @GetMapping({"", "/list"})
+    @Operation(summary = "获取文件列表")
+    @GetMapping("/list")
     public Result<List<FileInfo>> getList(@RequestParam(value = "dirIds", required = false) String dirIds) {
         List<FileInfo> list = fileService.getList(dirIds);
         return Result.ok(list);
     }
 
-    /**
-     * 获取树结构列表
-     *
-     * @param info
-     * @return
-     */
-    @GetMapping("/getTree")
+    @Operation(summary = "获取树结构列表")
+    @GetMapping("/tree/list")
     public String getTree(FileInfo info) {
         List<Dtree> list = fileService.getTreeList(info);
         return JSON.toJSONString(Result.ok(list));
     }
 
-    /**
-     * 获取树结构目录列表
-     *
-     * @param info
-     * @return
-     */
-    @GetMapping("/getDirTree")
+    @Operation(summary = "获取树结构目录列表")
+    @GetMapping("/dir/tree/list")
     public String getDirTree(FileInfo info) {
         // update Yann 增加一个根目录提供移动
         Dtree dtree = new Dtree();
@@ -77,60 +65,35 @@ public class FileController {
         return JSON.toJSONString(Result.ok(ListUtil.of(dtree)));
     }
 
-    /**
-     * 获取目录列表
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/getDirs/{id}")
+    @Operation(summary = "获取目录列表")
+    @GetMapping("/dirs/{id}")
     public Result<Map<String, Object>> getDirs(@PathVariable(value = "id") Long id) {
         Map<String, Object> map = fileService.getDirs(id);
         return Result.ok(map);
     }
 
-    /**
-     * 文件上传
-     *
-     * @param files
-     * @param dirIds
-     * @return
-     */
+    @Operation(summary = "文件上传")
     @Preview()
-    @PostMapping({"", "/upload"})
+    @PostMapping("/upload")
     public Result<?> upload(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "dirIds") String dirIds) {
 
         return fileService.upload(files, dirIds);
     }
 
-    /**
-     * 文件分片上传
-     *
-     * @param files
-     * @return
-     */
+    @Operation(summary = "文件分片上传")
     @PostMapping("/uploadSharding")
     public Result<?> uploadSharding(@RequestParam(value = "file") MultipartFile[] files, String dirIds, HttpServletRequest request) {
         return fileService.uploadSharding(files, dirIds, request.getSession());
     }
 
-    /**
-     * 获取进度数据
-     *
-     * @param request
-     * @return
-     */
+    @Operation(summary = "获取进度数据")
     @GetMapping("/percent")
     public Integer percent(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (session.getAttribute("uploadPercent") == null ? 0 : (Integer) session.getAttribute("uploadPercent"));
     }
 
-    /**
-     * 重置上传进度
-     *
-     * @param request
-     */
+    @Operation(summary = "重置上传进度")
     @GetMapping("/percent/reset")
     public void resetPercent(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -138,24 +101,15 @@ public class FileController {
         // ossUploadUtils.initPart();
     }
 
-    /**
-     * 文件下载
-     *
-     * @param url
-     * @param response
-     */
+    @Operation(summary = "文件下载")
     @SaCheckPermission("file:download")
     @GetMapping("/downLoad")
     public void downLoad(@RequestParam(value = "url") String url, HttpServletResponse response) {
         fileService.download(url, response);
     }
 
-    /**
-     * 修改名称
-     *
-     * @param info
-     */
-    @PostMapping("/updateByName")
+    @Operation(summary = "修改名称")
+    @PutMapping("/name")
     public Result<?> update(FileInfo info) {
         if (fileService.updateByName(info)) {
             return Result.ok("修改成功");
@@ -164,14 +118,9 @@ public class FileController {
 
     }
 
-    /**
-     * 移动文件
-     *
-     * @param ids
-     * @param parentId
-     */
+    @Operation(summary = "移动文件")
     @SaCheckPermission("file:move")
-    @PostMapping("/move")
+    @PutMapping("/move")
     public Result<?> move(@RequestParam(value = "ids") String ids, @RequestParam(value = "parentId") Long parentId) {
         if (fileService.move(ids, parentId)) {
             return Result.ok("移动成功");
@@ -179,13 +128,9 @@ public class FileController {
         return Result.error("移动失败");
     }
 
-    /**
-     * 根据url删除文件
-     *
-     * @param url
-     */
+    @Operation(summary = "根据url删除文件")
     @SaCheckPermission("file:delete")
-    @PostMapping("/deleteFile")
+    @DeleteMapping("/deleteFile")
     public Result<?> deleteFile(@RequestParam(value = "url") String url) {
         if (fileService.delete(url)) {
             return Result.ok("删除成功");
@@ -193,13 +138,9 @@ public class FileController {
         return Result.error("删除失败");
     }
 
-    /**
-     * 根据id删除文件
-     *
-     * @param id
-     */
+    @Operation(summary = "根据id删除文件")
     @SaCheckPermission("file:delete")
-    @PostMapping("/deleteByIds")
+    @DeleteMapping("/deleteByIds")
     public Result<?> deleteByIds(@RequestParam(value = "id") Long id) {
         if (fileService.deleteByIds(id)) {
             return Result.ok("删除成功");
@@ -207,13 +148,9 @@ public class FileController {
         return Result.error("删除失败");
     }
 
-    /**
-     * 新增文件夹
-     *
-     * @param info
-     */
+    @Operation(summary = "新增文件夹")
     @SaCheckPermission("dir:add")
-    @PostMapping("/addFolder")
+    @PostMapping("/folder")
     public Result<?> addFolder(FileInfo info) {
         if (fileService.addFolder(info)) {
             return Result.ok("添加成功");

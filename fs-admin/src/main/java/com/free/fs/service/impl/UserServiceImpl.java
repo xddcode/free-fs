@@ -1,13 +1,16 @@
 package com.free.fs.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
+import com.free.fs.common.utils.CaptchaUtil;
 import com.free.fs.domain.User;
 import com.free.fs.domain.UserRole;
 import com.free.fs.domain.dto.LoginBody;
 import com.free.fs.domain.dto.UserDto;
+import com.free.fs.domain.vo.UserVO;
 import com.free.fs.mapper.UserMapper;
 import com.free.fs.mapper.UserRoleMapper;
 import com.free.fs.service.RoleService;
@@ -18,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.free.fs.domain.table.UserTableDef.USER;
 
@@ -42,7 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return 是否登录成功
      */
     @Override
-    public boolean doLogin(LoginBody body) {
+    public Map<String, Object> loginByAccount(LoginBody body) {
+        //校验验证码
+        CaptchaUtil.verify(body.getCode(), body.getImgUUID());
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.where(USER.USERNAME.ge(body.getUsername()));
         User user = this.getOne(queryWrapper);
@@ -52,19 +60,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!SaSecureUtil.sha256(body.getPassword()).equals(user.getPassword())) {
             throw new BusinessException("密码不正确");
         }
-        StpUtil.login(user.getId(), body.getRememberMe());
-        return true;
+        StpUtil.login(user.getId());
+        //构建返回对象
+        UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(user.getId())), UserVO.class);
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", userVO);
+        map.put("token", tokenInfo);
+        return map;
     }
 
     /**
-     * 新增用户
+     * 注册用户
      *
      * @param userDto 用户对象
      * @return 是否新增成功
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean addUser(UserDto userDto) {
+    public boolean register(UserDto userDto) {
+        //校验验证码
+        CaptchaUtil.verify(userDto.getCode(), userDto.getImgUUID());
         long count = this.count(new QueryWrapper().where(USER.USERNAME.eq(userDto.getUsername())));
         if (count > 0) {
             throw new BusinessException("用户名已存在");

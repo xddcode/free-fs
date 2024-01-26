@@ -1,4 +1,3 @@
 com.free.fs.common.orm.MybatisFlexAutoConfigure
-com.free.fs.common.config.SaTokenConfigure
 com.free.fs.common.config.CorsConfig
 com.free.fs.common.config.WebMvcConfig
