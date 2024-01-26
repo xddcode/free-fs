@@ -19,10 +19,18 @@ public class CaptchaCacheUtils {
     private final static String CACHE_KEY = "captcha:";
 
     public static void put(String key, String value) {
-        cache.put(CACHE_KEY + key, value);
+        cache.put(getKey(key), value);
     }
 
     public static String get(String key) {
-        return cache.get(CACHE_KEY + key);
+        return cache.get(getKey(key));
+    }
+
+    public static boolean containsKey(String key) {
+        return cache.containsKey(getKey(key));
+    }
+
+    private static String getKey(String key) {
+        return CACHE_KEY + key;
     }
 }

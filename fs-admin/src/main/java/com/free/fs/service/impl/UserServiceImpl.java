@@ -50,7 +50,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Map<String, Object> loginByAccount(LoginBody body) {
         //校验验证码
-        CaptchaUtil.verify(body.getCode(), body.getImgUUID());
+        boolean verify = CaptchaUtil.verify(body.getUuid(), body.getCode());
+        if (!verify) {
+            throw new BusinessException("验证码不正确.");
+        }
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.where(USER.USERNAME.ge(body.getUsername()));
         User user = this.getOne(queryWrapper);
@@ -80,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean register(UserDto userDto) {
         //校验验证码
-        CaptchaUtil.verify(userDto.getCode(), userDto.getImgUUID());
+        CaptchaUtil.verify(userDto.getImgUUID(), userDto.getCode());
         long count = this.count(new QueryWrapper().where(USER.USERNAME.eq(userDto.getUsername())));
         if (count > 0) {
             throw new BusinessException("用户名已存在");

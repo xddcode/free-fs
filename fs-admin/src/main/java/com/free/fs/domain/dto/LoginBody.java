@@ -28,5 +28,5 @@ public class LoginBody implements Serializable {
     private String code;
 
     @NotBlank(message = "验证码UUID不能为空")
-    private String imgUUID;
+    private String uuid;
 }

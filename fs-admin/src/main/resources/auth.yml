@@ -1,6 +1,7 @@
 auth:
   prefix: /api/**
   ignore_urls:
+    - /api/v1/captcha
     - /api/v1/auth/**
     - /uploads/**
     - /assets/**
