@@ -1,7 +1,6 @@
 package com.free.fs.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.collection.CollUtil;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.common.domain.FileBo;
@@ -11,7 +10,8 @@ import com.free.fs.domain.FileInfo;
 import com.free.fs.mapper.FileMapper;
 import com.free.fs.service.FileService;
 import com.free.fs.uploader.core.IFileUploader;
-import com.free.fs.uploader.core.UploaderFactory;
+import com.free.fs.uploader.core.DefaultUploaderFactory;
+import com.free.fs.uploader.core.IFileUploaderProvider;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +40,7 @@ import static com.mybatisflex.core.query.QueryMethods.noCondition;
 @RequiredArgsConstructor
 public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implements FileService {
 
-    private final UploaderFactory uploaderFactory;
+    private final IFileUploaderProvider uploaderProvider;
 
     @Override
     public List<FileInfo> getList(String dirIds) {
@@ -153,7 +153,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     }
 
     private FileInfo uploadFile(MultipartFile file) {
-        FileBo bo = uploaderFactory.getUploader().upload(file);
+        FileBo bo = uploaderProvider.getUploader().upload(file);
         FileInfo fileInfo = new FileInfo();
         BeanUtils.copyProperties(bo, fileInfo);
         return fileInfo;
@@ -212,13 +212,13 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     }
 
     private void deleteFile(String url) {
-        IFileUploader uploader = uploaderFactory.getUploader();
+        IFileUploader uploader = uploaderProvider.getUploader();
         uploader.delete(url);
     }
 
     @Override
     public void download(String url, HttpServletResponse response) {
-        IFileUploader uploader = uploaderFactory.getUploader();
+        IFileUploader uploader = uploaderProvider.getUploader();
         uploader.download(url, response);
     }
 

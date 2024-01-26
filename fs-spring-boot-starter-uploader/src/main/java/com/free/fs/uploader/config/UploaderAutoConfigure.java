@@ -1,14 +1,9 @@
 package com.free.fs.uploader.config;
 
-import cn.hutool.core.util.StrUtil;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.free.fs.common.exception.BusinessException;
-import com.free.fs.uploader.core.UploaderFactory;
-import io.minio.MinioClient;
+import com.free.fs.uploader.core.DefaultUploaderFactory;
+import com.free.fs.uploader.core.IFileUploaderProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -54,7 +49,7 @@ public class UploaderAutoConfigure {
 //    }
 
     @Bean
-    public UploaderFactory uploaderFactory(UploaderProperties properties) {
-        return new UploaderFactory(properties);
+    public IFileUploaderProvider iFileUploaderProvider(UploaderProperties properties) {
+        return new DefaultUploaderFactory(properties);
     }
 }

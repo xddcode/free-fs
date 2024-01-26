@@ -29,6 +29,11 @@ public interface CommonConstant {
     String DEFAULT_DIR_TYPE = "dir";
 
     /**
+     * 编码
+     */
+    String UTF_8 = "UTF-8";
+
+    /**
      * 默认管理员角色code
      */
     String ROLE_ADMIN = "admin";

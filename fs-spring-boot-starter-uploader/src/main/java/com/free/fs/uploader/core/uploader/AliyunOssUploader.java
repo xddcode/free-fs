@@ -1,14 +1,13 @@
-package com.free.fs.uploader.core;
+package com.free.fs.uploader.core.uploader;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
-import com.free.fs.uploader.config.UploaderProperties;
 import com.free.fs.uploader.config.UploaderProperties.AliyunOssProperties;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.FileBo;
 import com.free.fs.common.exception.BusinessException;
-import io.minio.MinioClient;
+import com.free.fs.uploader.core.IFileUploader;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,15 +19,25 @@ import org.springframework.web.multipart.MultipartFile;
  * @Date: 2024/1/25 10:32
  */
 @Slf4j
-public class AliyunOssFileUploader implements IFileUploader {
+public class AliyunOssUploader implements IFileUploader {
 
     private final OSS ossClient;
     private final AliyunOssProperties properties;
 
-    public AliyunOssFileUploader(AliyunOssProperties properties) {
+    public AliyunOssUploader(AliyunOssProperties properties) {
         this.ossClient = new OSSClientBuilder().build(properties.getEndPoint(), properties.getAccessKey(),
                 properties.getSecretKey());
         this.properties = properties;
+    }
+
+    @Override
+    public boolean bucketExists(String bucket) {
+        return false;
+    }
+
+    @Override
+    public void makeBucket(String bucket) {
+
     }
 
     @Override

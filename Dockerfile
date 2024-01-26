@@ -1,8 +1,7 @@
-FROM openjdk:8-jdk-alpine
-LABEL version="1.2.0" description="free-fs" by="dinghao"
-#添加字体库，解决验证码报错
-RUN apk add --no-cache ttf-dejavu
-WORKDIR /home/free-fs
-ADD target/free-fs.jar /home/free-fs
-CMD ["java","-jar","free-fs.jar"]
-
+#构建镜像在DockerFile同级目录下执行命令： docker build -t free-fs .
+FROM openjdk:17-jdk-alpine
+ADD fs-admin/target/*.jar /app.jar
+# 设置默认时区
+ENV TZ=Asia/Shanghai
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/app.jar"]

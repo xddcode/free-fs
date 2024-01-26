@@ -1,21 +1,19 @@
-package com.free.fs.uploader.core;
+package com.free.fs.uploader.core.uploader;
 
 import cn.hutool.core.io.IoUtil;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.uploader.config.UploaderProperties.MinioProperties;
 import com.free.fs.common.domain.FileBo;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
+import com.free.fs.uploader.core.IFileUploader;
+import io.minio.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Minio文件上传
@@ -39,7 +37,34 @@ public class MinioUploader implements IFileUploader {
     }
 
     @Override
+    public boolean bucketExists(String bucket) {
+        try {
+            return minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+        } catch (Exception e) {
+            log.error("minio bucketExists Exception:{}", e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public void makeBucket(String bucket) {
+        try {
+            if (!bucketExists(bucket)) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+                log.info("minio makeBucket success bucketName:{}", bucket);
+            }
+        } catch (Exception e) {
+            log.error("minio makeBucket Exception:{}", e.getMessage());
+        }
+    }
+
+    @Override
     public FileBo upload(MultipartFile file) {
+        String bucket = properties.getBucket();
+        if (!bucketExists(bucket)) {
+            log.info("minio bucketName is not creat");
+            makeBucket(bucket);
+        }
         FileBo fileBo = FileBo.build(file);
         try {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
@@ -88,29 +113,24 @@ public class MinioUploader implements IFileUploader {
         int index = key.indexOf(CommonConstant.DIR_SPLIT);
         String bucket = key.substring(0, index);
         String object = key.substring(index + 1);
-        InputStream in = null;
-        OutputStream out = null;
+        GetObjectResponse is = null;
         try {
             GetObjectArgs getObjectArgs = GetObjectArgs.builder()
                     .bucket(bucket)
                     .object(object)
                     .build();
-            in = minioClient.getObject(getObjectArgs);
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment;filename=" + object);
-            out = response.getOutputStream();
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-            }
-            out.flush();
+            is = minioClient.getObject(getObjectArgs);
+            // 设置文件ContentType类型，这样设置，会自动判断下载文件类型
+            response.setContentType("application/x-msdownload");
+            response.setCharacterEncoding(CommonConstant.UTF_8);
+            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(object, StandardCharsets.UTF_8));
+            IoUtil.copy(is, response.getOutputStream());
+            log.info("minio downloadFile success, filePath:{}", url);
         } catch (Exception e) {
             log.error("Minio文件下载失败: {}", e.getMessage());
             throw new BusinessException("文件下载失败");
         } finally {
-            IoUtil.close(in);
-            IoUtil.close(out);
+            IoUtil.close(is);
         }
     }
 }

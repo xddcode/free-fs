@@ -8,7 +8,7 @@
     <version>${revision}</version>
 
     <packaging>pom</packaging>
-    <name>eco-platform</name>
+    <name>free-fs</name>
 
     <description>
         free-fs - [根pom文件]
