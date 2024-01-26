@@ -12,6 +12,23 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface IFileUploader {
 
+
+    /**
+     * 从文件路径中获取存储桶名称
+     *
+     * @param url 文件路径
+     * @return 存储桶名称
+     */
+    String getBucketByUrl(String url);
+
+    /**
+     * 从文件路径中获取对象名称
+     *
+     * @param url 文件路径
+     * @return 对象名称
+     */
+    String getObjectNameByUrl(String url);
+
     /**
      * 判断存储桶是否在存在
      *
@@ -49,4 +66,12 @@ public interface IFileUploader {
      * @param response
      */
     void download(String url, HttpServletResponse response);
+
+    /**
+     * 获取私有bucket文件访问地址
+     *
+     * @param url 文件路径
+     * @return
+     */
+    String getPolicyUrl(String url);
 }

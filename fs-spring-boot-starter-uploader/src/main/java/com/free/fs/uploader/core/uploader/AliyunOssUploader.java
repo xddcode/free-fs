@@ -31,6 +31,16 @@ public class AliyunOssUploader implements IFileUploader {
     }
 
     @Override
+    public String getBucketByUrl(String url) {
+        return null;
+    }
+
+    @Override
+    public String getObjectNameByUrl(String url) {
+        return null;
+    }
+
+    @Override
     public boolean bucketExists(String bucket) {
         return false;
     }
@@ -67,5 +77,10 @@ public class AliyunOssUploader implements IFileUploader {
     @Override
     public void download(String url, HttpServletResponse response) {
 
+    }
+
+    @Override
+    public String getPolicyUrl(String url) {
+        return null;
     }
 }

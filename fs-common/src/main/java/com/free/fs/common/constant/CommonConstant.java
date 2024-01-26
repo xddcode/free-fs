@@ -68,14 +68,19 @@ public interface CommonConstant {
     String FILE_TYPE_LOCAL = "local";
 
     /**
-     * 云存储类型-oss
+     * 阿里云存储类型aliyun_oss
      */
-    String FILE_TYPE_OSS = "oss";
+    String FILE_TYPE_OSS = "aliyunOss";
 
     /**
      * 云存储类型-七牛
      */
     String FILE_TYPE_QINIU = "qiniu";
+
+    /**
+     * 云存储类型-Minio
+     */
+    String FILE_TYPE_MINIO = "minio";
 
     /**
      * 需要租户过滤的字段

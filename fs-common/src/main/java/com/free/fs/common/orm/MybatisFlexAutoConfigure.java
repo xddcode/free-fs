@@ -1,5 +1,6 @@
 package com.free.fs.common.orm;
 
+import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.orm.decipher.Decipher;
 import com.free.fs.common.orm.tenant.MyTenantFactory;
 import com.mybatisflex.core.FlexGlobalConfig;
@@ -64,7 +65,7 @@ public class MybatisFlexAutoConfigure implements ConfigurationCustomizer, MyBati
     @Override
     public void customize(FlexGlobalConfig globalConfig) {
         // 设置租户列
-        FlexGlobalConfig.getDefaultConfig().setTenantColumn("source");
+        FlexGlobalConfig.getDefaultConfig().setTenantColumn(CommonConstant.SYSTEM_TENANT_ID);
         // 开启审计功能
         AuditManager.setAuditEnable(enableAudit);
         if (sqlPrint) {
@@ -77,7 +78,7 @@ public class MybatisFlexAutoConfigure implements ConfigurationCustomizer, MyBati
     }
 
     @Bean
-    public TenantFactory tenantFactory(){
+    public TenantFactory tenantFactory() {
         return new MyTenantFactory();
     }
 }

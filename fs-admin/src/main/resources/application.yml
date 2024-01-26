@@ -57,16 +57,6 @@ mybatis-flex:
 
 --- # fs配置
 fs:
-  #多租户应用隔离配置
-  tenant:
-    enable: true
-    ignoreTables:
-      - sys_user
-      - sys_user_role
-      - sys_role_permission
-      - sys_role
-      - sys_permission
-
   # 上传配置
   uploader:
     type: minio
