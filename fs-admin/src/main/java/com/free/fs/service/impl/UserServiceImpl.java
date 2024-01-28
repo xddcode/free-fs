@@ -14,6 +14,7 @@ import com.free.fs.domain.vo.UserVO;
 import com.free.fs.mapper.UserMapper;
 import com.free.fs.mapper.UserRoleMapper;
 import com.free.fs.service.RoleService;
+import com.free.fs.service.UserRoleService;
 import com.free.fs.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -37,9 +38,9 @@ import static com.free.fs.domain.table.UserTableDef.USER;
 @RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    private final UserRoleMapper userRoleMapper;
-
     private final RoleService roleService;
+
+    private final UserRoleService userRoleService;
 
     /**
      * 登录
@@ -66,10 +67,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         StpUtil.login(user.getId());
         //构建返回对象
         UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(user.getId())), UserVO.class);
+        userVO.setRoleList(userRoleService.getRoleByUserId(user.getId()));
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         Map<String, Object> map = new HashMap<>();
         map.put("user", userVO);
-        map.put("token", tokenInfo);
+        map.put("token", tokenInfo.tokenValue);
         return map;
     }
 
@@ -98,9 +100,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserRole ur = new UserRole();
         ur.setUserId(user.getId());
         ur.setRoleId(roleService.getIdByCode(CommonConstant.ROLE_USER));
-        if (userRoleMapper.insert(ur) <= 0) {
+        if (!userRoleService.save(ur)) {
             throw new BusinessException("用户新增失败");
         }
         return true;
+    }
+
+
+    @Override
+    public UserVO getUserInfo() {
+        Long userId = (Long) StpUtil.getLoginId();
+        UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(userId)), UserVO.class);
+        userVO.setRoleList(userRoleService.getRoleByUserId(userId));
+        return userVO;
     }
 }

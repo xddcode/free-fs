@@ -3,6 +3,7 @@ package com.free.fs.service;
 import com.free.fs.domain.User;
 import com.free.fs.domain.dto.LoginBody;
 import com.free.fs.domain.dto.UserDto;
+import com.free.fs.domain.vo.UserVO;
 import com.mybatisflex.core.service.IService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -31,4 +32,10 @@ public interface UserService extends IService<User> {
      * @return 是否新增成功
      */
     boolean register(UserDto userDto);
+
+    /**
+     * 获取用户信息
+     * @return userVo
+     */
+    UserVO getUserInfo();
 }

@@ -55,7 +55,7 @@ public class AuthController {
 //        return Result.error("注册失败");
 //    }
     @Operation(summary = "退出")
-    @GetMapping("logout")
+    @GetMapping("/logout")
     public Result<String> logout() {
         StpUtil.logout();
         return Result.ok();
