@@ -46,6 +46,7 @@
         <sa-token.version>1.37.0</sa-token.version>
         <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.30</lombok.version>
+        <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
 
         <!-- maven插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -199,6 +200,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${alibaba-ttl.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

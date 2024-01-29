@@ -3,6 +3,7 @@ package com.free.fs.controller;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.vo.UserVO;
 import com.free.fs.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @Operation(summary = "用户信息")
+    @GetMapping("/getInfo")
     public Result<UserVO> getUserInfo() {
         return Result.ok(userService.getUserInfo());
     }

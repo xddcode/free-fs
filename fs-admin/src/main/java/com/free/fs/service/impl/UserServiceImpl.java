@@ -66,11 +66,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         StpUtil.login(user.getId());
         //构建返回对象
-        UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(user.getId())), UserVO.class);
-        userVO.setRoleList(userRoleService.getRoleByUserId(user.getId()));
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         Map<String, Object> map = new HashMap<>();
-        map.put("user", userVO);
         map.put("token", tokenInfo.tokenValue);
         return map;
     }
@@ -109,9 +106,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserVO getUserInfo() {
-        Long userId = (Long) StpUtil.getLoginId();
-        UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(userId)), UserVO.class);
-        userVO.setRoleList(userRoleService.getRoleByUserId(userId));
+        Object loginId = StpUtil.getLoginId();
+        if (null == loginId) {
+            throw new BusinessException("用户已失效, 请重新登录.");
+        }
+        UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(loginId)), UserVO.class);
+        userVO.setRoleList(userRoleService.getRoleByUserId(Long.valueOf(loginId.toString())));
         return userVO;
     }
 }

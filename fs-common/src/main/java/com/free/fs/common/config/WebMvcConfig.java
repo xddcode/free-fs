@@ -3,6 +3,7 @@ package com.free.fs.common.config;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.security.PermitResource;
+import com.free.fs.common.web.interceptor.FsWebInvokeTimeInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -41,5 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin())).addPathPatterns(prefix)
                 .excludePathPatterns(excludePaths.toArray(new String[0]));
+        // 全局访问性能拦截
+        registry.addInterceptor(new FsWebInvokeTimeInterceptor());
     }
 }
