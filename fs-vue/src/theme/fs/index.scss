@@ -1,0 +1,19 @@
+/**
+ * PC端
+ */
+.file-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, 100px);
+}
+
+.file-box {
+  width: 120px;
+  height: 120px;
+  border: #1f1f1f solid 1px;
+}
+
+
+/**
+ mobile
+ */
