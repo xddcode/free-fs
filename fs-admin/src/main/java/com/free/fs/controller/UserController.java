@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "用户管理")
 @Validated
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("${fs.api.prefix}/user")
 @RequiredArgsConstructor
 public class UserController {
 

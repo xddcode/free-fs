@@ -51,6 +51,8 @@ mybatis-flex:
 
 --- # fs配置
 fs:
+  api:
+    prefix: /api/v1
   # 上传配置
   uploader:
     type: minio

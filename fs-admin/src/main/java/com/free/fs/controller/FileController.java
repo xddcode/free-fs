@@ -31,7 +31,7 @@ import java.util.Map;
 @Slf4j
 @Tag(name = "文件管理")
 @RestController
-@RequestMapping("/api/v1/file")
+@RequestMapping("${fs.api.prefix}/file")
 @RequiredArgsConstructor
 public class FileController {
 

@@ -24,7 +24,7 @@ public class CaptchaUtil {
      * 生成验证码
      */
     public static CaptchaVo captchaV2() {
-        Captcha captcha = CaptchaFactory.getCaptcha(CaptchaEnum.GIF);
+        Captcha captcha = CaptchaFactory.getCaptcha(CaptchaEnum.GIF);   
         //使用实例创建一个随机码对象TextEntry
         TextEntry text = captcha.createText();
         String uuid = UUID.fastUUID().toString();

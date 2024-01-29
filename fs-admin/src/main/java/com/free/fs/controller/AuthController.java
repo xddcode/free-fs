@@ -17,7 +17,7 @@ import java.util.Map;
 @Tag(name = "认证管理")
 @Validated
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("${fs.api.prefix}/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
