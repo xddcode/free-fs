@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import to from "await-to-js";
 import { useLoginApi } from '/@/api/login';
-import { LoginVo, UserInfo } from '/@/api/login/types';
-import { setToken, rmToken, getToken } from "/@/utils/authToken";
+import { LoginVo } from '/@/api/login/types';
+import { setToken, rmToken } from "/@/utils/authToken";
 import defAva from '/@/assets/imgs/def_avatar.jpg';
 import store from "/@/stores";
 

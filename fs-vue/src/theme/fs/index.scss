@@ -1,18 +1,88 @@
 /**
  * PC端
  */
-.file-container {
+.file-grid-container {
   display: grid;
+  //grid-column-gap: 10px;
+  // 暂时给颜色
+  //background-color: #2196F3;
+  //padding: 10px;
+  grid-gap: 10px;
+}
+
+.file-grid-item {
+  //background-color: rgba(255, 255, 255, 0.8);
+  //border: 1px solid rgba(0, 0, 0, 0.8);
+  height: 200px;
+  max-width: 188px;
+  //margin-top: 10px;
+  //padding: 10px;
+}
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, 100px);
+  height: 180px;
+  vertical-align: top;
+  cursor: pointer;
+
+  .file-icon {
+    width: 70%;
+    height: 100px;
+    background: #fafafa;
+
+    img {
+      padding: 5px;
+    }
+  }
+
+  .file-name {
+    bottom: 0;
+    word-wrap: break-word;
+    text-align: center;
+    line-height: normal;
+    font-size: 12px;
+    margin-top: 8px;
+  }
 }
 
-.file-box {
-  width: 120px;
-  height: 120px;
-  border: #1f1f1f solid 1px;
+/**    不同屏幕大小的样式     */
+@media (max-width: 768px) {
+  /* 当屏幕宽度小于或等于 768px 时应用的样式 */
+  .file-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* 当屏幕宽度在 768px 和 1024px 之间时应用的样式 */
+  .file-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+
+  }
+
+  .file-grid-item {
+
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  /* 当屏幕宽度大于或等于 1025px 时应用的样式 */
+  .file-grid-container {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  /* 当屏幕宽度大于或等于 1440px 时应用的样式 */
+  .file-grid-container {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
 
 /**
  mobile
