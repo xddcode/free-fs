@@ -1,6 +1,6 @@
 <template>
   <div ref="layoutRef" class="layout-padding">
-    <el-card  shadow="hover" class="layout-padding-auto">
+    <el-card shadow="hover" class="layout-padding-auto">
       <template #header>
         <!-- 头部: 面包屑, 左边一个小图标 -->
         <div class="file-card-header">
@@ -21,13 +21,22 @@
       <el-scrollbar :max-height="cardBodyHeight - 130">
         <div class="file-grid-container">
           <div v-for="(file, index) in fileList" class="file-grid-item" :body-style="{ padding: '0px' }" :key="index">
-            <div class="file-item">
-              <div class="file-icon">
-                <img v-if="file.isImg" :src="file.url" alt="文件" />
-                <img v-else :src="getAssetsFile(file.type)" alt="文件" />
+            <!-- 文件操作组件 -->
+            <fs-options
+                ref="fileOperationsRef"
+                :id="file.id.toString()"
+                @visibleChange="handleVisible"
+            >
+              <!-- 文件主体 -->
+              <div class="file-item-box">
+                <div class="file-icon">
+                  <img :src="getFileSvg(file.type)" :alt="file.name"/>
+                </div>
+                <div class="file-item-name">
+                  {{ file.name }}
+                </div>
               </div>
-              <div class="file-name">{{ file.name }}</div>
-            </div>
+            </fs-options>
           </div>
         </div>
       </el-scrollbar>
@@ -37,8 +46,8 @@
 
 <script setup lang="ts" name="fileList">
 import {ArrowRight} from '@element-plus/icons-vue'
-import {getAssetsFile} from "/@/utils/fti";
-import {FileVO} from "/@/api/files/types";
+import {getFileSvg} from "/@/utils/fti";
+import FsOptions from "/@/components/fs/fsOptions.vue";
 
 const layoutRef = ref();
 const cardBodyHeight = ref(0);
@@ -95,6 +104,16 @@ const fileList = reactive([
     isImg: true,
   },
 ]);
+
+//下拉菜单右键打开新的，要关闭之前的
+const fileOperationsRef = ref();
+function handleVisible(id, visible) {
+  if (!visible) return;
+  fileOperationsRef.value.forEach((item) => {
+    if (item.id === id) return;
+    item.handleClose();
+  });
+}
 </script>
 
 <style scoped lang="scss">
