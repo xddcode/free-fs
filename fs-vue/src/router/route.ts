@@ -83,7 +83,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				name: 'album',
 				component: () => import('/@/views/album/index.vue'),
 				meta: {
-					title: 'message.router.files',
+					title: 'message.router.album',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,

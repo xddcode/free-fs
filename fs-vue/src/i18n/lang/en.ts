@@ -74,6 +74,8 @@ export default {
 		layoutLinkView: 'LinkView',
 		layoutIframeViewOne: 'IframeViewOne',
 		layoutIframeViewTwo: 'IframeViewTwo',
+		files: 'files',
+		album: 'albums',
 	},
 	staticRoutes: {
 		signIn: 'signIn',

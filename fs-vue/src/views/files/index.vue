@@ -8,7 +8,7 @@
             <SvgIcon name="ele-Files" :size="30" color="#3498db" title="文件"/>
           </div>
           <div class="right-header">
-            <el-breadcrumb :separator-icon="ArrowRight">
+            <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
               <el-breadcrumb-item :to="{ path: '/' }">根目录</el-breadcrumb-item>
               <el-breadcrumb-item>目录一</el-breadcrumb-item>
               <el-breadcrumb-item>目录二</el-breadcrumb-item>
@@ -19,8 +19,12 @@
 
       <!-- 主体以文件列表为主 -->
       <el-scrollbar :max-height="cardBodyHeight - 130">
-        <div class="file-grid-container">
-          <div v-for="(file, index) in fileList" class="file-grid-item" :body-style="{ padding: '0px' }" :key="index">
+        <div class="file-grid-container"
+             @drop="handleFileDrop"
+             @dragover.prevent
+             @dragenter.prevent
+          >
+          <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
             <!-- 文件操作组件 -->
             <fs-options
                 ref="fileOperationsRef"
@@ -114,13 +118,16 @@ const fileList = reactive([
 
 //下拉菜单右键打开新的，要关闭之前的
 const fileOperationsRef = ref();
-
-function handleVisible(id, visible) {
+const handleVisible = (id, visible) => {
   if (!visible) return;
   fileOperationsRef.value.forEach((item) => {
     if (item.id === id) return;
     item.handleClose();
   });
+}
+
+const handleFileDrop = (e) => {
+  console.log(e)
 }
 </script>
 
@@ -134,6 +141,7 @@ function handleVisible(id, visible) {
 
   .left-header {
     margin: 0 10px;
+    padding-top: 10px;
   }
 
   .right-header {

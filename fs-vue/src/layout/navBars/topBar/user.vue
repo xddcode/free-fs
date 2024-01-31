@@ -1,17 +1,17 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
-			<div class="layout-navbars-breadcrumb-user-icon">
-				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>
-			</div>
-			<template #dropdown>
-				<el-dropdown-menu>
-					<el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('message.user.dropdownLarge') }}</el-dropdown-item>
-					<el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{ $t('message.user.dropdownDefault') }}</el-dropdown-item>
-					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('message.user.dropdownSmall') }}</el-dropdown-item>
-				</el-dropdown-menu>
-			</template>
-		</el-dropdown>
+<!--		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">-->
+<!--			<div class="layout-navbars-breadcrumb-user-icon">-->
+<!--				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>-->
+<!--			</div>-->
+<!--			<template #dropdown>-->
+<!--				<el-dropdown-menu>-->
+<!--					<el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('message.user.dropdownLarge') }}</el-dropdown-item>-->
+<!--					<el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{ $t('message.user.dropdownDefault') }}</el-dropdown-item>-->
+<!--					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('message.user.dropdownSmall') }}</el-dropdown-item>-->
+<!--				</el-dropdown-menu>-->
+<!--			</template>-->
+<!--		</el-dropdown>-->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i
@@ -181,7 +181,7 @@ const onHandleCommandClick = (path: string) => {
 			})
 			.catch(() => {});
 	} else if (path === 'wareHouse') {
-		window.open('https://gitee.com/lyt-top/vue-next-admin');
+		window.open('https://gitee.com/dh_free/free-fs');
 	} else {
 		router.push(path);
 	}
