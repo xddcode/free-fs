@@ -35,6 +35,7 @@
                 <div class="file-item-name">
                   {{ file.name }}
                 </div>
+                <div class="file-item-time">{{ file.createTime || '--' }}</div>
               </div>
             </fs-options>
           </div>
@@ -67,6 +68,7 @@ const fileList = reactive([
     url: '',
     type: 'dir',
     isImg: false,
+    createTime: '2021-08-01 12:00:00',
   },
   {
     id: 2,
@@ -74,6 +76,7 @@ const fileList = reactive([
     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
     type: 'jpeg',
     isImg: true,
+    createTime: '2021-08-01 12:00:00',
   },
   {
     id: 5,
@@ -81,6 +84,7 @@ const fileList = reactive([
     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
     type: 'pdf',
     isImg: false,
+    createTime: '2021-08-01 12:00:00',
   },
   {
     id: 6,
@@ -88,6 +92,7 @@ const fileList = reactive([
     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
     type: 'txt',
     isImg: false,
+    createTime: '2021-08-01 12:00:00',
   },
   {
     id: 7,
@@ -95,6 +100,7 @@ const fileList = reactive([
     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
     type: 'doc',
     isImg: false,
+    createTime: '2021-08-01 12:00:00',
   },
   {
     id: 8,
@@ -102,11 +108,12 @@ const fileList = reactive([
     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
     type: 'jpeg',
     isImg: true,
-  },
+  }
 ]);
 
 //下拉菜单右键打开新的，要关闭之前的
 const fileOperationsRef = ref();
+
 function handleVisible(id, visible) {
   if (!visible) return;
   fileOperationsRef.value.forEach((item) => {
@@ -131,6 +138,18 @@ function handleVisible(id, visible) {
   .right-header {
     //margin: auto 0;
   }
+}
+
+.file-grid-container {
+  gap: 24px;
+}
+
+.file-item-box:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.file-item-box .file-icon {
+  background: transparent;
 }
 
 </style>

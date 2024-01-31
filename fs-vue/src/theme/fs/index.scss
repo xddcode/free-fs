@@ -39,20 +39,40 @@
     margin: auto;
 
     img {
-      width: 90%;
-      height: 90%;
-      padding: 10px;
+      width: 95%;
+      height: 95%;
+      padding: 4px;
     }
   }
 
   .file-item-name {
     word-wrap: break-word;
     text-align: center;
-    font-size: 16px;
-    margin-top: 10px;
     line-height: 1.5;
-    color: #000;
+    width: 100%;
+    font-size: 14px;
+    color: rgb(37, 38, 43);
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    margin-bottom: 2px;
+    -webkit-transition: color .3s ease;
+    -o-transition: color .3s ease;
     transition: color .3s ease;
+  }
+
+  & .file-item-time {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    color: rgb(37, 38, 43, 0.36);
+    max-width: 100%;
   }
 }
 
@@ -101,7 +121,7 @@
 @media (min-width: 1920px) {
   /* 当屏幕宽度大于或等于 1920px 时应用的样式 */
   .file-grid-container {
-    grid-template-columns: repeat(14, 1fr);
+    grid-template-columns: repeat(16, 1fr);
   }
 }
 
