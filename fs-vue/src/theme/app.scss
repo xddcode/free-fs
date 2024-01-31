@@ -5,8 +5,12 @@
 	padding: 0;
 	box-sizing: border-box;
 	outline: none !important;
+    font-family: "HarmonyOS", Helvetica, Arial, sans-serif;
 }
-
+@font-face {
+	font-family: 'HarmonyOS';
+	src: url('../assets/font/HarmonyOS_Sans_SC_Regular.ttf');
+}
 :root {
 	--next-color-white: #ffffff;
 	--next-bg-main-color: #f8f8f8;

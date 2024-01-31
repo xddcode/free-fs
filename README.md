@@ -21,8 +21,8 @@
 - Gitee：[https://gitee.com/dh_free/free-fs](https://gitee.com/dh_free/free-fs)
 - Github：[https://github.com/dh-free/free-fs](https://github.com/dh-free/free-fs)
 
-#### SpringBoot3.x版本
-- 切换至springboot3分支即可，后续迭代以此分支为主！！！
+#### SpringBoot3.x版本(长期维护)
+- 切换至[springboot3](https://gitee.com/dh_free/free-fs/tree/springboot3/)
 
 #### Vue3版本正在开发中......(敬请期待)
 #### 开发文档： [https://dh_free.gitee.io/free-fs-doc](https://dh_free.gitee.io/free-fs-doc)
