@@ -1,3 +1,3 @@
 com.free.fs.common.orm.MybatisFlexAutoConfigure
-com.free.fs.common.config.CorsConfig
-com.free.fs.common.config.WebMvcConfig
+com.free.fs.common.web.config.CorsConfig
+com.free.fs.common.web.config.WebMvcConfig

@@ -1,4 +1,4 @@
-package com.free.fs.common.config;
+package com.free.fs.common.web.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;

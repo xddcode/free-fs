@@ -1,4 +1,4 @@
-package com.free.fs.common.config;
+package com.free.fs.common.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;

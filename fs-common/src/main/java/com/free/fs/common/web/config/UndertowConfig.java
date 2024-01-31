@@ -1,4 +1,4 @@
-package com.free.fs.common.config;
+package com.free.fs.common.web.config;
 
 import io.undertow.server.DefaultByteBufferPool;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
