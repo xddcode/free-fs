@@ -1,5 +1,5 @@
 <template>
-  <div ref="layoutRef" class="layout-padding">
+  <div class="layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <template #header>
         <!-- 头部: 面包屑, 左边一个小图标 -->
@@ -17,51 +17,59 @@
         </div>
       </template>
 
-      <!-- 主体以文件列表为主 -->
-      <el-scrollbar :max-height="cardBodyHeight - 130">
-        <div class="file-grid-container"
-             @drop="handleFileDrop"
-             @dragover.prevent
-             @dragenter.prevent
-          >
-          <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
-            <!-- 文件操作组件 -->
-            <fs-options
-                ref="fileOperationsRef"
-                :id="file.id.toString()"
-                @visibleChange="handleVisible"
-            >
-              <!-- 文件主体 -->
-              <div class="file-item-box">
-                <div class="file-icon">
-                  <img :src="getFileSvg(file.type)" :alt="file.name"/>
+      <div ref="cardBodyRef" class="file-card-body"
+           @dragover="handleDragOver"
+           @dragleave="handleDragLeave"
+           @drop="handleDrop"
+      >
+        <!-- 主体以文件列表为主 -->
+        <el-scrollbar :max-height="cardBodyRef.clientHeight">
+          <div class="file-grid-container">
+            <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
+              <!-- 文件操作组件 -->
+              <fs-options
+                  ref="fileOperationsRef"
+                  :id="file.id.toString()"
+                  @visibleChange="handleVisible"
+              >
+                <!-- 文件主体 -->
+                <div class="file-item-box">
+                  <div class="file-icon">
+                    <img :src="getFileSvg(file.type)" :alt="file.name"/>
+                  </div>
+                  <div class="file-item-name">
+                    {{ file.name }}
+                  </div>
+                  <div class="file-item-time">{{ file.createTime || '--' }}</div>
                 </div>
-                <div class="file-item-name">
-                  {{ file.name }}
-                </div>
-                <div class="file-item-time">{{ file.createTime || '--' }}</div>
-              </div>
-            </fs-options>
+              </fs-options>
+            </div>
+          </div>
+        </el-scrollbar>
+
+        <div v-if="isDragging" class="overlay">
+          <div class="overlay-text">拖放文件到此处</div>
+          <div class="overlay-icon" :style="{background: themeConfig.primary}">
+            <SvgIcon name="iconfont icon-shangchuan" color="#FFFFFF" :size="50"></SvgIcon>
           </div>
         </div>
-      </el-scrollbar>
+      </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts" name="fileList">
+import { debounce, throttle } from 'lodash';
 import {ArrowRight} from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia';
+import { useThemeConfig } from '/@/stores/modules/themeConfig';
 import {getFileSvg} from "/@/utils/fti";
 import FsOptions from "/@/components/fs/fsOptions.vue";
 
-const layoutRef = ref();
-const cardBodyHeight = ref(0);
 
-watch(layoutRef, () => {
-  if (layoutRef.value) {
-    cardBodyHeight.value = layoutRef.value.clientHeight;
-  }
-})
+const storesThemeConfig = useThemeConfig();
+const { themeConfig } = storeToRefs(storesThemeConfig);
+const cardBodyRef = ref(0);
 
 // const fileList = ref([]);
 // 文件集合
@@ -126,9 +134,42 @@ const handleVisible = (id, visible) => {
   });
 }
 
-const handleFileDrop = (e) => {
-  console.log(e)
-}
+const isDragging = ref(false);
+const handleDragOver = (event: DragEvent) => {
+  console.log(event)
+  event.preventDefault(); // 阻止默认行为，允许放置
+  isDragging.value = true;
+};
+// 节流函数, 减少事件触发频率
+const throttleHandleDragOver = throttle(handleDragOver, 500)
+
+// #TODO Yann 在组件中调用节流控制的@dragover后, 影响@drop事件触发
+const handleDrop = (event) => {
+  console.log(event)
+  event.preventDefault(); // 阻止浏览器默认行为，不会自动打开文件管理页面
+  event.stopPropagation();
+  isDragging.value = false;
+  // 移除事件时同步取消节流操作
+  throttleHandleDragOver && throttleHandleDragOver.cancel();
+  const DataTransferItemList = event.dataTransfer!.items; // 获取文件的数据
+  console.log(DataTransferItemList); // 打印看看
+};
+
+const handleDragLeave = (event) => {
+  if (!cardBodyRef.value.contains(event.relatedTarget)) {
+    isDragging.value = false;
+    // 移除事件时同步取消节流操作
+    throttleHandleDragOver && throttleHandleDragOver.cancel();
+  }
+};
+
+// onMounted(() => {
+//   // 在组件挂载时，为 dragover 事件处理函数应用节流函数
+//   #TODO Yann  没用...
+//   cardBodyRef.value.addEventListener('dragover',
+//       throttleHandleDragOver
+//   );
+// })
 </script>
 
 <style scoped lang="scss">
@@ -149,16 +190,38 @@ const handleFileDrop = (e) => {
   }
 }
 
-.file-grid-container {
-  gap: 24px;
-}
+.file-card-body {
+  height: calc(100vh - 50px - 100px - 45px);
+  position: relative;
 
-.file-item-box:hover {
-  background: rgba(0, 0, 0, 0.02);
-}
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 
-.file-item-box .file-icon {
-  background: transparent;
+    &-text {
+      color: white;
+      font-size: 18px;
+    }
+
+    &-icon {
+      margin-top: 10px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      //background: #26a59a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 
 </style>

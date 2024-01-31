@@ -8,6 +8,7 @@
   //background-color: #2196F3;
   //padding: 10px;
   //grid-gap: 10px;
+  gap: 24px;
 }
 
 .file-grid-item {
@@ -34,9 +35,10 @@
   .file-icon {
     width: 90%;
     height: 100px;
-    background: #fafafa;
     border-radius: 10px;
     margin: auto;
+    background: transparent;
+
 
     img {
       width: 95%;
@@ -77,7 +79,7 @@
 }
 
 .file-item-box:hover {
-  background: #efefef;
+  background: rgba(0, 0, 0, 0.02);
   border-radius: 15px;
 }
 
