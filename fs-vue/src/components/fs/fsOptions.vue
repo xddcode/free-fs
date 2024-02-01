@@ -33,7 +33,7 @@ import { View, CopyDocument, Rank, EditPen, Delete } from '@element-plus/icons-v
 
 const props = defineProps({
   id: {
-    type: String,
+    type: [String, Number],
     required: true,
   },
 });
@@ -42,7 +42,7 @@ const emit = defineEmits(['visibleChange']);
 
 //下拉菜单右键打开新的，要关闭之前的
 const dropdownRef = ref();
-function handleVisible(id, visible) {
+function handleVisible(id: string | number, visible: boolean) {
   if (!visible) return;
   emit('visibleChange', id, visible);
 }

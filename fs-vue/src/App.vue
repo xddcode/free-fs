@@ -1,10 +1,12 @@
 <template>
-	<el-config-provider :size="getGlobalComponentSize" :locale="getGlobalI18n">
-		<router-view v-show="setLockScreen" />
-		<LockScreen v-if="themeConfig.isLockScreen" />
-		<Setings ref="setingsRef" v-show="setLockScreen" />
-		<CloseFull v-if="!themeConfig.isLockScreen" />
-	</el-config-provider>
+  <DndProvider :backend="HTML5Backend">
+    <el-config-provider :size="getGlobalComponentSize" :locale="getGlobalI18n">
+      <router-view v-show="setLockScreen" />
+      <LockScreen v-if="themeConfig.isLockScreen" />
+      <Setings ref="setingsRef" v-show="setLockScreen" />
+      <CloseFull v-if="!themeConfig.isLockScreen" />
+    </el-config-provider>
+  </DndProvider>
 </template>
 
 <script setup lang="ts" name="app">
@@ -18,6 +20,10 @@ import other from '/@/utils/other';
 import { Local, Session } from '/@/utils/storage';
 import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
+
+// #TODO Yann 测试备忘 [测试完成后删除该注释]
+import { DndProvider } from 'vue3-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));

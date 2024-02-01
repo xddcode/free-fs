@@ -39,6 +39,14 @@
     margin: auto;
     background: transparent;
 
+    &__img {
+      width: 95%;
+      height: 95%;
+      padding: 4px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
 
     img {
       width: 95%;
@@ -66,6 +74,11 @@
     -webkit-transition: color .3s ease;
     -o-transition: color .3s ease;
     transition: color .3s ease;
+    /* 禁用文本复制 */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none;
   }
 
   & .file-item-time {
@@ -75,6 +88,10 @@
     line-height: 20px;
     color: rgb(37, 38, 43, 0.36);
     max-width: 100%;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none;
   }
 }
 

@@ -17,13 +17,9 @@
         </div>
       </template>
 
-      <div ref="cardBodyRef" class="file-card-body"
-           @dragover="handleDragOver"
-           @dragleave="handleDragLeave"
-           @drop="handleDrop"
-      >
+      <div ref="cardBodyRef" class="file-card-body">
         <!-- 主体以文件列表为主 -->
-        <el-scrollbar :max-height="cardBodyRef.clientHeight">
+        <el-scrollbar>
           <div class="file-grid-container">
             <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
               <!-- 文件操作组件 -->
@@ -35,7 +31,9 @@
                 <!-- 文件主体 -->
                 <div class="file-item-box">
                   <div class="file-icon">
-                    <img :src="getFileSvg(file.type)" :alt="file.name"/>
+<!--                    <img :src="getFileSvg(file.type)" :alt="file.name"/>-->
+                    <!-- 拖拽监听的是文件, 不想让监听这里 -->
+                    <div class="file-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(file.type) + ')' }"></div>
                   </div>
                   <div class="file-item-name">
                     {{ file.name }}
@@ -47,28 +45,18 @@
           </div>
         </el-scrollbar>
 
-        <div v-if="isDragging" class="overlay">
-          <div class="overlay-text">拖放文件到此处</div>
-          <div class="overlay-icon" :style="{background: themeConfig.primary}">
-            <SvgIcon name="iconfont icon-shangchuan" color="#FFFFFF" :size="50"></SvgIcon>
-          </div>
-        </div>
+        <target-box :on-drop="handleFileDrop"></target-box>
       </div>
     </el-card>
   </div>
 </template>
 
-<script setup lang="ts" name="fileList">
-import { debounce, throttle } from 'lodash';
+<script setup lang="ts" name="albumList">
 import {ArrowRight} from '@element-plus/icons-vue'
-import { storeToRefs } from 'pinia';
-import { useThemeConfig } from '/@/stores/modules/themeConfig';
 import {getFileSvg} from "/@/utils/fti";
 import FsOptions from "/@/components/fs/fsOptions.vue";
+import TargetBox from "/@/components/fs/targetBox.vue";
 
-
-const storesThemeConfig = useThemeConfig();
-const { themeConfig } = storeToRefs(storesThemeConfig);
 const cardBodyRef = ref(0);
 
 // const fileList = ref([]);
@@ -126,50 +114,21 @@ const fileList = reactive([
 
 //下拉菜单右键打开新的，要关闭之前的
 const fileOperationsRef = ref();
-const handleVisible = (id, visible) => {
+const handleVisible = (id: string | number, visible: boolean) => {
   if (!visible) return;
-  fileOperationsRef.value.forEach((item) => {
+  fileOperationsRef.value.forEach((item: any) => {
     if (item.id === id) return;
     item.handleClose();
   });
 }
 
-const isDragging = ref(false);
-const handleDragOver = (event: DragEvent) => {
-  console.log(event)
-  event.preventDefault(); // 阻止默认行为，允许放置
-  isDragging.value = true;
-};
-// 节流函数, 减少事件触发频率
-const throttleHandleDragOver = throttle(handleDragOver, 500)
-
-// #TODO Yann 在组件中调用节流控制的@dragover后, 影响@drop事件触发
-const handleDrop = (event) => {
-  console.log(event)
-  event.preventDefault(); // 阻止浏览器默认行为，不会自动打开文件管理页面
-  event.stopPropagation();
-  isDragging.value = false;
-  // 移除事件时同步取消节流操作
-  throttleHandleDragOver && throttleHandleDragOver.cancel();
-  const DataTransferItemList = event.dataTransfer!.items; // 获取文件的数据
-  console.log(DataTransferItemList); // 打印看看
-};
-
-const handleDragLeave = (event) => {
-  if (!cardBodyRef.value.contains(event.relatedTarget)) {
-    isDragging.value = false;
-    // 移除事件时同步取消节流操作
-    throttleHandleDragOver && throttleHandleDragOver.cancel();
+const droppedFiles = ref([]);
+const handleFileDrop = (item: any) => {
+  console.log(item)
+  if (item) {
+    droppedFiles.value = item.files
   }
-};
-
-// onMounted(() => {
-//   // 在组件挂载时，为 dragover 事件处理函数应用节流函数
-//   #TODO Yann  没用...
-//   cardBodyRef.value.addEventListener('dragover',
-//       throttleHandleDragOver
-//   );
-// })
+}
 </script>
 
 <style scoped lang="scss">
@@ -193,35 +152,6 @@ const handleDragLeave = (event) => {
 .file-card-body {
   height: calc(100vh - 50px - 100px - 45px);
   position: relative;
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    &-text {
-      color: white;
-      font-size: 18px;
-    }
-
-    &-icon {
-      margin-top: 10px;
-      width: 66px;
-      height: 66px;
-      border-radius: 50%;
-      //background: #26a59a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
 }
 
 </style>
