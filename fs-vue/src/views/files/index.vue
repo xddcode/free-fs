@@ -5,14 +5,21 @@
         <!-- 头部: 面包屑, 左边一个小图标 -->
         <div class="file-card-header">
           <div class="left-header">
-            <SvgIcon name="ele-Files" :size="30" color="#3498db" title="文件"/>
+            <div class="left-header__icon">
+              <SvgIcon name="ele-Files" :size="30" color="#3498db" title="文件"/>
+            </div>
+            <div class="left-header__title">
+              <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
+                <el-breadcrumb-item :to="{ path: '/' }">根目录</el-breadcrumb-item>
+                <el-breadcrumb-item>目录一</el-breadcrumb-item>
+                <el-breadcrumb-item>目录二</el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
           </div>
           <div class="right-header">
-            <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
-              <el-breadcrumb-item :to="{ path: '/' }">根目录</el-breadcrumb-item>
-              <el-breadcrumb-item>目录一</el-breadcrumb-item>
-              <el-breadcrumb-item>目录二</el-breadcrumb-item>
-            </el-breadcrumb>
+            <el-button type="primary" size="default" @click="uploadDialog.visible = true">
+              上传文件<SvgIcon class="el-icon--right" name="iconfont icon-shangchuan"></SvgIcon>
+            </el-button>
           </div>
         </div>
       </template>
@@ -48,16 +55,61 @@
         <target-box :on-drop="handleFileDrop"></target-box>
       </div>
     </el-card>
+
+    <el-dialog
+        v-model="uploadDialog.visible"
+        :title="uploadDialog.title"
+        width="50%"
+    >
+      <div class="upload-container">
+        <el-upload
+            ref="uploadFileRef"
+            drag
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            multiple
+            :auto-upload="false"
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            将要上传的文件拖到此处，或<em>点击上传</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">
+              jpg/png files with a size less than 500kb
+            </div>
+          </template>
+        </el-upload>
+        <!-- 文件列表 -->
+        <el-table :data="uploadFileList" border style="width: 100%">
+          <el-table-column prop="name" label="文件名" width="180" />
+          <el-table-column prop="type" label="文件类型" width="180" />
+          <el-table-column prop="address" label="Address" />
+        </el-table>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="uploadDialog.visible = false">取消</el-button>
+          <el-button type="primary" @click="submitUpload">
+            确认上传
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts" name="albumList">
-import {ArrowRight} from '@element-plus/icons-vue'
+import { ArrowRight, UploadFilled } from '@element-plus/icons-vue'
 import {getFileSvg} from "/@/utils/fti";
 import FsOptions from "/@/components/fs/fsOptions.vue";
 import TargetBox from "/@/components/fs/targetBox.vue";
+import type { UploadInstance } from "element-plus";
 
 const cardBodyRef = ref(0);
+const uploadDialog = ref({
+  visible: false,
+  title: '上传文件',
+});
 
 // const fileList = ref([]);
 // 文件集合
@@ -129,23 +181,38 @@ const handleFileDrop = (item: any) => {
     droppedFiles.value = item.files
   }
 }
+
+/** 文件上传框需要的函数, 后续拆分成组件 */
+const uploadFileRef = ref<UploadInstance>();
+const uploadFileList = ref([]);
+/* 手动点击上传 */
+const submitUpload = () => {
+  uploadFileRef.value!.submit()
+}
 </script>
 
 <style scoped lang="scss">
 
 .file-card-header {
   display: flex;
-  line-height: 30px;
-  justify-content: left;
+  width: 100%;
+  justify-content: space-between;
   align-items: center;
 
   .left-header {
-    margin: 0 10px;
-    padding-top: 10px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    &__icon {
+      margin: 0 10px;
+    }
+
+    &__title {
+    }
   }
 
   .right-header {
-    //margin: auto 0;
   }
 }
 
@@ -154,4 +221,8 @@ const handleFileDrop = (item: any) => {
   position: relative;
 }
 
+/** 上传对话框样式 */
+.upload-container {
+  width: 100%;
+}
 </style>

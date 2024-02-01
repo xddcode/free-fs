@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import {ElMessage, ElMessageBox, ElNotification} from 'element-plus';
 import errorCode from "/@/utils/errorCode";
 import { Session } from "/@/utils/storage";
 import { useUserInfo } from "/@/stores/modules/userInfo";
@@ -8,6 +8,12 @@ import { getToken } from "/@/utils/authToken";
 
 // 是否显示重新登录
 export const isRelogin = { show: false };
+export const globalHeaders = () => {
+	return {
+		Authorization: 'Bearer ' + getToken(),
+	};
+};
+
 // 配置新建一个 axios 实例
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 const service: AxiosInstance = axios.create({
