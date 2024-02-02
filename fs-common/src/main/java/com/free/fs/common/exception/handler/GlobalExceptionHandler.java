@@ -6,6 +6,7 @@ import cn.dev33.satoken.exception.NotRoleException;
 import cn.dev33.satoken.exception.NotSafeException;
 import com.free.fs.common.domain.Result;
 import com.free.fs.common.exception.BusinessException;
+import com.free.fs.common.exception.StorageTenantException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -77,6 +78,17 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public Result<?> handleBusinessException(BusinessException e) {
+        return defHandler(e.getMessage(), e);
+    }
+
+    /**
+     * StorageTenantException 存储租户异常处理
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(StorageTenantException.class)
+    public Result<?> handleStorageTenantException(StorageTenantException e) {
         return defHandler(e.getMessage(), e);
     }
 

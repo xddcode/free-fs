@@ -15,9 +15,9 @@
     </description>
 
     <modules>
-        <module>fs-spring-boot-starter-uploader</module>
         <module>fs-common</module>
         <module>fs-admin</module>
+        <module>fs-core</module>
     </modules>
 
     <properties>
@@ -83,13 +83,11 @@
                 <artifactId>fs-common</artifactId>
                 <version>${revision}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.free</groupId>
-                <artifactId>fs-spring-boot-starter-uploader</artifactId>
+                <artifactId>fs-core</artifactId>
                 <version>${revision}</version>
             </dependency>
-
             <!-- 数据库连接池-->
             <dependency>
                 <groupId>com.zaxxer</groupId>

@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.free</groupId>
-            <artifactId>fs-spring-boot-starter-uploader</artifactId>
+            <artifactId>fs-core</artifactId>
         </dependency>
 
         <dependency>

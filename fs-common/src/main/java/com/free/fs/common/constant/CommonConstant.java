@@ -49,6 +49,15 @@ public interface CommonConstant {
     Long ROOT_PARENT_ID = -1L;
 
     /**
+     * 禁用
+     */
+    Integer DISABLE = 0;
+    /**
+     * 启用
+     */
+    Integer ENABLE = 1;
+
+    /**
      * dtree指定图标
      */
     String DTREE_ICON_1 = "dtree-icon-weibiaoti5";
@@ -57,10 +66,6 @@ public interface CommonConstant {
      * dtree指定图标
      */
     String DTREE_ICON_2 = "dtree-icon-normal-file";
-
-    String X_REQUESTED_WITH = "X-Requested-With";
-
-    String XML_HTTP_REQUEST = "XMLHttpRequest";
 
     /**
      * 存储类型-本地
@@ -83,7 +88,12 @@ public interface CommonConstant {
     String FILE_TYPE_MINIO = "minio";
 
     /**
-     * 需要租户过滤的字段
+     * 存储租户列
      */
-    String SYSTEM_TENANT_ID = "source";
+    String STORAGE_TENANT_COLUMN = "storage";
+
+    /**
+     * 存储租户请求头
+     */
+    String STORAGE_TENANT_REQUEST = "x-storage";
 }
