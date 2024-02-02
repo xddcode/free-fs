@@ -34,12 +34,11 @@ const viteConfig = defineConfig(({mode, command}: ConfigEnv) => {
 			open: JSON.parse(env.VITE_OPEN),
 			hmr: true,
 			proxy: {
-				'/api': {
+				[env.VITE_APP_BASE_API]: {
 					target: env.VITE_API_URL,
-					ws: true,
 					changeOrigin: true,
-					rewrite: (path) => path.replace(new RegExp('^api'), ''),
-				},
+					rewrite: (path) => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), '')
+				}
 			},
 		},
 		build: {

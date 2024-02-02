@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,8 +75,9 @@ public class FileController {
 
     @Operation(summary = "文件上传")
     @Preview()
-    @PostMapping("/upload")
-    public Result<?> upload(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "dirIds") String dirIds) {
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result<?> upload(@RequestParam(value = "file") MultipartFile[] files,
+                            @RequestParam(value = "dirIds") String dirIds) {
 
         return fileService.upload(files, dirIds);
     }

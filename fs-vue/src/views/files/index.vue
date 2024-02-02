@@ -68,10 +68,10 @@
       <div class="upload-container">
         <el-upload
             ref="uploadFileRef"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :action="uploadApi"
             drag
             multiple
-            :auto-upload="false"
+            :auto-upload="true"
             :show-file-list="false"
             :before-upload="handleBeforeUpload"
             :on-success="handleUploadSuccess"
@@ -233,6 +233,8 @@ const handleFileDrop = (item: any) => {
 const uploadFileRef = ref<UploadInstance>();
 const uploadFileList = ref<UploadFileVo>([]);
 const headers = ref(globalHeaders());
+const baseUrl = import.meta.env.VITE_APP_BASE_API;
+const uploadApi = ref(baseUrl + '/file/upload');
 const handleUploadDiaglogClose = () => {
   if (uploadDialog.uploadLoading) {
     // 后面改成最小化的效果最好
@@ -291,7 +293,7 @@ const handleFileDelete = (file) => {
 }
 
 /* 手动点击上传 */
-const submitUpload = () => {
+const submitUpload = async () => {
   if (uploadFileList.value.length > 0) {
     // 校验列表中是否存在上传失败的文件
     // let failList = uploadFileList.value.filter(item => item.status === 'fail');
@@ -301,7 +303,7 @@ const submitUpload = () => {
     // }
 
     uploadDialog.uploadLoading = true;
-    uploadFileRef.value!.submit();
+    await uploadFileRef.value!.submit();
   } else {
     ElMessage.error({
       message: '未选择要上传的文件..',
