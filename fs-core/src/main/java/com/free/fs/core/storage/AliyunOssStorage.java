@@ -20,14 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class AliyunOssStorage implements IFileStorage {
 
-    private final OSS ossClient;
-    private final AliyunOssProperties properties;
-
-    public AliyunOssStorage(AliyunOssProperties properties) {
-        this.ossClient = new OSSClientBuilder().build(properties.getEndPoint(), properties.getAccessKey(),
-                properties.getSecretKey());
-        this.properties = properties;
-    }
+//    private final OSS ossClient;
+//    private final AliyunOssProperties properties;
+//
+//    public AliyunOssStorage(AliyunOssProperties properties) {
+//        this.ossClient = new OSSClientBuilder().build(properties.getEndPoint(), properties.getAccessKey(),
+//                properties.getSecretKey());
+//        this.properties = properties;
+//    }
 
     @Override
     public String getBucketByUrl(String url) {
@@ -53,18 +53,18 @@ public class AliyunOssStorage implements IFileStorage {
     public FileBo upload(MultipartFile file) {
         try {
             FileBo fileBo = FileBo.build(file);
-            PutObjectResult result = ossClient.putObject(properties.getBucket(), fileBo.getFileName(), file.getInputStream());
-            if (result == null) {
-                throw new BusinessException("文件上传失败");
-            }
-            String url = properties.getPath() + CommonConstant.DIR_SPLIT + fileBo.getFileName();
-            fileBo.setUrl(url);
+//            PutObjectResult result = ossClient.putObject(properties.getBucket(), fileBo.getFileName(), file.getInputStream());
+//            if (result == null) {
+//                throw new BusinessException("文件上传失败");
+//            }
+//            String url = properties.getPath() + CommonConstant.DIR_SPLIT + fileBo.getFileName();
+//            fileBo.setUrl(url);
             return fileBo;
         } catch (Exception e) {
             log.error("上传文件失败", e);
             throw new BusinessException("文件上传失败");
         } finally {
-            ossClient.shutdown();
+//            ossClient.shutdown();
         }
     }
 

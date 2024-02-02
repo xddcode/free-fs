@@ -1,24 +1,19 @@
-package com.free.fs.core.storage;
+package com.free.fs.core;
 
 import com.free.fs.common.domain.FileBo;
-import com.free.fs.core.IFileStorage;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 本地文件上传
+ * 抽象文件存储类:
+ * <p>所有oss存储公共方法实现</p>
  *
- * @Author: hao.ding@insentek.com
- * @Date: 2024/1/26 13:59
+ * @author yann
  */
-public class LocalStorage implements IFileStorage {
+public abstract class AbstractFileStorage implements IFileStorage {
 
-//    private final LocalProperties properties;
 
-//    public LocalStorage(LocalProperties properties) {
-//
-//        this.properties = properties;
-//    }
+
 
     @Override
     public String getBucketByUrl(String url) {
@@ -32,10 +27,6 @@ public class LocalStorage implements IFileStorage {
 
     @Override
     public boolean bucketExists(String bucket) {
-        //判断本地文路径是否存在
-//        if (properties.getBasePath() != null) {
-//            return true;
-//        }
         return false;
     }
 

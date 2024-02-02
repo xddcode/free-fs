@@ -2,7 +2,7 @@ package com.free.fs.web;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
-import com.free.fs.common.web.interceptor.FsWebInvokeTimeInterceptor;
+import com.free.fs.interceptor.FsWebInvokeTimeInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

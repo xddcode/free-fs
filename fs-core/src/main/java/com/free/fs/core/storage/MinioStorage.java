@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.domain.FileBo;
+import com.free.fs.core.AbstractFileStorage;
 import com.free.fs.core.IFileStorage;
 import io.minio.*;
 import io.minio.http.Method;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2024/1/25 10:05
  */
 @Slf4j
-public class MinioStorage implements IFileStorage {
+public class MinioStorage extends AbstractFileStorage {
 
     private final MinioClient minioClient;
 
@@ -104,8 +105,8 @@ public class MinioStorage implements IFileStorage {
                     .contentType(file.getContentType())
                     .build();
             minioClient.putObject(putObjectArgs);
-            String url = properties.getPath() + CommonConstant.DIR_SPLIT + fileBo.getFileName();
-            fileBo.setUrl(url);
+//            String url = properties.getPath() + CommonConstant.DIR_SPLIT + fileBo.getFileName();
+//            fileBo.setUrl(url);
             return fileBo;
         } catch (Exception e) {
             log.error("文件上传失败", e);

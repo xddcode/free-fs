@@ -60,13 +60,18 @@ public class IStorageFactory implements IFileStorageProvider {
         return getFileStorage(platformIdentifier, storageSettings.getConfigData());
     }
 
+    @Override
+    public IFileStorage getUploader() {
+        return null;
+    }
+
     private IFileStorage getFileStorage(String platformIdentifier, String config) {
         StorageType storageType = StorageType.getStorageType(platformIdentifier);
         return switch (Objects.requireNonNull(storageType)) {
-            case StorageType.Local -> new MinioStorage(config);
-            case StorageType.Minio -> new AliyunOssStorage(config);
-            case StorageType.AliyunOSS -> new AliyunOssStorage(config);
-            case StorageType.Qiniu -> new AliyunOssStorage(config);
+            case Minio -> new MinioStorage(config);
+//            case StorageType.Minio -> new AliyunOssStorage(config);
+//            case StorageType.AliyunOSS -> new AliyunOssStorage(config);
+//            case StorageType.Qiniu -> new AliyunOssStorage(config);
             default -> throw new BusinessException("不支持的存储平台");
         };
     }
