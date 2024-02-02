@@ -1,5 +1,6 @@
 package com.free.fs.service.impl;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.free.fs.domain.StoragePlatform;
 import com.free.fs.mapper.StoragePlatformMapper;
@@ -30,10 +31,16 @@ public class StoragePlatformServiceImpl extends ServiceImpl<StoragePlatformMappe
         JSONObject configObj = JSONObject.parseObject(config);
         StoragePlatform storagePlatform = this.getStoragePlatformByIdentifier(identifier);
         String configScheme = storagePlatform.getConfigScheme();
-        JSONObject schemeObj = JSONObject.parseObject(configScheme);
-        for (String key : schemeObj.keySet()) {
-            if (!configObj.containsKey(key)) {
-                return false;
+        JSONArray schemes = JSONArray.parse(configScheme);
+        for (Object scheme : schemes) {
+            JSONObject schemeObj = (JSONObject) scheme;
+            for (String key : schemeObj.keySet()) {
+                if (key.equals("identifier")) {
+                    String value = schemeObj.getString(key);
+                    if (!configObj.containsKey(value)) {
+                        return false;
+                    }
+                }
             }
         }
         return true;

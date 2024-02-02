@@ -3,6 +3,7 @@ package com.free.fs.web;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.interceptor.FsWebInvokeTimeInterceptor;
+import com.free.fs.interceptor.StorageTenantInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -43,5 +44,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(excludePaths.toArray(new String[0]));
         // 全局访问性能拦截
         registry.addInterceptor(new FsWebInvokeTimeInterceptor());
+        // 注册存储租户拦截
+        registry.addInterceptor(new StorageTenantInterceptor());
     }
 }

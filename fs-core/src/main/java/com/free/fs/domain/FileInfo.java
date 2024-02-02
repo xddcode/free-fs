@@ -82,9 +82,9 @@ public class FileInfo implements Serializable {
     private Long parentId;
 
     /**
-     * 存储
+     * 存储平台表舒服
      */
-    private Long storage;
+    private String storage;
 
     /**
      * 用户id

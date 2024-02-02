@@ -35,9 +35,9 @@ public class MinioStorage extends AbstractFileStorage {
         JSONObject jsonObject = JSONObject.parseObject(config);
         String accessKey = jsonObject.getString("accessKey");
         String secretKey = jsonObject.getString("secretKey");
-        String endPoint = jsonObject.getString("endPoint");
+        String endPoint = jsonObject.getString("endpoint");
         String bucket = jsonObject.getString("bucket");
-
+        System.out.println(jsonObject.toString());
         this.minioClient = MinioClient.builder()
                 .credentials(accessKey, secretKey)
                 .endpoint(endPoint)
@@ -108,7 +108,7 @@ public class MinioStorage extends AbstractFileStorage {
             fileBo.setUrl(url);
             return fileBo;
         } catch (Exception e) {
-            log.error("文件上传失败", e);
+            log.error("文件上传失败: {}", e.getMessage());
             throw new BusinessException("文件上传失败");
         }
     }

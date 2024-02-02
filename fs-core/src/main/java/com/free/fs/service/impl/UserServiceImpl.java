@@ -50,10 +50,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Map<String, Object> loginByAccount(LoginBody body) {
         //校验验证码
-        boolean verify = CaptchaUtil.verify(body.getUuid(), body.getCode());
-        if (!verify) {
-            throw new BusinessException("验证码不正确.");
-        }
+//        boolean verify = CaptchaUtil.verify(body.getUuid(), body.getCode());
+//        if (!verify) {
+//            throw new BusinessException("验证码不正确.");
+//        }
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.where(USER.USERNAME.ge(body.getUsername()));
         User user = this.getOne(queryWrapper);

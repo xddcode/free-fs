@@ -16,7 +16,7 @@ public class StorageTenantFactory implements TenantFactory {
     @Override
     public Object[] getTenantIds() {
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        Long tenantId = StorageTenantManager.getTenantAsLong(request);
-        return new Object[]{tenantId};
+        String tenant = StorageTenantManager.getTenant(request);
+        return new Object[]{tenant};
     }
 }
