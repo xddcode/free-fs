@@ -234,7 +234,7 @@ const uploadFileRef = ref<UploadInstance>();
 const uploadFileList = ref<UploadFileVo>([]);
 const headers = ref(globalHeaders());
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
-const uploadApi = ref(baseUrl + '/file/upload');
+const uploadApi = ref(baseUrl + '/file/upload?dirIds=1');
 const handleUploadDiaglogClose = () => {
   if (uploadDialog.uploadLoading) {
     // 后面改成最小化的效果最好
@@ -293,7 +293,7 @@ const handleFileDelete = (file) => {
 }
 
 /* 手动点击上传 */
-const submitUpload = async () => {
+const submitUpload = () => {
   if (uploadFileList.value.length > 0) {
     // 校验列表中是否存在上传失败的文件
     // let failList = uploadFileList.value.filter(item => item.status === 'fail');
@@ -303,7 +303,7 @@ const submitUpload = async () => {
     // }
 
     uploadDialog.uploadLoading = true;
-    await uploadFileRef.value!.submit();
+    uploadFileRef.value!.submit();
   } else {
     ElMessage.error({
       message: '未选择要上传的文件..',
