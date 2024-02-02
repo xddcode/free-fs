@@ -1,0 +1,41 @@
+[
+  {
+    "identifier": "accessKey",
+    "label": "Access-Key",
+    "dataType": "string",
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "identifier": "secretKey",
+    "label": "Secret-key",
+    "dataType": "string",
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "identifier": "endpoint",
+    "label": "服务器端点",
+    "dataType": "string",
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "identifier": "bucket",
+    "label": "存储桶名",
+    "dataType": "string",
+    "validation": {
+      "required": true
+    }
+  }
+]
+
+{
+"accessKey":"kNKaJVWM36fP2xewIC3G",
+"secretKey":"n3BTy9ntg4nmlJa6Y81dZkh7r9kyoL75VVdTZFMH",
+"endpoint":"http://192.168.199.113:9000",
+"bucket":"test",
+}
