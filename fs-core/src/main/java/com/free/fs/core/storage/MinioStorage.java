@@ -6,12 +6,12 @@ import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.domain.FileBo;
 import com.free.fs.core.AbstractFileStorage;
-import com.free.fs.core.IFileStorage;
 import io.minio.*;
 import io.minio.http.Method;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.params.ClientPNames;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLEncoder;
@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 public class MinioStorage extends AbstractFileStorage {
 
     private final MinioClient minioClient;
-
     private final String endPoint;
     private final String bucket;
 
@@ -105,8 +104,8 @@ public class MinioStorage extends AbstractFileStorage {
                     .contentType(file.getContentType())
                     .build();
             minioClient.putObject(putObjectArgs);
-//            String url = properties.getPath() + CommonConstant.DIR_SPLIT + fileBo.getFileName();
-//            fileBo.setUrl(url);
+            String url = endPoint + CommonConstant.DIR_SPLIT + bucket + CommonConstant.DIR_SPLIT + fileBo.getFileName();
+            fileBo.setUrl(url);
             return fileBo;
         } catch (Exception e) {
             log.error("文件上传失败", e);

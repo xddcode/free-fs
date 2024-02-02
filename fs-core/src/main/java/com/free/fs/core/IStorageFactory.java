@@ -3,21 +3,16 @@ package com.free.fs.core;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.enums.StorageType;
 import com.free.fs.common.exception.BusinessException;
-import com.free.fs.core.storage.AliyunOssStorage;
 import com.free.fs.core.storage.MinioStorage;
 import com.free.fs.domain.StoragePlatform;
 import com.free.fs.domain.StorageSettings;
 import com.free.fs.service.StoragePlatformService;
 import com.free.fs.service.StorageSettingsService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * 默认文件上传平台工厂
@@ -33,13 +28,6 @@ public class IStorageFactory implements IFileStorageProvider {
     private final StoragePlatformService storagePlatformService;
 
     private final StorageSettingsService storageSettingsService;
-
-    private static final Map<StorageType, Supplier<IFileStorage>> storageProviders = new HashMap<>();
-
-    @PostConstruct
-    public void storageProviders() {
-
-    }
 
     @Override
     public IFileStorage getStorage() {
@@ -60,12 +48,12 @@ public class IStorageFactory implements IFileStorageProvider {
         return getFileStorage(platformIdentifier, storageSettings.getConfigData());
     }
 
-    @Override
-    public IFileStorage getUploader() {
-        return null;
-    }
-
     private IFileStorage getFileStorage(String platformIdentifier, String config) {
+        //校验用户配置的参数是否合法
+        if (!storagePlatformService.checkConfigScheme(platformIdentifier, config)) {
+            log.error("存储平台{}配置参数不合法", platformIdentifier);
+            throw new BusinessException("存储平台配置参数不合法");
+        }
         StorageType storageType = StorageType.getStorageType(platformIdentifier);
         return switch (Objects.requireNonNull(storageType)) {
             case Minio -> new MinioStorage(config);

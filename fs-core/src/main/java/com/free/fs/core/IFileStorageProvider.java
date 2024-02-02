@@ -8,6 +8,4 @@ package com.free.fs.core;
  */
 public interface IFileStorageProvider {
     IFileStorage getStorage();
-
-    IFileStorage getUploader();
 }

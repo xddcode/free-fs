@@ -18,4 +18,13 @@ public interface StoragePlatformService extends IService<StoragePlatform> {
      * @return 存储平台信息
      */
     StoragePlatform getStoragePlatformByIdentifier(String identifier);
+
+    /**
+     * 检查存储平台配置方案是否合法
+     *
+     * @param identifier 存储平台标识符
+     * @param config     存储平台配置
+     * @return 是否合法
+     */
+    boolean checkConfigScheme(String identifier, String config);
 }

@@ -152,7 +152,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     }
 
     private FileInfo uploadFile(MultipartFile file) {
-        FileBo bo = uploaderProvider.getUploader().upload(file);
+        FileBo bo = uploaderProvider.getStorage().upload(file);
         FileInfo fileInfo = new FileInfo();
         BeanUtils.copyProperties(bo, fileInfo);
         return fileInfo;
@@ -211,13 +211,13 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     }
 
     private void deleteFile(String url) {
-        IFileStorage uploader = uploaderProvider.getUploader();
+        IFileStorage uploader = uploaderProvider.getStorage();
         uploader.delete(url);
     }
 
     @Override
     public void download(String url, HttpServletResponse response) {
-        IFileStorage uploader = uploaderProvider.getUploader();
+        IFileStorage uploader = uploaderProvider.getStorage();
         uploader.download(url, response);
     }
 
