@@ -36,6 +36,16 @@ public class StorageController {
         return Result.ok(list);
     }
 
+    @Operation(summary = "检查用户是否已经配置当前存储平台")
+    @GetMapping("/setting/check/{identifier}")
+    public Result<?> checkConfigByUser(@PathVariable("identifier") String identifier) {
+        long userId = StpUtil.getLoginIdAsLong();
+        if (storageSettingsService.checkConfigByUser(userId, identifier)) {
+            return Result.ok();
+        }
+        return Result.error();
+    }
+
     @Operation(summary = "启用禁用配置")
     @PutMapping("/platform/{identifier}")
     public Result<?> toggleStoragePlatform(@PathVariable("identifier") String identifier) {

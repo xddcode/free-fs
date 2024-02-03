@@ -1,6 +1,5 @@
 package com.free.fs.service;
 
-import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.domain.StorageSettings;
 import com.mybatisflex.core.service.IService;
 
@@ -20,18 +19,7 @@ public interface StorageSettingsService extends IService<StorageSettings> {
      * @param userId 用户ID
      * @return
      */
-    default StorageSettings getByUserEnabled(Long userId) {
-        return getByUser(userId, CommonConstant.ENABLE);
-    }
-
-    /**
-     * 获取用户存储平台配置
-     *
-     * @param userId  用户ID
-     * @param enabled 是否启用
-     * @return
-     */
-    StorageSettings getByUser(Long userId, Integer enabled);
+    StorageSettings getByUserEnabled(Long userId);
 
     /**
      * 根据存储平台标识符获取用户平台配置
@@ -49,6 +37,15 @@ public interface StorageSettingsService extends IService<StorageSettings> {
      * @return
      */
     List<StorageSettings> getListByUser(Long userId);
+
+    /**
+     * 检查当前用户对此存储平台是否已经配置
+     *
+     * @param userId             用户ID
+     * @param platformIdentifier 存储平台标识符
+     * @return
+     */
+    boolean checkConfigByUser(Long userId, String platformIdentifier);
 
     /**
      * 切换存储平台

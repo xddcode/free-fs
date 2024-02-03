@@ -28,12 +28,20 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
     private final StoragePlatformService storagePlatformService;
 
     @Override
-    public StorageSettings getByUser(Long userId, Integer enabled) {
+    public StorageSettings getByUserEnabled(Long userId) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId))
-                .and(STORAGE_SETTINGS.ENABLED.eq(enabled).when(enabled != null));
+                .and(STORAGE_SETTINGS.ENABLED.eq(CommonConstant.ENABLE));
         return this.getOne(queryWrapper);
     }
+
+//    @Override
+//    public StorageSettings getByUser(Long userId, Integer enabled) {
+//        QueryWrapper queryWrapper = new QueryWrapper();
+//        queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId))
+//                .and(STORAGE_SETTINGS.ENABLED.eq(enabled).when(enabled != null));
+//        return this.getOne(queryWrapper);
+//    }
 
     @Override
     public StorageSettings getByUserPlatformIdentifier(Long userId, String platformIdentifier) {
@@ -50,15 +58,21 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
         return this.list(queryWrapper);
     }
 
+    @Override
+    public boolean checkConfigByUser(Long userId, String platformIdentifier) {
+        StorageSettings storageSettings = this.getByUserPlatformIdentifier(userId, platformIdentifier);
+        return storageSettings != null;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean toggleStoragePlatform(Long userId, String platformIdentifier) {
         //判断用户是否已经配置此平台
-        StorageSettings storageSettings = this.getByUserPlatformIdentifier(userId, platformIdentifier);
-        if (storageSettings == null) {
+        if (this.checkConfigByUser(userId, platformIdentifier)) {
             throw new BusinessException("您尚未配置此存储平台，请配置后重试");
         }
         //判断配置参数是否正确
+        StorageSettings storageSettings = this.getByUserPlatformIdentifier(userId, platformIdentifier);
         String config = storageSettings.getConfigData();
         if (!storagePlatformService.checkConfigScheme(platformIdentifier, config)) {
             throw new BusinessException("您此存储平台配置有误，请检查后重试");
