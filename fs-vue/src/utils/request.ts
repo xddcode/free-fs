@@ -11,6 +11,7 @@ export const isRelogin = { show: false };
 export const globalHeaders = () => {
 	return {
 		Authorization: 'Bearer ' + getToken(),
+		'x-storage': 'Minio'
 	};
 };
 

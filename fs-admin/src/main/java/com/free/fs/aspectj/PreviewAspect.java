@@ -5,6 +5,7 @@ import com.free.fs.common.annotation.Preview;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.service.FileService;
 import com.mybatisflex.core.query.QueryWrapper;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -21,10 +22,10 @@ import static com.free.fs.domain.table.FileInfoTableDef.FILE_INFO;
  */
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class PreviewAspect {
 
-    @Autowired
-    private FileService fileService;
+    private final FileService fileService;
 
     @Before("@annotation(preview)")
     public void doBefore(JoinPoint point, Preview preview) {

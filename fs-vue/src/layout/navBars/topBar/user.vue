@@ -12,6 +12,18 @@
 <!--				</el-dropdown-menu>-->
 <!--			</template>-->
 <!--		</el-dropdown>-->
+    <!-- 存储平台 -->
+    <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentStorageChange">
+      <div class="layout-navbars-breadcrumb-user-icon">
+        <i class="iconfont icon-neiqianshujuchucun" :title="$t('message.user.title0')"></i>
+      </div>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('message.user.dropdownLarge') }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+    <!-- 语言切换 -->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i
@@ -28,6 +40,7 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
+    <!-- 查询 -->
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<el-icon :title="$t('message.user.title2')">
 				<ele-Search />
@@ -36,6 +49,7 @@
 <!--		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">-->
 <!--			<i class="icon-skin iconfont" :title="$t('message.user.title3')"></i>-->
 <!--		</div>-->
+    <!-- 新闻 -->
 		<div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
 			<el-badge :is-dot="true">
 				<el-icon :title="$t('message.user.title4')">
@@ -55,6 +69,7 @@
 		>
 			<UserNews />
 		</el-popover>
+    <!-- 全屏 -->
 		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
 			<i
 				class="iconfont"
@@ -62,6 +77,7 @@
 				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
 			></i>
 		</div>
+    <!-- 用户头像操作 -->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="userStores.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
@@ -92,10 +108,10 @@ import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useUserInfo } from '/@/stores/modules/userInfo';
 import { useThemeConfig } from '/@/stores/modules/themeConfig';
+import { useFsConfig } from '/@/stores/modules/fs.store';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local, Session } from '/@/utils/storage';
-import stores from "/@/stores";
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
@@ -106,9 +122,12 @@ const userNewsRef = ref();
 const userNewsBadgeRef = ref();
 const { locale, t } = useI18n();
 const router = useRouter();
-const userStores = useUserInfo(stores);
+const userStores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
+const storeFsConfig = useFsConfig();
+const { fileStorage } = storeToRefs(storeFsConfig);
+
 const searchRef = ref();
 const state = reactive({
 	isScreenfull: false,
@@ -211,6 +230,17 @@ const onLanguageChange = (lang: string) => {
 const initI18nOrSize = (value: string, attr: string) => {
 	(<any>state)[attr] = Local.get('themeConfig')[value];
 };
+
+// ADD by Yann
+// 获取支持平台存储类型
+
+
+const onComponentStorageChange = (storage) => {
+  fileStorage.value = storage;
+  console.log(fileStorage)
+}
+
+
 // 页面加载时
 onMounted(() => {
 	if (Local.get('themeConfig')) {
