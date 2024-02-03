@@ -33,7 +33,7 @@ public class IStorageFactory implements IFileStorageProvider {
     public IFileStorage getStorage() {
         //获取当前用户的配置信息
         Long UserId = StpUtil.getLoginIdAsLong();
-        StorageSettings storageSettings = storageSettingsService.getStorageSettingsByUserEnabled(UserId);
+        StorageSettings storageSettings = storageSettingsService.getByUserEnabled(UserId);
         if (storageSettings == null) {
             log.error("用户{}未配置存储平台", UserId);
             throw new BusinessException("用户未配置存储平台");
