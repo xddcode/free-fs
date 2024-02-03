@@ -33,4 +33,14 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
         queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId));
         return this.list(queryWrapper);
     }
+
+    @Override
+    public boolean enabled() {
+        return false;
+    }
+
+    @Override
+    public boolean save() {
+        return false;
+    }
 }
