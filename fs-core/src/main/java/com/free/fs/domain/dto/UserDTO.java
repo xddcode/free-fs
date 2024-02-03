@@ -9,14 +9,12 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 登录表单实体
- *
  * @Author: hao.ding@insentek.com
- * @Date: 2024/1/25 15:59
+ * @Date: 2024/1/25 16:15
  */
 @Data
-@Schema(description = "登录实体")
-public class LoginBody implements Serializable {
+@Schema(description = "用户保存实体")
+public class UserDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -24,6 +22,10 @@ public class LoginBody implements Serializable {
     //    @NotBlank(message = "账号不能为空")
     @Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
+
+    //    @NotBlank(message = "昵称不能为空")
+    @Schema(description = "昵称", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String nickname;
 
     //    @NotBlank(message = "密码不能为空")
     @Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -35,5 +37,5 @@ public class LoginBody implements Serializable {
 
     //    @NotBlank(message = "验证码UUID不能为空")
     @Schema(description = "验证码UUID", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String uuid;
+    private String imgUUID;
 }

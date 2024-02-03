@@ -10,7 +10,7 @@ import com.free.fs.domain.StorageSettings;
 import com.free.fs.domain.User;
 import com.free.fs.domain.UserRole;
 import com.free.fs.domain.dto.LoginBody;
-import com.free.fs.domain.dto.UserDto;
+import com.free.fs.domain.dto.UserDTO;
 import com.free.fs.domain.vo.UserVO;
 import com.free.fs.mapper.UserMapper;
 import com.free.fs.service.RoleService;
@@ -84,7 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean register(UserDto userDto) {
+    public boolean register(UserDTO userDto) {
         //校验验证码
         CaptchaUtil.verify(userDto.getImgUUID(), userDto.getCode());
         long count = this.count(new QueryWrapper().where(USER.USERNAME.eq(userDto.getUsername())));

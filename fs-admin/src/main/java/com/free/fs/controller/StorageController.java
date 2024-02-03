@@ -5,12 +5,14 @@ import com.free.fs.common.domain.Result;
 import com.free.fs.common.domain.vo.DictVo;
 import com.free.fs.common.enums.StorageType;
 import com.free.fs.domain.StoragePlatform;
+import com.free.fs.domain.dto.StorageConfigDTO;
 import com.free.fs.service.StoragePlatformService;
 import com.free.fs.service.StorageSettingsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,10 +49,19 @@ public class StorageController {
     }
 
     @Operation(summary = "启用禁用配置")
-    @PutMapping("/platform/{identifier}")
+    @PutMapping("/setting/{identifier}")
     public Result<?> toggleStoragePlatform(@PathVariable("identifier") String identifier) {
         long userId = StpUtil.getLoginIdAsLong();
         if (storageSettingsService.toggleStoragePlatform(userId, identifier)) {
+            return Result.ok();
+        }
+        return Result.error();
+    }
+
+    @Operation(summary = "创建或更新存储平台配置")
+    @PostMapping("/setting")
+    public Result<?> toggleStoragePlatform(@Validated @RequestBody StorageConfigDTO storageConfigDTO) {
+        if (storageSettingsService.saveOrUpdateConfig(storageConfigDTO)) {
             return Result.ok();
         }
         return Result.error();

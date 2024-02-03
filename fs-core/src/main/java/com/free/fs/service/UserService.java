@@ -2,7 +2,7 @@ package com.free.fs.service;
 
 import com.free.fs.domain.User;
 import com.free.fs.domain.dto.LoginBody;
-import com.free.fs.domain.dto.UserDto;
+import com.free.fs.domain.dto.UserDTO;
 import com.free.fs.domain.vo.UserVO;
 import com.mybatisflex.core.service.IService;
 
@@ -30,7 +30,7 @@ public interface UserService extends IService<User> {
      * @param userDto 用户对象
      * @return 是否新增成功
      */
-    boolean register(UserDto userDto);
+    boolean register(UserDTO userDto);
 
     /**
      * 获取用户信息

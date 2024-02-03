@@ -1,8 +1,11 @@
 package com.free.fs.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.domain.StorageSettings;
+import com.free.fs.domain.dto.StorageConfigDTO;
 import com.free.fs.mapper.StorageSettingsMapper;
 import com.free.fs.service.StoragePlatformService;
 import com.free.fs.service.StorageSettingsService;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.free.fs.domain.table.StorageSettingsTableDef.STORAGE_SETTINGS;
@@ -89,5 +93,20 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
         //启用此存储平台
         storageSettings.setEnabled(CommonConstant.ENABLE);
         return this.updateById(storageSettings);
+    }
+
+    @Override
+    public boolean saveOrUpdateConfig(StorageConfigDTO storageConfigDTO) {
+        long userId = StpUtil.getLoginIdAsLong();
+        StorageSettings storageSettings = new StorageSettings();
+        storageSettings.setPlatformIdentifier(storageConfigDTO.getPlatformIdentifier());
+        storageSettings.setConfigData(storageConfigDTO.getConfigData());
+        storageSettings.setUserId(userId);
+        if (storageConfigDTO.getId() == null) {
+            storageSettings.setEnabled(CommonConstant.DISABLE);
+            storageSettings.setCreateTime(new Date());
+        }
+        storageSettings.setUpdateTime(new Date());
+        return this.saveOrUpdate(storageSettings);
     }
 }

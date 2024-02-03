@@ -1,6 +1,7 @@
 package com.free.fs.service;
 
 import com.free.fs.domain.StorageSettings;
+import com.free.fs.domain.dto.StorageConfigDTO;
 import com.mybatisflex.core.service.IService;
 
 import java.util.List;
@@ -55,4 +56,12 @@ public interface StorageSettingsService extends IService<StorageSettings> {
      * @return
      */
     boolean toggleStoragePlatform(Long userId, String platformIdentifier);
+
+    /**
+     * 新增或修改存储平台配置
+     *
+     * @param storageConfigDTO 存储平台配置信息
+     * @return
+     */
+    boolean saveOrUpdateConfig(StorageConfigDTO storageConfigDTO);
 }

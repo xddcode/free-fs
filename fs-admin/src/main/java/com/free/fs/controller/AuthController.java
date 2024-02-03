@@ -3,7 +3,7 @@ package com.free.fs.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.dto.LoginBody;
-import com.free.fs.domain.dto.UserDto;
+import com.free.fs.domain.dto.UserDTO;
 import com.free.fs.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +32,7 @@ public class AuthController {
 
     @Operation(summary = "注册")
     @PostMapping("/register")
-    public Result<?> register(@Valid @RequestBody UserDto user) {
+    public Result<?> register(@Valid @RequestBody UserDTO user) {
         if (userService.register(user)) {
             return Result.ok("注册成功");
         }
