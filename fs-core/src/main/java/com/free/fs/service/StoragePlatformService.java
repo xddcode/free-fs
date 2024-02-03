@@ -3,6 +3,8 @@ package com.free.fs.service;
 import com.free.fs.domain.StoragePlatform;
 import com.mybatisflex.core.service.IService;
 
+import java.util.List;
+
 /**
  * 存储平台业务接口
  *
@@ -10,6 +12,13 @@ import com.mybatisflex.core.service.IService;
  * @Date: 2024/2/2 10:46
  */
 public interface StoragePlatformService extends IService<StoragePlatform> {
+
+    /**
+     * 获取存储平台列表
+     *
+     * @return
+     */
+    List<StoragePlatform> getList();
 
     /**
      * 根据存储平台ID获取存储平台信息

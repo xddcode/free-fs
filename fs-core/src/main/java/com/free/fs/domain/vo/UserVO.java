@@ -1,6 +1,7 @@
 package com.free.fs.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.free.fs.domain.StorageSettings;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -62,4 +63,9 @@ public class UserVO implements Serializable {
      * 权限集合
      */
     private List<String> authList;
+
+    /**
+     * 用户已配置的存储配置
+     */
+    private List<StorageSettings> storageSettings;
 }

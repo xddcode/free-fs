@@ -8,6 +8,8 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.free.fs.domain.table.StorageSettingsTableDef.STORAGE_SETTINGS;
 
 /**
@@ -23,5 +25,12 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
         queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId))
                 .and(STORAGE_SETTINGS.ENABLED.eq(enabled));
         return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public List<StorageSettings> getListByUser(Long userId) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId));
+        return this.list(queryWrapper);
     }
 }

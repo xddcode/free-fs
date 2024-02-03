@@ -10,6 +10,8 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.free.fs.domain.table.StoragePlatformTableDef.STORAGE_PLATFORM;
 
 /**
@@ -18,6 +20,11 @@ import static com.free.fs.domain.table.StoragePlatformTableDef.STORAGE_PLATFORM;
 @Slf4j
 @Service
 public class StoragePlatformServiceImpl extends ServiceImpl<StoragePlatformMapper, StoragePlatform> implements StoragePlatformService {
+
+    @Override
+    public List<StoragePlatform> getList() {
+        return this.getList();
+    }
 
     @Override
     public StoragePlatform getStoragePlatformByIdentifier(String identifier) {

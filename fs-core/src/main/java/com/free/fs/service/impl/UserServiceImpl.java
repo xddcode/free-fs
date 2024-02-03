@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.utils.CaptchaUtil;
+import com.free.fs.domain.StorageSettings;
 import com.free.fs.domain.User;
 import com.free.fs.domain.UserRole;
 import com.free.fs.domain.dto.LoginBody;
@@ -13,6 +14,7 @@ import com.free.fs.domain.dto.UserDto;
 import com.free.fs.domain.vo.UserVO;
 import com.free.fs.mapper.UserMapper;
 import com.free.fs.service.RoleService;
+import com.free.fs.service.StorageSettingsService;
 import com.free.fs.service.UserRoleService;
 import com.free.fs.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.free.fs.domain.table.UserTableDef.USER;
@@ -40,6 +43,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final RoleService roleService;
 
     private final UserRoleService userRoleService;
+
+    private final StorageSettingsService storageSettingsService;
 
     /**
      * 登录
@@ -104,15 +109,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return true;
     }
 
-
     @Override
     public UserVO getUserInfo() {
-        Object loginId = StpUtil.getLoginId();
-        if (null == loginId) {
-            throw new BusinessException("用户已失效, 请重新登录.");
-        }
+        long loginId = StpUtil.getLoginIdAsLong();
         UserVO userVO = this.getOneAs(new QueryWrapper().where(USER.ID.eq(loginId)), UserVO.class);
-        userVO.setRoleList(userRoleService.getRoleByUserId(Long.valueOf(loginId.toString())));
+        userVO.setRoleList(userRoleService.getRoleByUserId(loginId));
+        List<StorageSettings> storageSettings = storageSettingsService.getListByUser(loginId);
+        userVO.setStorageSettings(storageSettings);
         return userVO;
     }
 }
