@@ -5,13 +5,14 @@ import { Session } from "/@/utils/storage";
 import { useUserInfo } from "/@/stores/modules/userInfo";
 import { HttpStatus } from "/@/types/enums/RespEnum";
 import { getToken } from "/@/utils/authToken";
+import { useFsConfig } from "/@/stores/modules/fs.store";
 
 // 是否显示重新登录
 export const isRelogin = { show: false };
 export const globalHeaders = () => {
 	return {
 		Authorization: 'Bearer ' + getToken(),
-		'x-storage': 'Minio'
+		'x-storage': useFsConfig().fileStorage
 	};
 };
 
@@ -35,7 +36,7 @@ service.interceptors.request.use(
 		const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
 		// 在发送请求之前做些什么 token
 		if (getToken() && !isToken) {
-			config.headers!['Authorization'] = 'Bearer ' + getToken();
+			config.headers = {...globalHeaders(), ...config.headers}
 		}
 		// get请求映射params参数
 		if (config.method === 'get' && config.params) {

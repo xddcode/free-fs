@@ -67,10 +67,12 @@ import { useLoginApi } from '/@/api/login';
 import to from "await-to-js";
 import store from "/@/stores";
 import { Session } from "/@/utils/storage";
+import { useFsConfig } from "/@/stores/modules/fs.store";
 
 // 定义变量内容
 const { t } = useI18n();
 const storesUserInfo = useUserInfo(store);
+const storeFsConfig = useFsConfig(store);
 const { login } = storesUserInfo;
 
 const route = useRoute();
@@ -119,6 +121,8 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 		ElMessage.warning('抱歉，您没有登录权限');
 		Session.clear();
 	} else {
+    // 加载支持的存储平台
+    getStorageList();
 		// 初始化登录成功时间问候语
 		let currentTimeInfo = currentTime.value;
 		// 登录成功，跳到转首页
@@ -139,6 +143,14 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	}
 	state.loading.signIn = false;
 };
+
+// 获取支持平台存储类型
+const getStorageList = async () => {
+  const [ err ] = await to(storeFsConfig.loadFileStorageList());
+  if (err) {
+
+  }
+}
 
 onMounted(() => {
   getCode();

@@ -22,10 +22,8 @@ export const useFsConfig = defineStore('fsConfig', () => {
         return Promise.reject(err);
     }
 
-    /** 选择文件存储平台 */
-    const selectFileStorage = () => {
+    /** 切换平台时, 校验是否已配置 */
 
-    }
 
     return {
         fileStorage,

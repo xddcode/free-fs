@@ -19,7 +19,11 @@
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('message.user.dropdownLarge') }}</el-dropdown-item>
+          <el-dropdown-item v-for="item in fileStorageList"
+                            :command="item.key"
+                            :disabled="fileStorage === item.key"
+                            :key="item.key"
+          >{{ item.value }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -112,6 +116,7 @@ import { useFsConfig } from '/@/stores/modules/fs.store';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local, Session } from '/@/utils/storage';
+import store from "/@/stores";
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
@@ -122,11 +127,11 @@ const userNewsRef = ref();
 const userNewsBadgeRef = ref();
 const { locale, t } = useI18n();
 const router = useRouter();
-const userStores = useUserInfo();
+const userStores = useUserInfo(store);
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const storeFsConfig = useFsConfig();
-const { fileStorage } = storeToRefs(storeFsConfig);
+const { fileStorage, fileStorageList } = storeToRefs(storeFsConfig);
 
 const searchRef = ref();
 const state = reactive({
@@ -232,14 +237,10 @@ const initI18nOrSize = (value: string, attr: string) => {
 };
 
 // ADD by Yann
-// 获取支持平台存储类型
-
-
 const onComponentStorageChange = (storage) => {
   fileStorage.value = storage;
-  console.log(fileStorage)
+  window.location.reload();
 }
-
 
 // 页面加载时
 onMounted(() => {
