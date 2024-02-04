@@ -21,11 +21,6 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_APP_BASE_API,
 	timeout: 50000,
-	// paramsSerializer: {
-	// 	serialize(params) {
-	// 		return qs.stringify(params, { allowDots: true });
-	// 	},
-	// },
 });
 
 // 添加请求拦截器
@@ -103,7 +98,7 @@ service.interceptors.response.use(
 				}).then(() => {
 					isRelogin.show = false;
 					useUserInfo().logout().then(() => {
-						location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index';
+						location.href = '/';
 					});
 				}).catch(() => {
 					isRelogin.show = false;
