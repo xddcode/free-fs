@@ -8,13 +8,14 @@
   //background-color: #2196F3;
   //padding: 10px;
   //grid-gap: 10px;
-  gap: 24px;
+  //gap: 24px;
 }
 
 .file-grid-item {
   //background-color: rgba(255, 255, 255, 0.8);
   //border: 1px solid rgba(0, 0, 0, 0.8);
   height: 200px;
+  min-width: 120px;
   max-width: 188px;
   //margin-top: 10px;
   //padding: 10px;
@@ -59,19 +60,12 @@
     word-wrap: break-word;
     text-align: center;
     line-height: 1.5;
-    width: 100%;
+    width: 80%;
     font-size: 14px;
     color: rgb(37, 38, 43);
-    max-width: 100%;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    overflow-wrap: break-word;
     margin-bottom: 2px;
-    -webkit-transition: color .3s ease;
     -o-transition: color .3s ease;
     transition: color .3s ease;
     /* 禁用文本复制 */
@@ -87,7 +81,6 @@
     font-size: 12px;
     line-height: 20px;
     color: rgb(37, 38, 43, 0.36);
-    max-width: 100%;
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
@@ -111,14 +104,14 @@
 @media (min-width: 321px) and (max-width: 768px) {
   /* 当屏幕宽度在 321px 和 768px 之间时应用的样式 */
   .file-grid-container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   /* 当屏幕宽度在 769px 和 1024px 之间时应用的样式 */
   .file-grid-container {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
 
   }
 }
@@ -126,7 +119,7 @@
 @media (min-width: 1025px) and (max-width: 1440px) {
   /* 当屏幕宽度大于或等于 1025px 和 1440px 时应用的样式 */
   .file-grid-container {
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
   }
 }
 
@@ -140,7 +133,7 @@
 @media (min-width: 1921px) {
   /* 当屏幕宽度大于或等于 1921px 时应用的样式 */
   .file-grid-container {
-    grid-template-columns: repeat(16, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 }
 

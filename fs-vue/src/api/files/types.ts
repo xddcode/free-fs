@@ -15,4 +15,31 @@ export interface FileVO {
      * 文件地址
      */
     url: string;
+    /**
+     * 文件uuid后的新名
+     */
+    fileName: string;
+    /**
+     * 是否图片
+     */
+    isImg: boolean;
+    /**
+     * 是否文件夹
+     */
+    isDir: boolean;
+    /**
+     * 上传时间
+     */
+    putTime: string;
+    /**
+     * 父id
+     */
+    parentId: string | number;
+}
+
+/**
+ * 目录
+ */
+export interface DirVo {
+
 }

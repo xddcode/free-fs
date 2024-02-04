@@ -117,6 +117,9 @@ import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local, Session } from '/@/utils/storage';
 import store from "/@/stores";
+// 存储平台api
+import { useStorageApi } from "/@/api/storage";
+import to from "await-to-js";
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
@@ -237,9 +240,21 @@ const initI18nOrSize = (value: string, attr: string) => {
 };
 
 // ADD by Yann
-const onComponentStorageChange = (storage) => {
-  fileStorage.value = storage;
-  window.location.reload();
+const onComponentStorageChange = async (storage) => {
+  const [ err ] = await to(useStorageApi().checkStorageConfig(storage));
+  if (err) {
+    ElMessageBox.confirm('您好，您正在切换的存储平台暂未配置，请确认是否前往配置？', '提醒',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          router.push('/personal');
+        }).catch(() => {})
+  } else {
+    fileStorage.value = storage;
+    window.location.reload();
+  }
 }
 
 // 页面加载时

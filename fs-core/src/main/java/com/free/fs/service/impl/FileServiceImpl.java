@@ -134,8 +134,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         }
         for (MultipartFile file : files) {
             FileInfo fileInfo = uploadFile(file);
+            // 文件目录id
             String dirId = dirIds.substring(dirIds.lastIndexOf(CommonConstant.DIR_SPLIT) + 1);
-            if (CommonConstant.DIR_SPLIT.equals(dirId) || StringUtils.isEmpty(dirId)) {
+            if (CommonConstant.DIR_SPLIT.equals(dirId)
+                    || StringUtils.isEmpty(dirId)) {
                 fileInfo.setParentId(CommonConstant.ROOT_PARENT_ID);
             } else {
                 FileInfo f = this.getById(Long.parseLong(dirId));

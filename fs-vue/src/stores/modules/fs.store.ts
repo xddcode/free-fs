@@ -5,7 +5,6 @@ import {useStorageApi} from "/@/api/storage";
 import {StorageDictVo} from "/@/api/storage/types";
 
 // 支持文件存储的类型
-export declare type fileStorageTypes = 'Local' | 'AliyunOSS' | 'Minio' | 'Qiniu';
 export const useFsConfig = defineStore('fsConfig', () => {
     // 当前使用的存储平台
     const fileStorage = ref<String>('');
@@ -21,9 +20,6 @@ export const useFsConfig = defineStore('fsConfig', () => {
         }
         return Promise.reject(err);
     }
-
-    /** 切换平台时, 校验是否已配置 */
-
 
     return {
         fileStorage,

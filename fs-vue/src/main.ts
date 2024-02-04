@@ -10,7 +10,6 @@ import ElementPlus from 'element-plus';
 import '/@/theme/index.scss';
 import VueGridLayout from 'vue-grid-layout';
 
-
 const app = createApp(App);
 
 directive(app);

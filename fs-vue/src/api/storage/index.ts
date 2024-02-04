@@ -5,11 +5,17 @@ import request from '/@/utils/request';
  */
 export function useStorageApi() {
     return {
-        getStorageTypes() {
+        getStorageTypes: () => {
             return request({
                 url: '/storage/types',
                 method: 'get',
             });
+        },
+        checkStorageConfig: (identifier) => {
+            return request({
+                url: '/storage/setting/check/' + identifier,
+                method: 'get',
+            })
         }
     }
 }

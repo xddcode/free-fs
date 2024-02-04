@@ -45,6 +45,9 @@ public class FileController {
         return Result.ok(list);
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "获取树结构列表")
     @GetMapping("/tree/list")
     public String getTree(FileInfo info) {
@@ -52,6 +55,9 @@ public class FileController {
         return JSON.toJSONString(Result.ok(list));
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "获取树结构目录列表")
     @GetMapping("/dir/tree/list")
     public String getDirTree(FileInfo info) {
@@ -66,6 +72,9 @@ public class FileController {
         return JSON.toJSONString(Result.ok(ListUtil.of(dtree)));
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "获取目录列表")
     @GetMapping("/dirs/{id}")
     public Result<Map<String, Object>> getDirs(@PathVariable(value = "id") Long id) {
@@ -82,12 +91,18 @@ public class FileController {
         return fileService.upload(files, dirIds);
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "文件分片上传")
     @PostMapping("/uploadSharding")
     public Result<?> uploadSharding(@RequestParam(value = "file") MultipartFile[] files, String dirIds, HttpServletRequest request) {
         return fileService.uploadSharding(files, dirIds, request.getSession());
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "获取进度数据")
     @GetMapping("/percent")
     public Integer percent(HttpServletRequest request) {
@@ -95,6 +110,9 @@ public class FileController {
         return (session.getAttribute("uploadPercent") == null ? 0 : (Integer) session.getAttribute("uploadPercent"));
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "重置上传进度")
     @GetMapping("/percent/reset")
     public void resetPercent(HttpServletRequest request) {
@@ -103,6 +121,9 @@ public class FileController {
         // ossUploadUtils.initPart();
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "文件下载")
     @SaCheckPermission("file:download")
     @GetMapping("/downLoad")
@@ -110,6 +131,9 @@ public class FileController {
         fileService.download(url, response);
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "修改名称")
     @PutMapping("/name")
     public Result<?> update(FileInfo info) {
@@ -120,6 +144,9 @@ public class FileController {
 
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "移动文件")
     @SaCheckPermission("file:move")
     @PutMapping("/move")
@@ -130,6 +157,9 @@ public class FileController {
         return Result.error("移动失败");
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "根据url删除文件")
     @SaCheckPermission("file:delete")
     @DeleteMapping("/deleteFile")
@@ -140,6 +170,9 @@ public class FileController {
         return Result.error("删除失败");
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "根据id删除文件")
     @SaCheckPermission("file:delete")
     @DeleteMapping("/deleteByIds")
@@ -150,6 +183,9 @@ public class FileController {
         return Result.error("删除失败");
     }
 
+    /**
+     * #TODO 待对接
+     */
     @Operation(summary = "新增文件夹")
     @SaCheckPermission("dir:add")
     @PostMapping("/folder")

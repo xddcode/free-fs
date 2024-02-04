@@ -15,15 +15,15 @@ import zipSvg from '/@/assets/svg/fti/zip.svg';
  * 获取类型文件图片
  * @param type
  */
-export const getAssetsFile = (type: string) => {
-    return new URL(`../assets/imgs/fti/${type}.png`, import.meta.url).href;
+export const getAssetsFile = ( type: string ) => {
+    return new URL( `../assets/imgs/fti/${ type }.png`, import.meta.url ).href;
 }
 
 /**
  * 获取文件类型
  * @param type
  */
-export const getFileSvg = (type: string) => {
+export const getFileSvg = ( type: string ) => {
     switch (type) {
         case 'jpg':
         case 'jpeg':

@@ -10,7 +10,7 @@
             </div>
             <div class="left-header__title">
               <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
-                <el-breadcrumb-item :to="{ path: '/' }">根目录</el-breadcrumb-item>
+                <el-breadcrumb-item>根目录</el-breadcrumb-item>
                 <el-breadcrumb-item>目录一</el-breadcrumb-item>
                 <el-breadcrumb-item>目录二</el-breadcrumb-item>
               </el-breadcrumb>
@@ -44,17 +44,17 @@
                   <!-- 拖拽监听的是文件, 不想让监听这里 -->
                   <div class="file-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(file.type) + ')' }"></div>
                 </div>
-                <div class="file-item-name">
-                  {{ file.name }}
-                </div>
-                <div class="file-item-time">{{ file.createTime || '--' }}</div>
+                <el-tooltip :content="file.name" effect="light">
+                  <el-text class="file-item-name" truncated>{{ file.name }}</el-text>
+                </el-tooltip>
+                <div class="file-item-time">{{ file.putTime || '--' }}</div>
               </div>
               <!--              </fs-options>-->
             </div>
           </div>
         </el-scrollbar>
 
-        <target-box :on-drop="handleFileDrop"></target-box>
+        <!--        <target-box :on-drop="handleFileDrop"></target-box>-->
       </div>
     </el-card>
 
@@ -63,7 +63,7 @@
         :title="uploadDialog.title"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
-        width="50%"
+        width="800px"
     >
       <file-uploader/>
       <template #footer>
@@ -82,96 +82,41 @@
 import { ArrowRight } from '@element-plus/icons-vue'
 import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
+import { useFilesApi } from "/@/api/files";
 import { defineAsyncComponent } from "vue";
+import to from "await-to-js";
+import { FileVO } from "/@/api/files/types";
 
-const FileUploader = defineAsyncComponent(() => import('/@/views/files/uploader.vue'));
+const FileUploader = defineAsyncComponent( () => import('/@/views/files/uploader.vue') );
 
-const cardBodyRef = ref(0);
-const uploadDialog = reactive({
+const cardBodyRef = ref( 0 );
+const uploadDialog = reactive( {
   visible: false,
   title: '上传文件',
-  progressColors: [
-    {color: '#f56c6c', percentage: 20},
-    {color: '#e6a23c', percentage: 40},
-    {color: '#5cb87a', percentage: 60},
-    {color: '#1989fa', percentage: 80},
-    {color: '#6f7ad3', percentage: 100},
-  ],
   uploadLoading: false,
-});
+} );
 
-// const fileList = ref([]);
 // 文件集合
-const fileList = reactive([
-  {
-    id: 1,
-    name: '默认文件夹',
-    url: '',
-    type: 'dir',
-    isImg: false,
-    createTime: '2021/08/01 12:00',
-  },
-  {
-    id: 2,
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    type: 'jpeg',
-    isImg: true,
-    createTime: '2021/08/01 12:00',
-  },
-  {
-    id: 5,
-    name: 'food.pdf',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    type: 'pdf',
-    isImg: false,
-    createTime: '2021/08/01 12:00',
-  },
-  {
-    id: 6,
-    name: 'food.txt',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    type: 'txt',
-    isImg: false,
-    createTime: '2021/08/01 12:00',
-  },
-  {
-    id: 7,
-    name: 'food.doc',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    type: 'doc',
-    isImg: false,
-    createTime: '2021/08/01 12:00',
-  },
-  {
-    id: 8,
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    type: 'jpeg',
-    isImg: true,
-    createTime: '2021/08/01 12:00',
-  }
-]);
+const fileList = ref<FileVO[]>( [] );
 
 //下拉菜单右键打开新的，要关闭之前的
 const fileOperationsRef = ref();
 const handleVisible = ( id: string | number, visible: boolean ) => {
   if ( !visible ) return;
-  fileOperationsRef.value.forEach(( item: any ) => {
+  fileOperationsRef.value.forEach( ( item: any ) => {
     if ( item.id === id ) return;
     item.handleClose();
-  });
+  } );
 }
 
 /** 文件拖拽事件 */
-const droppedFiles = ref([]);
+const droppedFiles = ref( [] );
 const handleFileDrop = ( item: any ) => {
-  console.log(item)
+  console.log( item )
   if ( item ) {
     droppedFiles.value = item.files
   }
 }
-
 
 /* 手动点击上传 */
 const submitUpload = () => {
@@ -206,6 +151,21 @@ const cancelUpload = () => {
   // }
   uploadDialog.visible = false;
 }
+
+
+// 获取文件列表
+const loadFileList = async () => {
+  const [err, res] = await to( useFilesApi().fileList( {} ) );
+  if ( !err ) {
+    fileList.value = res.data;
+  } else {
+
+  }
+}
+
+onMounted( () => {
+  loadFileList();
+} )
 </script>
 
 <style scoped lang="scss">
