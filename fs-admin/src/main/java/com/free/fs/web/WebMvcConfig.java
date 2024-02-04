@@ -6,6 +6,7 @@ import com.free.fs.interceptor.FsWebInvokeTimeInterceptor;
 import com.free.fs.interceptor.StorageTenantInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @Author: hao.ding@insentek.com
  * @Date: 2023/11/22 15:33
  */
+@Configuration
 @AllArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -39,11 +41,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePaths = permitResource.getPermitList();
         String prefix = permitResource.getPrefix();
-        // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin())).addPathPatterns(prefix)
-                .excludePathPatterns(excludePaths.toArray(new String[0]));
         // 全局访问性能拦截
         registry.addInterceptor(new FsWebInvokeTimeInterceptor());
+        // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
+        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
+                .addPathPatterns(prefix)
+                .excludePathPatterns(excludePaths.toArray(new String[0]));
         // 注册存储租户拦截
         registry.addInterceptor(new StorageTenantInterceptor());
     }

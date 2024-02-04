@@ -18,7 +18,8 @@
           </div>
           <div class="right-header">
             <el-button type="primary" size="default" @click="uploadDialog.visible = true">
-              上传文件<SvgIcon class="el-icon--right" name="iconfont icon-shangchuan"></SvgIcon>
+              上传文件
+              <SvgIcon class="el-icon--right" name="iconfont icon-shangchuan"></SvgIcon>
             </el-button>
           </div>
         </div>
@@ -31,24 +32,24 @@
             <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
               <!-- 文件操作组件 -->
               <!-- #TODO Yann 这个组件有无限递归导致内存溢出问题 -->
-<!--              <fs-options-->
-<!--                  ref="fileOperationsRef"-->
-<!--                  :id="file.id.toString()"-->
-<!--                  @visibleChange="handleVisible"-->
-<!--              >-->
-                <!-- 文件主体 -->
-                <div class="file-item-box">
-                  <div class="file-icon">
-<!--                    <img :src="getFileSvg(file.type)" :alt="file.name"/>-->
-                    <!-- 拖拽监听的是文件, 不想让监听这里 -->
-                    <div class="file-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(file.type) + ')' }"></div>
-                  </div>
-                  <div class="file-item-name">
-                    {{ file.name }}
-                  </div>
-                  <div class="file-item-time">{{ file.createTime || '--' }}</div>
+              <!--              <fs-options-->
+              <!--                  ref="fileOperationsRef"-->
+              <!--                  :id="file.id.toString()"-->
+              <!--                  @visibleChange="handleVisible"-->
+              <!--              >-->
+              <!-- 文件主体 -->
+              <div class="file-item-box">
+                <div class="file-icon">
+                  <!--                    <img :src="getFileSvg(file.type)" :alt="file.name"/>-->
+                  <!-- 拖拽监听的是文件, 不想让监听这里 -->
+                  <div class="file-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(file.type) + ')' }"></div>
                 </div>
-<!--              </fs-options>-->
+                <div class="file-item-name">
+                  {{ file.name }}
+                </div>
+                <div class="file-item-time">{{ file.createTime || '--' }}</div>
+              </div>
+              <!--              </fs-options>-->
             </div>
           </div>
         </el-scrollbar>
@@ -62,69 +63,12 @@
         :title="uploadDialog.title"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
-        :before-close="handleUploadDiaglogClose"
         width="50%"
     >
-      <div class="upload-container">
-        <el-upload
-            ref="uploadFileRef"
-            :action="uploadApi"
-            drag
-            multiple
-            :auto-upload="true"
-            :show-file-list="false"
-            :before-upload="handleBeforeUpload"
-            :on-success="handleUploadSuccess"
-            :on-change="handleFileChange"
-            :limit="10"
-            :headers="headers"
-        >
-          <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
-          <div class="el-upload__text">
-            将要上传的文件拖到此处，或<em>点击上传</em>
-          </div>
-          <template #tip>
-            <div class="el-upload__tip color-danger">
-              支持大文件上传，分片上传，断点续传...
-            </div>
-          </template>
-        </el-upload>
-        <!-- 文件列表 -->
-        <el-table :data="uploadFileList" border :style="{ width: '100%', marginTop: '10px' }" max-height="250">
-          <el-table-column align="center" prop="name" label="文件名" width="160px" >
-            <template #default="scope">
-              <el-text truncated>{{ scope.row.name }}</el-text>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="type" label="文件类型" width="120px" />
-          <el-table-column align="center" prop="size" label="大小" width="100px" >
-            <template #default="scope">
-              <el-text>{{ Math.ceil(scope.row.size / 1024) }} kb</el-text>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="status" label="状态" width="100px">
-            <template #default="scope">
-              <el-tag v-if="scope.row.status === 'ready'">准备</el-tag>
-              <el-tag v-else-if="scope.row.status === 'uploading'">上传中</el-tag>
-              <el-tag v-if="scope.row.status === 'success'">成功</el-tag>
-              <el-tag v-if="scope.row.status === 'fail'">失败</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="percentage" label="上传进度" >
-            <template #default="scope">
-              <el-progress :percentage="scope.row.percentage" :color="uploadDialog.progressColors" />
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="option" label="操作" width="120px" >
-            <template #default="scope">
-              <el-button type="warning" :icon="Delete" size="default" @click="handleFileDelete(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+      <file-uploader/>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="cancelUpload" >取消</el-button>
+          <el-button @click="cancelUpload">取消</el-button>
           <el-button type="primary" @click="submitUpload" :loading="uploadDialog.uploadLoading">
             确认上传
           </el-button>
@@ -134,26 +78,24 @@
   </div>
 </template>
 
-<script setup lang="ts" name="albumList">
-import { ArrowRight, UploadFilled, Delete } from '@element-plus/icons-vue'
-import {getFileSvg} from "/@/utils/fti";
-import FsOptions from "/@/components/fs/fsOptions.vue";
+<script setup lang="ts" name="filesManager">
+import { ArrowRight } from '@element-plus/icons-vue'
+import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
-import type { UploadFile, UploadFiles, UploadInstance} from "element-plus";
-import { UploadFileVo } from "/@/api/upload/types";
-import { globalHeaders } from '/@/utils/request';
-import { ElMessage, ElMessageBox} from "element-plus";
+import { defineAsyncComponent } from "vue";
+
+const FileUploader = defineAsyncComponent(() => import('/@/views/files/uploader.vue'));
 
 const cardBodyRef = ref(0);
 const uploadDialog = reactive({
   visible: false,
   title: '上传文件',
   progressColors: [
-    { color: '#f56c6c', percentage: 20 },
-    { color: '#e6a23c', percentage: 40 },
-    { color: '#5cb87a', percentage: 60 },
-    { color: '#1989fa', percentage: 80 },
-    { color: '#6f7ad3', percentage: 100 },
+    {color: '#f56c6c', percentage: 20},
+    {color: '#e6a23c', percentage: 40},
+    {color: '#5cb87a', percentage: 60},
+    {color: '#1989fa', percentage: 80},
+    {color: '#6f7ad3', percentage: 100},
   ],
   uploadLoading: false,
 });
@@ -213,115 +155,56 @@ const fileList = reactive([
 
 //下拉菜单右键打开新的，要关闭之前的
 const fileOperationsRef = ref();
-const handleVisible = (id: string | number, visible: boolean) => {
-  if (!visible) return;
-  fileOperationsRef.value.forEach((item: any) => {
-    if (item.id === id) return;
+const handleVisible = ( id: string | number, visible: boolean ) => {
+  if ( !visible ) return;
+  fileOperationsRef.value.forEach(( item: any ) => {
+    if ( item.id === id ) return;
     item.handleClose();
   });
 }
 
+/** 文件拖拽事件 */
 const droppedFiles = ref([]);
-const handleFileDrop = (item: any) => {
+const handleFileDrop = ( item: any ) => {
   console.log(item)
-  if (item) {
+  if ( item ) {
     droppedFiles.value = item.files
   }
 }
 
-/** 文件上传框需要的函数, 后续拆分成组件 */
-const uploadFileRef = ref<UploadInstance>();
-const uploadFileList = ref<UploadFileVo>([]);
-const headers = ref(globalHeaders());
-const baseUrl = import.meta.env.VITE_APP_BASE_API;
-const uploadApi = ref(baseUrl + '/file/upload?dirIds=1');
-const handleUploadDiaglogClose = () => {
-  if (uploadDialog.uploadLoading) {
-    // 后面改成最小化的效果最好
-    ElMessageBox.alert('文件正在上传中，请勿关闭..', '提示', {
-      confirmButtonText: 'OK',
-    })
-    return;
-  }
-  uploadDialog.visible = false;
-}
-
-
-/* 上传前事件 */
-const handleBeforeUpload = (file: any) => {
-  console.log(file)
-}
-
-// 上传成功回调
-const handleUploadSuccess = (res: any, file: UploadFile) => {
-  console.log('success', file)
-}
-
-// 文件改变事件
-const handleFileChange = (file: UploadFile, files: UploadFiles) => {
-  console.log('change', file)
-  if (file) {
-    handleUploadFile(file);
-  } else if (files) {
-    for (let i = 0; i < files.length; i++) {
-      handleUploadFile(files[i])
-    }
-  }
-}
-
-const handleUploadFile = (file) => {
-  // 通过uid查找集合是否已经存在
-  let index = uploadFileList.value.findIndex(obj => obj.uid === file.uid);
-  if (index !== -1) {
-    uploadFileList.value = uploadFileList.value.map(obj => {
-      if (obj.uid === file.uid) {
-        return { type: file.raw?.type , ...file};
-      }
-      return obj;
-    })
-  } else {
-    let _file = { type: file.raw?.type , ...file}
-    uploadFileList.value.push(_file);
-  }
-}
-
-const handleFileDelete = (file) => {
-  // 移除待上传的文件
-  uploadFileRef.value!.handleRemove(file);
-  // 移除集合元素
-  uploadFileList.value.splice(uploadFileList.value.indexOf(file), 1)
-}
 
 /* 手动点击上传 */
 const submitUpload = () => {
-  if (uploadFileList.value.length > 0) {
-    // 校验列表中是否存在上传失败的文件
-    // let failList = uploadFileList.value.filter(item => item.status === 'fail');
-    // for (let i = 0; i < failList.length; i++) {
-    //   failList[i].status = 'ready';
-    //   handleUploadFile(failList[i]);
-    // }
-
-    uploadDialog.uploadLoading = true;
-    uploadFileRef.value!.submit();
-  } else {
-    ElMessage.error({
-      message: '未选择要上传的文件..',
-      type: 'warning',
-    });
-  }
+  // if (uploadFileList.value.length > 0) {
+  //   // 校验列表中是否存在上传失败的文件
+  //   // let failList = uploadFileList.value.filter(item => item.status === 'fail');
+  //   // for (let i = 0; i < failList.length; i++) {
+  //   //   failList[i].status = 'ready';
+  //   //   handleUploadFile(failList[i]);
+  //   // }
+  //
+  //   uploadDialog.uploadLoading = true;
+  //   uploadFileRef.value!.submit();
+  // } else {
+  //   ElMessage.error({
+  //     message: '未选择要上传的文件..',
+  //     type: 'warning',
+  //   });
+  // }
+  uploadDialog.visible = false;
 }
 
 const cancelUpload = () => {
-  if (uploadDialog.uploadLoading) {
-    uploadFileRef.value!.abort();
-    uploadDialog.uploadLoading = false;
-  } else {
-    ElMessage.error({
-      message: '暂无文件正在上传..',
-      type: 'warning',
-    });
-  }
+  // if (uploadDialog.uploadLoading) {
+  //   uploadFileRef.value!.abort();
+  //   uploadDialog.uploadLoading = false;
+  // } else {
+  //   ElMessage.error({
+  //     message: '暂无文件正在上传..',
+  //     type: 'warning',
+  //   });
+  // }
+  uploadDialog.visible = false;
 }
 </script>
 
