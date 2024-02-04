@@ -1,6 +1,7 @@
 package com.free.fs.aspectj;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.free.fs.common.annotation.Preview;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.service.FileService;
@@ -25,16 +26,20 @@ import static com.free.fs.domain.table.FileInfoTableDef.FILE_INFO;
 @RequiredArgsConstructor
 public class PreviewAspect {
 
+    private final static String demoProfile = "demo";
+
     private final FileService fileService;
 
     @Before("@annotation(preview)")
     public void doBefore(JoinPoint point, Preview preview) {
-        Long id = StpUtil.getLoginIdAsLong();
-        long fileCount = fileService.count(new QueryWrapper()
-                .where(FILE_INFO.USER_ID.eq(id))
-                .and(FILE_INFO.IS_DIR.eq(0)));
-        if (fileCount >= preview.count()) {
-            throw new BusinessException("演示环境限制每个用户最多上传" + preview.count() + "个文件");
+        if (demoProfile.equals(SpringUtil.getActiveProfile())) {
+            Long id = StpUtil.getLoginIdAsLong();
+            long fileCount = fileService.count(new QueryWrapper()
+                    .where(FILE_INFO.USER_ID.eq(id))
+                    .and(FILE_INFO.IS_DIR.eq(0)));
+            if (fileCount >= preview.count()) {
+                throw new BusinessException("演示环境限制每个用户最多上传" + preview.count() + "个文件");
+            }
         }
     }
 }
