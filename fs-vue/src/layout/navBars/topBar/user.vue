@@ -15,7 +15,10 @@
     <!-- 存储平台 -->
     <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentStorageChange">
       <div class="layout-navbars-breadcrumb-user-icon">
-        <i class="iconfont icon-neiqianshujuchucun" :title="$t('message.user.title0')"></i>
+        <i class="iconfont icon-neiqianshujuchucun" :title="$t('message.user.title10')"></i>
+        <span v-for="item in fileStorageList" style="margin-left: 3px; color: #663d74;">
+          <span v-if="item.key === fileStorage">[ {{ item.value }} ]</span>
+        </span>
       </div>
       <template #dropdown>
         <el-dropdown-menu>

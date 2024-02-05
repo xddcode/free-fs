@@ -109,6 +109,7 @@ export default {
 		logOutConfirm: 'determine',
 		logOutCancel: 'cancel',
 		logOutExit: 'Exiting',
+        title10: 'Storage switching',
 	},
 	tagsView: {
 		refresh: 'refresh',

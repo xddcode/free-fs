@@ -112,3 +112,29 @@ declare interface TableType<T = any> {
 		[key: string]: T;
 	};
 }
+
+/**
+ * 分页数据
+ * T : 表单数据
+ * D : 查询参数
+ */
+declare interface PageData<T, D> {
+    form: T;
+    queryParams: D;
+    rules: ElFormRules;
+}
+
+/**
+ * 分页查询参数
+ */
+declare interface PageQuery {
+    pageNum: number;
+    pageSize: number;
+}
+
+/**
+ *
+ */
+declare interface BaseEntity {
+
+}

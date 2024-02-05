@@ -110,6 +110,7 @@ export default {
 		logOutConfirm: '确定',
 		logOutCancel: '取消',
 		logOutExit: '退出中',
+        title10: '存储切换'
 	},
 	tagsView: {
 		refresh: '刷新',

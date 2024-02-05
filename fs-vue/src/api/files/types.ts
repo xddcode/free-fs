@@ -43,3 +43,17 @@ export interface FileVO {
 export interface DirVo {
 
 }
+
+/**
+ * 文件表单
+ */
+export interface FileForm extends BaseEntity {
+    /**
+     * 主键
+     */
+    id: string | number;
+    /**
+     * 文件名
+     */
+    name: string;
+}

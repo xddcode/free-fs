@@ -11,8 +11,6 @@
             <div class="left-header__title">
               <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
                 <el-breadcrumb-item>根目录</el-breadcrumb-item>
-                <el-breadcrumb-item>目录一</el-breadcrumb-item>
-                <el-breadcrumb-item>目录二</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
           </div>
@@ -25,22 +23,16 @@
         </div>
       </template>
 
-      <div ref="cardBodyRef" class="file-card-body">
+      <div ref="cardBodyRef" class="file-card-body" @contextmenu.prevent="showContextMenu" @click="hideContextMenu">
         <!-- 主体以文件列表为主 -->
         <el-scrollbar>
           <div class="file-grid-container">
-            <div v-for="(file, index) in fileList" class="file-grid-item" :key="index">
-              <!-- 文件操作组件 -->
-              <!-- #TODO Yann 这个组件有无限递归导致内存溢出问题 -->
-              <!--              <fs-options-->
-              <!--                  ref="fileOperationsRef"-->
-              <!--                  :id="file.id.toString()"-->
-              <!--                  @visibleChange="handleVisible"-->
-              <!--              >-->
+            <div v-for="(file, index) in fileList"
+                 class="file-grid-item" :key="index"
+                 @contextmenu.prevent.stop="showFileItemContextMenu($event, file)">
               <!-- 文件主体 -->
               <div class="file-item-box">
                 <div class="file-icon">
-                  <!--                    <img :src="getFileSvg(file.type)" :alt="file.name"/>-->
                   <!-- 拖拽监听的是文件, 不想让监听这里 -->
                   <div class="file-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(file.type) + ')' }"></div>
                 </div>
@@ -49,15 +41,34 @@
                 </el-tooltip>
                 <div class="file-item-time">{{ file.putTime || '--' }}</div>
               </div>
-              <!--              </fs-options>-->
             </div>
           </div>
         </el-scrollbar>
-
         <!--        <target-box :on-drop="handleFileDrop"></target-box>-->
       </div>
     </el-card>
 
+    <!-- 右键菜单: 放在template的第一级元素下 -->
+    <context-menu ref="contextMenuRef"></context-menu>
+
+    <!-- 新增|编辑文件夹/文件 -->
+    <el-dialog v-model="dialogFormVisible" title="编辑" width="500">
+      <el-form :model="form" ref="fileFormRef">
+        <el-form-item label="Promotion name">
+          <el-input v-model="form.name" autocomplete="off"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">
+            确认
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 上传框 -->
     <el-dialog
         v-model="uploadDialog.visible"
         :title="uploadDialog.title"
@@ -84,30 +95,33 @@ import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
 import { useFilesApi } from "/@/api/files";
 import { defineAsyncComponent } from "vue";
-import to from "await-to-js";
-import { FileVO } from "/@/api/files/types";
+import { FileForm, FileVO } from "/@/api/files/types";
 
 const FileUploader = defineAsyncComponent( () => import('/@/views/files/uploader.vue') );
+const ContextMenu = defineAsyncComponent( () => import('/@/components/contextMenu/index.vue') )
+const contextMenuRef = ref();
 
-const cardBodyRef = ref( 0 );
 const uploadDialog = reactive( {
   visible: false,
   title: '上传文件',
   uploadLoading: false,
 } );
 
+const initFormData: FileForm = {
+  id: '',
+  name: '新建文件夹',
+}
+// form表单
+const fileFormRef = ref<ElFormInstance>();
+const data = reactive( {
+  form: { ...initFormData },
+  queryParams: {},
+  rules: {}
+} )
+const {queryParams, form, rules} = toRefs(data);
+
 // 文件集合
 const fileList = ref<FileVO[]>( [] );
-
-//下拉菜单右键打开新的，要关闭之前的
-const fileOperationsRef = ref();
-const handleVisible = ( id: string | number, visible: boolean ) => {
-  if ( !visible ) return;
-  fileOperationsRef.value.forEach( ( item: any ) => {
-    if ( item.id === id ) return;
-    item.handleClose();
-  } );
-}
 
 /** 文件拖拽事件 */
 const droppedFiles = ref( [] );
@@ -120,47 +134,89 @@ const handleFileDrop = ( item: any ) => {
 
 /* 手动点击上传 */
 const submitUpload = () => {
-  // if (uploadFileList.value.length > 0) {
-  //   // 校验列表中是否存在上传失败的文件
-  //   // let failList = uploadFileList.value.filter(item => item.status === 'fail');
-  //   // for (let i = 0; i < failList.length; i++) {
-  //   //   failList[i].status = 'ready';
-  //   //   handleUploadFile(failList[i]);
-  //   // }
-  //
-  //   uploadDialog.uploadLoading = true;
-  //   uploadFileRef.value!.submit();
-  // } else {
-  //   ElMessage.error({
-  //     message: '未选择要上传的文件..',
-  //     type: 'warning',
-  //   });
-  // }
   uploadDialog.visible = false;
 }
 
 const cancelUpload = () => {
-  // if (uploadDialog.uploadLoading) {
-  //   uploadFileRef.value!.abort();
-  //   uploadDialog.uploadLoading = false;
-  // } else {
-  //   ElMessage.error({
-  //     message: '暂无文件正在上传..',
-  //     type: 'warning',
-  //   });
-  // }
   uploadDialog.visible = false;
 }
 
+const showFileItemContextMenu = ( event, file ) => {
+  const items = [
+    {
+      id: 1,
+      label: "查看",
+      event: () => {
+        console.log( file )
+      },
+      icon: 'ele-View'
+    },
+    {
+      id: 2,
+      label: "复制",
+      event: () => {
+        console.log( '2--------' )
+      },
+      icon: 'ele-CopyDocument',
+    },
+    {
+      id: 3,
+      label: "重命名",
+      event: () => {
+        console.log( '3--------' )
+      },
+      icon: 'ele-EditPen'
+    },
+    {
+      id: 4,
+      label: "删除",
+      event: () => {
+        console.log( '4--------' )
+      },
+      icon: 'ele-Delete'
+    }
+  ];
+  contextMenuRef.value.show( event, items );
+}
+
+const showContextMenu = ( event ) => {
+  const items = [
+    {
+      id: 1,
+      label: "新建文件夹",
+      event: () => {
+        console.log( '1--------' )
+      },
+      icon: 'ele-FolderAdd'
+    },
+    {
+      id: 2,
+      label: "上传文件",
+      event: () => {
+        console.log( '2--------' )
+      },
+      icon: 'ele-DocumentAdd',
+    },
+    {
+      id: 3,
+      label: "刷新页面",
+      event: () => {
+        console.log( '3--------' )
+      },
+      icon: 'ele-Refresh'
+    }
+  ];
+  contextMenuRef.value.show( event, items );
+}
+
+const hideContextMenu = () => {
+  contextMenuRef.value.hide();
+}
 
 // 获取文件列表
 const loadFileList = async () => {
-  const [err, res] = await to( useFilesApi().fileList( {} ) );
-  if ( !err ) {
-    fileList.value = res.data;
-  } else {
-
-  }
+  const res = await useFilesApi().fileList( {} );
+  fileList.value = res.data;
 }
 
 onMounted( () => {
@@ -169,7 +225,6 @@ onMounted( () => {
 </script>
 
 <style scoped lang="scss">
-
 .file-card-header {
   display: flex;
   width: 100%;
