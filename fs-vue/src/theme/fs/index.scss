@@ -93,6 +93,20 @@
   border-radius: 15px;
 }
 
+.file-form-icon {
+  height: 120px;
+  width: 240px;
+
+  &__img {
+    width: 60%;
+    height: 100px;
+    margin: auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+}
+
 @media (max-width: 320px) {
   /* 当屏幕宽度小于或等于 320px 时应用的样式 */
   .file-grid-container {

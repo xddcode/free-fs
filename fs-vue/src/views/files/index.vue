@@ -52,22 +52,29 @@
     <context-menu ref="contextMenuRef"></context-menu>
 
     <!-- 新增|编辑文件夹/文件 -->
-    <el-dialog v-model="dialogFormVisible" title="编辑" width="500">
+    <el-dialog v-model="formDialog.visible"
+               :title="formDialog.title"
+               width="300"
+               append-to-body
+               :style="{ borderRadius: '15px' }">
+
+      <div class="file-form-icon">
+        <div class="file-form-icon__img" :style="{ backgroundImage: 'url(' + getFileSvg(formDialog.type) + ')' }"></div>
+      </div>
       <el-form :model="form" ref="fileFormRef">
-        <el-form-item label="Promotion name">
+        <el-form-item>
           <el-input v-model="form.name" autocomplete="off"/>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
+          <el-button @click="formDialog.visible = false">取消</el-button>
+          <el-button type="primary" @click="handleSaveFile" v-loading="formDialog.buttonLoading">
             确认
           </el-button>
         </div>
       </template>
     </el-dialog>
-
     <!-- 上传框 -->
     <el-dialog
         v-model="uploadDialog.visible"
@@ -107,6 +114,12 @@ const uploadDialog = reactive( {
   uploadLoading: false,
 } );
 
+const formDialog = reactive( {
+  visible: false,
+  title: '',
+  type: '',
+  buttonLoading: false,
+} );
 const initFormData: FileForm = {
   id: '',
   name: '新建文件夹',
@@ -118,7 +131,7 @@ const data = reactive( {
   queryParams: {},
   rules: {}
 } )
-const {queryParams, form, rules} = toRefs(data);
+const { queryParams, form, rules } = toRefs( data );
 
 // 文件集合
 const fileList = ref<FileVO[]>( [] );
@@ -185,7 +198,9 @@ const showContextMenu = ( event ) => {
       id: 1,
       label: "新建文件夹",
       event: () => {
-        console.log( '1--------' )
+        formDialog.title = '新建文件夹';
+        formDialog.type = 'dir';
+        formDialog.visible = true;
       },
       icon: 'ele-FolderAdd'
     },
@@ -217,6 +232,20 @@ const hideContextMenu = () => {
 const loadFileList = async () => {
   const res = await useFilesApi().fileList( {} );
   fileList.value = res.data;
+}
+
+// 保存文件|目录
+const handleSaveFile = async () => {
+  fileFormRef.value?.validate( async ( valid: boolean ) => {
+    if (valid) {
+      formDialog.buttonLoading = true;
+      if (form.value.id) {
+
+      } else {
+
+      }
+    }
+  } )
 }
 
 onMounted( () => {

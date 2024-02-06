@@ -15,5 +15,15 @@ export function useFilesApi() {
                 data
             } )
         },
+        // 新增文件
+        addFile: ( data ) => {
+            return request({
+                url: '',
+                method: 'post',
+                data
+            })
+        },
+        // 修改文件
+
     }
 }

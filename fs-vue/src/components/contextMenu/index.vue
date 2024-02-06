@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineExpose } from 'vue';
-
 /**
  * 页面中引入一个contextMenu
  * 必须将该组件放在根template下的第一级元素下
