@@ -3,6 +3,8 @@ package com.free.fs.service;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.FileInfo;
+import com.free.fs.domain.dto.FileDTO;
+import com.free.fs.domain.dto.FolderDTO;
 import com.mybatisflex.core.service.IService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +28,9 @@ public interface FileService extends IService<FileInfo> {
      * @return
      */
     List<FileInfo> getList(String dirIds);
+
+
+    List<FileInfo> getListByPage(FileDTO dto);
 
     /**
      * 获取文件树结构列表
@@ -83,6 +88,8 @@ public interface FileService extends IService<FileInfo> {
      * @return
      */
     boolean addFolder(FileInfo fileInfo);
+
+    boolean addFolder(FolderDTO folderDTO);
 
     /**
      * 重命名

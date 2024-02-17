@@ -41,7 +41,10 @@ export interface FileVO {
  * 目录
  */
 export interface DirVo {
-
+    id: string | number;
+    name: string;
+    pid?: string | number;
+    selected?: boolean;
 }
 
 /**
@@ -53,7 +56,21 @@ export interface FileForm extends BaseEntity {
      */
     id: string | number;
     /**
+     * 父id
+     */
+    pid: string | number;
+    /**
      * 文件名
      */
     name: string;
+}
+
+/**
+ * 文件列表查询条件
+ */
+export interface FileQuery extends PageQuery {
+    /**
+     * 目录id
+     */
+    dirId: string | number;
 }

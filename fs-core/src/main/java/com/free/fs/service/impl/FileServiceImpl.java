@@ -9,6 +9,9 @@ import com.free.fs.common.exception.BusinessException;
 import com.free.fs.core.IFileStorage;
 import com.free.fs.core.IFileStorageProvider;
 import com.free.fs.domain.FileInfo;
+import com.free.fs.domain.dto.FileDTO;
+import com.free.fs.domain.dto.FolderDTO;
+import com.free.fs.domain.vo.FolderVo;
 import com.free.fs.mapper.FileMapper;
 import com.free.fs.service.FileService;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -51,6 +54,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
                 .from(FILE_INFO)
                 .where(FILE_INFO.USER_ID.eq(StpUtil.getLoginIdAsLong()))
                 .and(FILE_INFO.PARENT_ID.eq(StringUtils.isEmpty(dirIds) ? CommonConstant.ROOT_PARENT_ID : Long.parseLong(dirIds)))
+                .orderBy(FILE_INFO.IS_DIR.desc(), FILE_INFO.PUT_TIME.desc());
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<FileInfo> getListByPage(FileDTO dto) {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select()
+                .from(FILE_INFO)
+                .where(FILE_INFO.USER_ID.eq(StpUtil.getLoginIdAsLong()))
+                .and(FILE_INFO.PARENT_ID.eq(dto.getDirId()))
                 .orderBy(FILE_INFO.IS_DIR.desc(), FILE_INFO.PUT_TIME.desc());
         return this.list(queryWrapper);
     }
@@ -223,9 +237,11 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         uploader.download(url, response);
     }
 
+    @Deprecated
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean addFolder(FileInfo info) {
+        // #TODO 前端目录结构是有序的集合, 需要修改用 / 来区分
         String dirId = info.getDirIds().substring(info.getDirIds().lastIndexOf(CommonConstant.DIR_SPLIT) + 1);
         if (CommonConstant.DIR_SPLIT.equals(dirId) || StringUtils.isEmpty(dirId)) {
             info.setParentId(CommonConstant.ROOT_PARENT_ID);
@@ -248,6 +264,36 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
             throw new BusinessException("当前目录名称已存在，请修改名称！");
         }
         return this.save(info);
+    }
+
+    @Override
+    public boolean addFolder(FolderDTO folderDTO) {
+        FileInfo fileInfo = new FileInfo();
+        // 是否为根下的文件夹
+        if (null == folderDTO.getPid()) {
+            fileInfo.setParentId(CommonConstant.ROOT_PARENT_ID);
+        } else {
+            fileInfo.setParentId(folderDTO.getPid());
+        }
+        fileInfo.setFileName(folderDTO.getName());
+        fileInfo.setName(folderDTO.getName());
+        fileInfo.setPutTime(new Date());
+        // 文件类型
+        fileInfo.setType(CommonConstant.DEFAULT_DIR_TYPE);
+        fileInfo.setIsDir(Boolean.TRUE);
+        fileInfo.setIsImg(Boolean.FALSE);
+        fileInfo.setUserId(StpUtil.getLoginIdAsLong());
+        // 判断文件夹名称在当前目录中是否存在
+        long count = this.count(new QueryWrapper()
+                .where(FILE_INFO.NAME.eq(fileInfo.getName()))
+                .and(FILE_INFO.IS_DIR.eq(Boolean.TRUE))
+                .and(FILE_INFO.PARENT_ID.eq(fileInfo.getParentId()))
+                .and(FILE_INFO.USER_ID.eq(fileInfo.getUserId()))
+        );
+        if (count > 0) {
+            throw new BusinessException("当前目录名称已存在，请修改名称！");
+        }
+        return this.save(fileInfo);
     }
 
     @Transactional(rollbackFor = Exception.class)

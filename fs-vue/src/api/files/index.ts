@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 import { AxiosPromise } from "axios";
-import { FileVO } from "/@/api/files/types";
+import { FileQuery, FileVO } from "/@/api/files/types";
 
 /**
  * 文件服务api
@@ -8,22 +8,26 @@ import { FileVO } from "/@/api/files/types";
 export function useFilesApi() {
     return {
         // 文件列表
-        fileList: ( data ): AxiosPromise<FileVO[]> => {
+        fileList: ( query?: FileQuery ): AxiosPromise<FileVO[]> => {
             return request( {
                 url: '/file/list',
                 method: 'get',
-                data
+                params: query
             } )
         },
-        // 新增文件
-        addFile: ( data ) => {
+        // 新增文件夹
+        addFolder: ( data ) => {
             return request({
-                url: '',
+                url: '/folder',
                 method: 'post',
                 data
             })
         },
-        // 修改文件
+        // 修改文件名称
+        updateFileName: () => {
+            return request({
 
+            })
+        },
     }
 }

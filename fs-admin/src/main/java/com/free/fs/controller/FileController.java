@@ -8,6 +8,7 @@ import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.Dtree;
 import com.free.fs.common.domain.Result;
 import com.free.fs.domain.FileInfo;
+import com.free.fs.domain.dto.FileDTO;
 import com.free.fs.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,8 +41,9 @@ public class FileController {
 
     @Operation(summary = "获取文件列表")
     @GetMapping("/list")
-    public Result<List<FileInfo>> getList(@RequestParam(value = "dirIds", required = false) String dirIds) {
-        List<FileInfo> list = fileService.getList(dirIds);
+    public Result<List<FileInfo>> getList(FileDTO fileDTO) {
+        // #TODO Yann 修改查询参数
+        List<FileInfo> list = fileService.getListByPage(fileDTO);
         return Result.ok(list);
     }
 
@@ -186,6 +188,7 @@ public class FileController {
     /**
      * #TODO 待对接
      */
+    @Deprecated
     @Operation(summary = "新增文件夹")
     @SaCheckPermission("dir:add")
     @PostMapping("/folder")
