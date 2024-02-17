@@ -64,7 +64,7 @@
     <!-- 新增|编辑文件夹/文件 -->
     <el-dialog v-model="formDialog.visible"
                :title="formDialog.title"
-               width="300"
+               width="300px"
                append-to-body
                :style="{ borderRadius: '15px' }">
 
@@ -103,6 +103,11 @@
         </span>
       </template>
     </el-dialog>
+
+    <!-- 预览框 -->
+    <el-dialog v-model="viewerDialog.visible" title="文件预览" class="viewer-dialog" fullscreen>
+      <file-viewer :src="viewerValue"></file-viewer>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,6 +121,7 @@ import { defineAsyncComponent } from "vue";
 import { DirVo, FileForm, FileQuery, FileVO } from "/@/api/files/types";
 
 /**  引入文件组件  */
+const FileViewer = defineAsyncComponent(() => import('/@/components/fileViewer/index.vue'))
 const FileUploader = defineAsyncComponent(() => import('/@/views/files/uploader.vue'));
 const ContextMenu = defineAsyncComponent(() => import('/@/components/contextMenu/index.vue'))
 const contextMenuRef = ref();
@@ -176,6 +182,13 @@ const handleClickBreadcrumb = (pid) => {
 }
 // **************************************************
 
+// ****************  文件夹预览  ********************
+const viewerDialog = reactive({
+  visible: false,
+})
+const viewerValue = ref('')
+// **************************************************
+
 /** 文件拖拽事件 */
 const droppedFiles = ref([]);
 const handleFileDrop = (item: any) => {
@@ -194,7 +207,7 @@ const cancelUpload = () => {
 }
 
 /** 鼠标右键文件事件 */
-const showFileItemContextMenu = (event, file) => {
+const showFileItemContextMenu = (event, file: FileVO) => {
   const items = [
     {
       id: 1,
@@ -212,6 +225,8 @@ const showFileItemContextMenu = (event, file) => {
       },
       icon: 'ele-CopyDocument',
     },
+  ];
+  const items2 = [
     {
       id: 3,
       label: "重命名",
@@ -229,7 +244,11 @@ const showFileItemContextMenu = (event, file) => {
       icon: 'ele-Delete'
     }
   ];
-  contextMenuRef.value.show(event, items);
+  if (file.isDir) {
+    contextMenuRef.value.show(event, [...items2]);
+  } else {
+    contextMenuRef.value.show(event, [...items, ...items2]);
+  }
 }
 
 /** 鼠标右键事件 */
@@ -284,6 +303,9 @@ const handleClickFileItem = (file: FileVO) => {
     // 跳转文件夹
     queryParams.value.dirId = file.id;
     loadFileList();
+  } else {
+    viewerValue.value = file.url;
+    viewerDialog.visible = true;
   }
 }
 
@@ -349,5 +371,12 @@ onMounted(() => {
 /** 上传对话框样式 */
 .upload-container {
   width: 100%;
+}
+
+.viewer-dialog {
+  :deep(.el-dialog__body) {
+    max-height: calc(100vh - 111px) !important;
+    overflow: auto;
+  }
 }
 </style>

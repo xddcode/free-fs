@@ -11,6 +11,9 @@
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.1.0",
+		"@vue-office/docx": "^1.6.0",
+		"@vue-office/excel": "^1.6.0",
+		"@vue-office/pdf": "^1.6.2",
 		"@vueuse/core": "9.5.0",
 		"@wangeditor/editor": "^5.1.23",
 		"@wangeditor/editor-for-vue": "^5.1.12",
@@ -39,7 +42,7 @@
 		"splitpanes": "^3.1.5",
 		"vue": "^3.2.47",
 		"vue-clipboard3": "^2.0.0",
-		"vue-demi": "^0.13.11",
+		"vue-demi": "^0.14.7",
 		"vue-grid-layout": "^3.0.0-beta1",
 		"vue-i18n": "^9.2.2",
 		"vue-router": "^4.1.6",
