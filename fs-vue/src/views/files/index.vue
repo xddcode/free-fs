@@ -105,19 +105,17 @@
     </el-dialog>
 
     <!-- 预览框 -->
-    <el-dialog v-model="viewerDialog.visible" title="文件预览" class="viewer-dialog" fullscreen>
+    <el-dialog v-model="viewerDialog.visible" title="文件预览" class="viewer-dialog" fullscreen destroy-on-close>
       <file-viewer :src="viewerValue"></file-viewer>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts" name="filesManager">
-import { onMounted } from 'vue';
 import { ArrowRight } from '@element-plus/icons-vue'
 import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
 import { useFilesApi } from "/@/api/files";
-import { defineAsyncComponent } from "vue";
 import { DirVo, FileForm, FileQuery, FileVO } from "/@/api/files/types";
 
 /**  引入文件组件  */
@@ -152,7 +150,9 @@ const fileFormRef = ref<ElFormInstance>();
 const data = reactive<PageData<FileForm, FileQuery>>({
   form: { ...initFormData },
   queryParams: {
-    dirId: -1
+    dirId: -1,
+    pageNum: 1,
+    pageSize: 20
   },
   rules: {}
 })
@@ -374,9 +374,9 @@ onMounted(() => {
 }
 
 .viewer-dialog {
-  :deep(.el-dialog__body) {
-    max-height: calc(100vh - 111px) !important;
-    overflow: auto;
+  max-height: 100vh;
+  .el-dialog__body {
+    max-height: 100vh;
   }
 }
 </style>
