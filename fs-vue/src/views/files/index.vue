@@ -46,7 +46,7 @@
           </div>
         </el-scrollbar>
         <!-- #TODO Yann 有点触发问题, 注释掉后面解决 -->
-<!--        <target-box :on-drop="handleFileDrop"></target-box>-->
+        <!--        <target-box :on-drop="handleFileDrop"></target-box>-->
       </div>
     </el-card>
 
@@ -108,6 +108,7 @@ import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
 import { useFilesApi } from "/@/api/files";
 import { FileForm, FileQuery, FileVO } from "/@/api/files/types";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 /**  引入文件组件  */
 const FileViewer = defineAsyncComponent(() => import('/@/components/fileViewer/index.vue'))
@@ -191,7 +192,8 @@ const showFileItemContextMenu = (event, file: FileVO) => {
       id: 1,
       label: "查看",
       event: () => {
-        console.log(file)
+        viewerValue.value = file.url;
+        viewerDialog.visible = true;
       },
       icon: 'ele-View'
     },
@@ -221,15 +223,15 @@ const showFileItemContextMenu = (event, file: FileVO) => {
       id: 4,
       label: "删除",
       event: () => {
-        console.log('4--------')
+        handleDeleteFile(file);
       },
       icon: 'ele-Delete'
     }
   ];
   if (file.isDir) {
-    contextMenuRef.value.show(event, [...items2]);
+    contextMenuRef.value.show(event, [ ...items2 ]);
   } else {
-    contextMenuRef.value.show(event, [...items, ...items2]);
+    contextMenuRef.value.show(event, [ ...items, ...items2 ]);
   }
 }
 
@@ -250,7 +252,7 @@ const showContextMenu = (event) => {
       id: 2,
       label: "上传文件",
       event: () => {
-        console.log('2--------')
+        uploadDialog.visible = true
       },
       icon: 'ele-DocumentAdd',
     },
@@ -298,10 +300,12 @@ const handleSaveFile = async () => {
       if (form.value.id) {
         // id存在重命名
         await useFilesApi().updateFileName(form.value).finally(() => formDialog.buttonLoading = false);
+        ElMessage.success('修改成功');
       } else {
         // 判断是否为目录
         if (formDialog.type === 'dir') {
           await useFilesApi().addFolder(form.value).finally(() => formDialog.buttonLoading = false)
+          ElMessage.success('文件夹创建成功');
         }
       }
       formDialog.visible = false;
@@ -310,10 +314,20 @@ const handleSaveFile = async () => {
   })
 }
 
-
-const renameFile = async (file) => {
-
-  await useFilesApi().updateFileName(file.id)
+// 删除文件
+const handleDeleteFile = (file?: FileVO) => {
+  const _ids = file?.id;
+  // #TODO Yann 先按照单文件删除, 后面增加了选中样式后可以多删
+  ElMessageBox.confirm('确认删除当前选择的文件？', '提醒', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(async () => {
+    await useFilesApi().deleteFile(_ids);
+    ElMessage.success('删除成功');
+    await loadFileList();
+  }).catch(() => {
+  })
 }
 
 onMounted(() => {
@@ -358,6 +372,7 @@ onMounted(() => {
 
 .viewer-dialog {
   max-height: 100vh;
+
   .el-dialog__body {
     max-height: 100vh;
   }

@@ -108,6 +108,8 @@ public interface FileService extends IService<FileInfo> {
      */
     boolean deleteByIds(Long id);
 
+    boolean deleteByIds(Long[] ids);
+
     /**
      * 移动文件
      *

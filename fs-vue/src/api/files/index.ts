@@ -31,11 +31,19 @@ export function useFilesApi() {
                 data
             } )
         },
+        // 获取目录层级
         getLevelFolders: ( id ) => {
             return request( {
                 url: '/folder/level/' + id,
                 method: 'get'
             } )
+        },
+        // 删除文件
+        deleteFile: ( ids?: string | number | Array<string | number> ) => {
+            return request({
+                url: '/file/' + ids,
+                method: 'delete'
+            })
         }
     }
 }

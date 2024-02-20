@@ -183,6 +183,12 @@ public class FileController {
         return Result.error("删除失败");
     }
 
+    @DeleteMapping("/{ids}")
+    public Result<?> delete(@PathVariable("ids") Long[] ids) {
+
+        return Result.ok(fileService.deleteByIds(ids));
+    }
+
     /**
      * #TODO 待对接
      */

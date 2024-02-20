@@ -319,6 +319,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         return this.updateById(updInfo);
     }
 
+    @Deprecated
     @Override
     public boolean deleteByIds(Long id) {
         //id集合
@@ -327,7 +328,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         List<String> keys = new ArrayList<>();
         this.selectPermissionChildById(id, idList, keys);
         idList.add(id);
-        //删除云资源
+        // 删除云资源
         FileInfo info = this.getById(id);
         keys.add(info.getUrl());
         for (String key : keys) {
@@ -336,6 +337,19 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         return this.removeByIds(idList);
     }
 
+    @Override
+    public boolean deleteByIds(Long[] ids) {
+        for (Long id : ids) {
+            FileInfo info = this.getById(id);
+            deleteFile(info.getUrl());
+        }
+        return this.removeByIds(Arrays.asList(ids));
+    }
+
+    /**
+     * #TODO 删除文件夹时, 应该做是否含有文件校验, 有额外文件不给删, 或者提示删除后果
+     *
+     */
     private void selectPermissionChildById(Long id, List<Long> idList, List<String> keys) {
         //查询菜单里面子菜单id
         List<FileInfo> childIdList = this.list(new QueryWrapper().where(FILE_INFO.PARENT_ID.eq(id)));
