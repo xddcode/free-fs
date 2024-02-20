@@ -45,7 +45,8 @@
             </div>
           </div>
         </el-scrollbar>
-        <!--        <target-box :on-drop="handleFileDrop"></target-box>-->
+        <!-- #TODO Yann 有点触发问题, 注释掉后面解决 -->
+<!--        <target-box :on-drop="handleFileDrop"></target-box>-->
       </div>
     </el-card>
 
@@ -103,11 +104,10 @@
 </template>
 
 <script setup lang="ts" name="filesManager">
-import { ArrowRight } from '@element-plus/icons-vue'
 import { getFileSvg } from "/@/utils/fti";
 import TargetBox from "/@/components/fs/targetBox.vue";
 import { useFilesApi } from "/@/api/files";
-import { DirVo, FileForm, FileQuery, FileVO } from "/@/api/files/types";
+import { FileForm, FileQuery, FileVO } from "/@/api/files/types";
 
 /**  引入文件组件  */
 const FileViewer = defineAsyncComponent(() => import('/@/components/fileViewer/index.vue'))
@@ -209,7 +209,11 @@ const showFileItemContextMenu = (event, file: FileVO) => {
       id: 3,
       label: "重命名",
       event: () => {
-        console.log('3--------')
+        formDialog.title = '重命名';
+        formDialog.type = file.type;
+        form.value.id = file.id;
+        form.value.name = file.name;
+        formDialog.visible = true;
       },
       icon: 'ele-EditPen'
     },
@@ -276,7 +280,6 @@ const loadFileList = async () => {
 
 // 点击文件
 const handleClickFileItem = (file: FileVO) => {
-  console.log('File: ', file)
   if (file.isDir) {
     // 跳转文件夹
     queryParams.value.dirId = file.id;
@@ -293,7 +296,8 @@ const handleSaveFile = async () => {
     if (valid) {
       formDialog.buttonLoading = true;
       if (form.value.id) {
-
+        // id存在重命名
+        await useFilesApi().updateFileName(form.value).finally(() => formDialog.buttonLoading = false);
       } else {
         // 判断是否为目录
         if (formDialog.type === 'dir') {
@@ -304,6 +308,12 @@ const handleSaveFile = async () => {
       await loadFileList();
     }
   })
+}
+
+
+const renameFile = async (file) => {
+
+  await useFilesApi().updateFileName(file.id)
 }
 
 onMounted(() => {

@@ -134,12 +134,9 @@ public class FileController {
         fileService.download(url, response);
     }
 
-    /**
-     * #TODO 待对接
-     */
     @Operation(summary = "修改名称")
-    @PutMapping("/name")
-    public Result<?> update(FileInfo info) {
+    @PutMapping("/rename")
+    public Result<?> update(@RequestBody FileInfo info) {
         if (fileService.updateByName(info)) {
             return Result.ok("修改成功");
         }

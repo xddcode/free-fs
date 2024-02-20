@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 import { AxiosPromise } from "axios";
-import { FileQuery, FileVO } from "/@/api/files/types";
+import { FileForm, FileQuery, FileVO } from "/@/api/files/types";
 
 /**
  * 文件服务api
@@ -16,24 +16,26 @@ export function useFilesApi() {
             } )
         },
         // 新增文件夹
-        addFolder: ( data ) => {
-            return request({
+        addFolder: ( data?: FileForm ) => {
+            return request( {
                 url: '/folder',
                 method: 'post',
                 data
-            })
+            } )
         },
         // 修改文件名称
-        updateFileName: () => {
-            return request({
-
-            })
+        updateFileName: ( data?: FileForm ) => {
+            return request( {
+                url: '/file/rename',
+                method: 'put',
+                data
+            } )
         },
-        getLevelFolders: (id) => {
-            return request({
+        getLevelFolders: ( id ) => {
+            return request( {
                 url: '/folder/level/' + id,
                 method: 'get'
-            })
+            } )
         }
     }
 }

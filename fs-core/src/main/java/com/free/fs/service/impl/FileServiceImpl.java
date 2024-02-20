@@ -300,9 +300,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateByName(FileInfo info) {
-        if (info.getName().equals(info.getRename())) {
-            throw new BusinessException("当前名称与原始名称相同，请修改名称！");
-        }
+//        if (info.getName().equals(info.getRename())) {
+//            throw new BusinessException("当前名称与原始名称相同，请修改名称！");
+//        }
         FileInfo fileInfo = this.getById(info.getId());
         long count = this.count(new QueryWrapper()
                 .where(FILE_INFO.NAME.eq(info.getName()))
@@ -315,7 +315,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         }
         FileInfo updInfo = new FileInfo();
         updInfo.setId(info.getId());
-        updInfo.setName(info.getRename());
+        updInfo.setName(info.getName());
         return this.updateById(updInfo);
     }
 
