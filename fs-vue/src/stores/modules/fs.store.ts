@@ -15,7 +15,11 @@ export const useFsConfig = defineStore('fsConfig', () => {
     const loadFileStorageList = async () => {
         const [ err, res ] = await to(useStorageApi().getStorageTypes());
         if (res) {
-            fileStorageList.value = res.data;
+            const list = res.data;
+            fileStorageList.value = list;
+            if (fileStorage.value === '') {
+                fileStorage.value = list[0].key
+            }
             return Promise.resolve();
         }
         return Promise.reject(err);

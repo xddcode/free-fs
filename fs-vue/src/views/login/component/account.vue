@@ -148,7 +148,7 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 const getStorageList = async () => {
   const [ err ] = await to(storeFsConfig.loadFileStorageList());
   if (err) {
-
+    ElMessage.error('支持储存平台列表加载失败: ' + err.message)
   }
 }
 
