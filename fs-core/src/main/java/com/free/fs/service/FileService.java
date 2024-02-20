@@ -5,6 +5,7 @@ import com.free.fs.common.domain.Result;
 import com.free.fs.domain.FileInfo;
 import com.free.fs.domain.dto.FileDTO;
 import com.free.fs.domain.dto.FolderDTO;
+import com.free.fs.domain.vo.FolderVO;
 import com.mybatisflex.core.service.IService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -123,4 +124,11 @@ public interface FileService extends IService<FileInfo> {
      * @return
      */
     Map<String, Object> getDirs(Long id);
+
+    /**
+     * 根据文件夹id 返回自下而上的文件夹
+     * @param id 文件夹id
+     * @return list
+     */
+    List<FolderVO> getLevelFolders(Long id);
 }

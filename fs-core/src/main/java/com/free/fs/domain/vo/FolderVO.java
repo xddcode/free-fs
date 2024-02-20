@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Yann
  */
 @Data
-public class FolderVo {
+public class FolderVO {
 
     /**
      * 主键

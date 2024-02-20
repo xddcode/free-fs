@@ -77,6 +77,7 @@ public class FileController {
     /**
      * #TODO 待对接
      */
+    @Deprecated
     @Operation(summary = "获取目录列表")
     @GetMapping("/dirs/{id}")
     public Result<Map<String, Object>> getDirs(@PathVariable(value = "id") Long id) {

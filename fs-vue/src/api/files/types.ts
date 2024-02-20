@@ -44,7 +44,6 @@ export interface DirVo {
     id: string | number;
     name: string;
     pid?: string | number;
-    selected?: boolean;
 }
 
 /**

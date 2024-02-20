@@ -29,5 +29,11 @@ export function useFilesApi() {
 
             })
         },
+        getLevelFolders: (id) => {
+            return request({
+                url: '/folder/level/' + id,
+                method: 'get'
+            })
+        }
     }
 }

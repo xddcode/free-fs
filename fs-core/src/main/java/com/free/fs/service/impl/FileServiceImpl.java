@@ -11,9 +11,10 @@ import com.free.fs.core.IFileStorageProvider;
 import com.free.fs.domain.FileInfo;
 import com.free.fs.domain.dto.FileDTO;
 import com.free.fs.domain.dto.FolderDTO;
-import com.free.fs.domain.vo.FolderVo;
+import com.free.fs.domain.vo.FolderVO;
 import com.free.fs.mapper.FileMapper;
 import com.free.fs.service.FileService;
+import com.google.common.collect.Lists;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -404,5 +405,28 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
 //            list.sort(Comparator.comparing(FileInfo::getId));
 //        }
         return list;
+    }
+
+    @Override
+    public List<FolderVO> getLevelFolders(Long id) {
+        List<FolderVO> list = Lists.newArrayList();
+
+        getParentFolders(list, id);
+//        Collections.reverse(list);
+        return list;
+    }
+
+    private void getParentFolders(List<FolderVO> list, Long id) {
+        FileInfo fileInfo = this.getById(id);
+        if (fileInfo == null) {
+            return;
+        }
+        FolderVO vo = new FolderVO();
+        vo.setId(fileInfo.getId());
+        vo.setName(fileInfo.getName());
+        if (!CommonConstant.ROOT_PARENT_ID.equals(fileInfo.getParentId())) {
+            getParentFolders(list, id);
+        }
+        list.add(vo);
     }
 }

@@ -9,16 +9,7 @@
               <SvgIcon name="ele-Files" :size="30" color="#3498db" title="文件"/>
             </div>
             <div class="left-header__title">
-              <!-- #TODO Yann 考虑如何抽取出去, 通过list形式循环 -->
-              <el-breadcrumb style="line-height: 30px;" :separator-icon="ArrowRight">
-                <el-breadcrumb-item
-                    v-for="(item, index) in folderList"
-                    @click="handleClickBreadcrumb(item.id)"
-                    :key="index">
-                  <span class="breadcrumb-title"
-                        :style="{ fontWeight: (item.selected ? 'bold' : '') }">{{ item.name }}</span>
-                </el-breadcrumb-item>
-              </el-breadcrumb>
+              <folder-breadcrumb :on-click="handleClickBreadcrumb" :folder-id="queryParams.dirId"></folder-breadcrumb>
             </div>
           </div>
           <div class="right-header">
@@ -120,6 +111,7 @@ import { DirVo, FileForm, FileQuery, FileVO } from "/@/api/files/types";
 
 /**  引入文件组件  */
 const FileViewer = defineAsyncComponent(() => import('/@/components/fileViewer/index.vue'))
+const FolderBreadcrumb = defineAsyncComponent(() => import('/@/components/folderBreadcrumb/index.vue'))
 const FileUploader = defineAsyncComponent(() => import('/@/views/files/uploader.vue'));
 const ContextMenu = defineAsyncComponent(() => import('/@/components/contextMenu/index.vue'))
 const contextMenuRef = ref();
@@ -162,20 +154,6 @@ const { queryParams, form, rules } = toRefs(data);
 const fileList = ref<FileVO[]>([]);
 
 // ****************  文件夹面包屑  ********************
-const folderList = ref<DirVo[]>([
-  {
-    id: -1,
-    name: '根目录',
-    pid: -1,
-    selected: false,
-  },
-  {
-    id: 1,
-    name: '目录1',
-    pid: -1,
-    selected: true,
-  }
-]);
 const handleClickBreadcrumb = (pid) => {
   queryParams.value.dirId = pid;
   loadFileList();
@@ -356,11 +334,6 @@ onMounted(() => {
 
   .right-header {
   }
-}
-
-.breadcrumb-title {
-  font-size: 16px;
-  cursor: pointer;
 }
 
 .file-card-body {
