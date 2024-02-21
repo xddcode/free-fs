@@ -1,6 +1,7 @@
 package com.free.fs.service;
 
 import com.free.fs.domain.StoragePlatform;
+import com.free.fs.domain.vo.StoragePlatformVO;
 import com.mybatisflex.core.service.IService;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface StoragePlatformService extends IService<StoragePlatform> {
      * @return
      */
     List<StoragePlatform> getList();
+
+    List<StoragePlatformVO> getConfigList();
 
     /**
      * 根据存储平台ID获取存储平台信息

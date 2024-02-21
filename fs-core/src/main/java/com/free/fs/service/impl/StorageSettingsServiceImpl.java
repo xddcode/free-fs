@@ -2,10 +2,12 @@ package com.free.fs.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson2.JSONObject;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.domain.StorageSettings;
 import com.free.fs.domain.dto.StorageConfigDTO;
+import com.free.fs.domain.vo.StorageSettingsVO;
 import com.free.fs.mapper.StorageSettingsMapper;
 import com.free.fs.service.StoragePlatformService;
 import com.free.fs.service.StorageSettingsService;
@@ -56,6 +58,14 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
     }
 
     @Override
+    public StorageSettingsVO getByVoUserPlatformIdentifier(Long userId, String platformIdentifier) {
+        StorageSettings settings = getByUserPlatformIdentifier(userId, platformIdentifier);
+        StorageSettingsVO vo = BeanUtil.copyProperties(settings, StorageSettingsVO.class, "configData");
+        vo.setConfigData(JSONObject.parseObject(settings.getConfigData()));
+        return vo;
+    }
+
+    @Override
     public List<StorageSettings> getListByUser(Long userId) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.where(STORAGE_SETTINGS.USER_ID.eq(userId));
@@ -72,7 +82,7 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
     @Override
     public boolean toggleStoragePlatform(Long userId, String platformIdentifier) {
         //判断用户是否已经配置此平台
-        if (this.checkConfigByUser(userId, platformIdentifier)) {
+        if (!this.checkConfigByUser(userId, platformIdentifier)) {
             throw new BusinessException("您尚未配置此存储平台，请配置后重试");
         }
         //判断配置参数是否正确
@@ -105,8 +115,10 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
         if (storageConfigDTO.getId() == null) {
             storageSettings.setEnabled(CommonConstant.DISABLE);
             storageSettings.setCreateTime(new Date());
+        } else {
+            storageSettings.setId(storageConfigDTO.getId());
+            storageSettings.setUpdateTime(new Date());
         }
-        storageSettings.setUpdateTime(new Date());
         return this.saveOrUpdate(storageSettings);
     }
 }

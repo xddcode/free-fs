@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 import { AxiosPromise } from "axios";
-import { StoragePlatformVO } from "/@/api/storage/types";
+import { StoragePlatformVO, StorageSettingForm } from "/@/api/storage/types";
 
 /**
  * 存储平台api
@@ -25,5 +25,24 @@ export function useStorageApi() {
                 method: 'get',
             })
         },
+        getStorageSetting: (identifier: string) => {
+            return request({
+                url: '/storage/setting/' + identifier,
+                method: 'get'
+            })
+        },
+        saveStorageSetting: (data?: StorageSettingForm) => {
+            return request({
+                url: '/storage/setting',
+                method: 'post',
+                data
+            })
+        },
+        toggleSettingStatus: (identifier: string) => {
+            return request({
+                url: '/storage/setting/' + identifier,
+                method: 'put'
+            })
+        }
     }
 }

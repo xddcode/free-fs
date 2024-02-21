@@ -2,6 +2,7 @@ package com.free.fs.service;
 
 import com.free.fs.domain.StorageSettings;
 import com.free.fs.domain.dto.StorageConfigDTO;
+import com.free.fs.domain.vo.StorageSettingsVO;
 import com.mybatisflex.core.service.IService;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public interface StorageSettingsService extends IService<StorageSettings> {
      * @return
      */
     StorageSettings getByUserPlatformIdentifier(Long userId, String platformIdentifier);
+
+
+    StorageSettingsVO getByVoUserPlatformIdentifier(Long userId, String platformIdentifier);
 
     /**
      * 获取用户已配置的存储平台列表
