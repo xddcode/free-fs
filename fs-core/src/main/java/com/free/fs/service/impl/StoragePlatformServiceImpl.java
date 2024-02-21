@@ -23,7 +23,7 @@ public class StoragePlatformServiceImpl extends ServiceImpl<StoragePlatformMappe
 
     @Override
     public List<StoragePlatform> getList() {
-        return this.getList();
+        return mapper.selectAll();
     }
 
     @Override

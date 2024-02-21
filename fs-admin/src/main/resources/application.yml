@@ -53,7 +53,7 @@ mybatis-flex:
 fs:
   api:
     prefix: /api/v1
-  # 上传配置
+  # 上传配置 [#TODO 废弃 待删除]
   uploader:
     type: minio
     local:
@@ -80,9 +80,9 @@ fs:
     minio:
       access-key: kNKaJVWM36fP2xewIC3G
       secret-key: n3BTy9ntg4nmlJa6Y81dZkh7r9kyoL75VVdTZFMH
-      endpoint: http://192.168.199.113:9000
+      endpoint: http://116.62.112.146:9000
       bucket: test
-      path: http://192.168.199.113:9000/test
+      path: http://116.62.112.146:9000/test
 
 # 第三方登录配置
 justauth:

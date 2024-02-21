@@ -7,36 +7,38 @@
 					<div class="personal-user">
 						<div class="personal-user-left">
 							<el-upload class="h100 personal-user-left-upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
-								<img src="https://img2.baidu.com/it/u=1978192862,2048448374&fm=253&fmt=auto&app=138&f=JPEG?w=504&h=500" />
+								<img :src="userStores.avatar" />
 							</el-upload>
 						</div>
 						<div class="personal-user-right">
 							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，admin，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">昵称：</div>
-											<div class="personal-item-value">小柒</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">身份：</div>
-											<div class="personal-item-value">超级管理</div>
-										</el-col>
-									</el-row>
-								</el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">登录IP：</div>
-											<div class="personal-item-value">192.168.1.1</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">登录时间：</div>
-											<div class="personal-item-value">2021-02-05 18:47:26</div>
-										</el-col>
-									</el-row>
-								</el-col>
+								<el-col :span="24" class="personal-title mb18">
+                  {{ currentTime }}，{{ userStores.nickname }}，生活变的再糟糕，也不妨碍我变得更好！
+                </el-col>
+<!--								<el-col :span="24">-->
+<!--									<el-row>-->
+<!--										<el-col :xs="24" :sm="8" class="personal-item mb6">-->
+<!--											<div class="personal-item-label">昵称：</div>-->
+<!--											<div class="personal-item-value">小柒</div>-->
+<!--										</el-col>-->
+<!--										<el-col :xs="24" :sm="16" class="personal-item mb6">-->
+<!--											<div class="personal-item-label">身份：</div>-->
+<!--											<div class="personal-item-value">超级管理</div>-->
+<!--										</el-col>-->
+<!--									</el-row>-->
+<!--								</el-col>-->
+<!--								<el-col :span="24">-->
+<!--									<el-row>-->
+<!--										<el-col :xs="24" :sm="8" class="personal-item mb6">-->
+<!--											<div class="personal-item-label">登录IP：</div>-->
+<!--											<div class="personal-item-value">192.168.1.1</div>-->
+<!--										</el-col>-->
+<!--										<el-col :xs="24" :sm="16" class="personal-item mb6">-->
+<!--											<div class="personal-item-label">登录时间：</div>-->
+<!--											<div class="personal-item-value">2021-02-05 18:47:26</div>-->
+<!--										</el-col>-->
+<!--									</el-row>-->
+<!--								</el-col>-->
 							</el-row>
 						</div>
 					</div>
@@ -60,79 +62,10 @@
 				</el-card>
 			</el-col>
 
-			<!-- 营销推荐 -->
+			<!-- 存储配置 -->
 			<el-col :span="24">
-				<el-card shadow="hover" class="mt15" header="营销推荐">
-					<el-row :gutter="15" class="personal-recommend-row">
-						<el-col :sm="6" v-for="(v, k) in state.recommendList" :key="k" class="personal-recommend-col">
-							<div class="personal-recommend" :style="{ 'background-color': v.bg }">
-								<SvgIcon :name="v.icon" :size="70" :style="{ color: v.iconColor }" />
-								<div class="personal-recommend-auto">
-									<div>{{ v.title }}</div>
-									<div class="personal-recommend-msg">{{ v.msg }}</div>
-								</div>
-							</div>
-						</el-col>
-					</el-row>
-				</el-card>
-			</el-col>
-
-			<!-- 更新信息 -->
-			<el-col :span="24">
-				<el-card shadow="hover" class="mt15 personal-edit" header="更新信息">
-					<div class="personal-edit-title">基本信息</div>
-					<el-form :model="state.personalForm" size="default" label-width="40px" class="mt35 mb35">
-						<el-row :gutter="35">
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="昵称">
-									<el-input v-model="state.personalForm.name" placeholder="请输入昵称" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="邮箱">
-									<el-input v-model="state.personalForm.email" placeholder="请输入邮箱" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="签名">
-									<el-input v-model="state.personalForm.autograph" placeholder="请输入签名" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="职业">
-									<el-select v-model="state.personalForm.occupation" placeholder="请选择职业" clearable class="w100">
-										<el-option label="计算机 / 互联网 / 通信" value="1"></el-option>
-										<el-option label="生产 / 工艺 / 制造" value="2"></el-option>
-										<el-option label="医疗 / 护理 / 制药" value="3"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="手机">
-									<el-input v-model="state.personalForm.phone" placeholder="请输入手机" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="性别">
-									<el-select v-model="state.personalForm.sex" placeholder="请选择性别" clearable class="w100">
-										<el-option label="男" value="1"></el-option>
-										<el-option label="女" value="2"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-								<el-form-item>
-									<el-button type="primary">
-										<el-icon>
-											<ele-Position />
-										</el-icon>
-										更新个人信息
-									</el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-					<div class="personal-edit-title mb15">账号安全</div>
+				<el-card shadow="hover" class="mt15 personal-edit" header="存储配置">
+					<div class="personal-edit-title mb10">账号安全</div>
 					<div class="personal-edit-safe-box">
 						<div class="personal-edit-safe-item">
 							<div class="personal-edit-safe-item-left">
@@ -144,39 +77,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保手机</div>
-								<div class="personal-edit-safe-item-left-value">已绑定手机：132****4108</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即修改</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保问题</div>
-								<div class="personal-edit-safe-item-left-value">已设置密保问题，账号安全大幅度提升</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即设置</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">绑定QQ</div>
-								<div class="personal-edit-safe-item-left-value">已绑定QQ：110****566</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即设置</el-button>
-							</div>
-						</div>
-					</div>
 				</el-card>
 			</el-col>
 		</el-row>
@@ -184,9 +84,14 @@
 </template>
 
 <script setup lang="ts" name="personal">
-import { reactive, computed } from 'vue';
 import { formatAxis } from '/@/utils/formatTime';
+import store from '/@/stores'
+import { useUserInfo } from '/@/stores/modules/userInfo';
+import { useStorageApi } from '/@/api/storage';
+import { StoragePlatformVO } from '/@/api/storage/types'
 import { newsInfoList, recommendList } from './mock';
+
+const userStores = useUserInfo(store);
 
 // 定义变量内容
 const state = reactive<PersonalState>({
@@ -206,6 +111,17 @@ const state = reactive<PersonalState>({
 const currentTime = computed(() => {
 	return formatAxis(new Date());
 });
+
+const storagePlatforms = ref<StoragePlatformVO[]>([]);
+// 加载存储平台配置结构
+const loadStoragePlatforms = async () => {
+	const res = await useStorageApi().getStoragePlatformsConfig();
+  storagePlatforms.value = res.data;
+};
+
+onMounted(() => {
+  loadStoragePlatforms();
+})
 </script>
 
 <style scoped lang="scss">
