@@ -23,6 +23,10 @@ public class PlatformStructureVO {
      */
     private String dataType;
     /**
+     * 描述
+     */
+    private String description;
+    /**
      * 校验结构
      */
     private StructureValid validation;

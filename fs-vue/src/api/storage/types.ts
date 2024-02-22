@@ -29,6 +29,7 @@ export interface PlatformStructure {
     identifier: string;
     label: string;
     dataType: string;
+    description: string;
     validation: StructureValid;
 }
 

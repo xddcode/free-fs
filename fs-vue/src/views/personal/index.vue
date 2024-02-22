@@ -65,31 +65,34 @@
 
       <!-- 存储配置 -->
       <el-col :span="24">
-        <el-card shadow="hover" class="mt15 personal-edit" header="存储配置">
+        <el-card v-loading="loading" shadow="hover" class="mt15 personal-edit" header="存储配置">
           <div v-for="(item, index) in storagePlatforms" :key="index" class="personal-edit-safe-box">
             <div class="personal-edit-safe-item">
               <div class="personal-edit-safe-item-left">
                 <div class="personal-edit-safe-item-left-label">{{ item.name }}</div>
-              </div>
-              <div class="personal-edit-safe-item-left">
                 <div class="personal-edit-safe-item-left-value">
-                  配置状态：<el-tag v-if="item.status" type="primary">已配置</el-tag><el-tag v-else type="warning">未配置</el-tag>
+                  配置状态：<el-tag v-if="item.status">已配置</el-tag><el-tag v-else type="warning">未配置</el-tag>
                 </div>
               </div>
-              <div class="personal-edit-safe-item-left">
-                <div class="personal-edit-safe-item-left-value">
-                  启用状态：
-                  <el-switch
-                    v-model="item.enabled"
-                    :disabled="!item.status"
-                    active-text="启用" inactive-text="停用"
-                    :active-action-icon="Select"
-                    :inactive-action-icon="CloseBold"
-                    @change="handleChangeEnabled($event, item)"
-                    v-loading="switchLoading"
-                  />
-                </div>
-              </div>
+<!--              <div class="personal-edit-safe-item-left">-->
+<!--                <div class="personal-edit-safe-item-left-value">-->
+<!--                  配置状态：<el-tag v-if="item.status">已配置</el-tag><el-tag v-else type="warning">未配置</el-tag>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="personal-edit-safe-item-left">-->
+<!--                <div class="personal-edit-safe-item-left-value">-->
+<!--                  启用状态：-->
+<!--                  <el-switch-->
+<!--                    v-model="item.enabled"-->
+<!--                    :disabled="!item.status"-->
+<!--                    active-text="启用" inactive-text="停用"-->
+<!--                    :active-action-icon="Select"-->
+<!--                    :inactive-action-icon="CloseBold"-->
+<!--                    @change="handleChangeEnabled($event, item)"-->
+<!--                    v-loading="switchLoading"-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
               <div class="personal-edit-safe-item-right">
                 <el-button type="primary" @click="handleSetupSetting(item)">立即配置</el-button>
               </div>
@@ -112,7 +115,7 @@
                width="600px"
                append-to-body
                :style="{ borderRadius: '15px' }">
-      <el-form :model="form" :rules="rules" ref="fileFormRef" label-width="auto">
+      <el-form :model="form" :rules="rules" ref="fileFormRef" label-position="top" label-width="auto">
         <el-form-item
             v-for="item in currentPlatformConfig"
             :key="item.identifier"
@@ -124,7 +127,8 @@
               trigger: 'blur',
             }"
         >
-          <el-input v-model="form[item.identifier]" />
+          <el-input v-model="form[item.identifier]" type="text" :placeholder="`请填写${item.label}`" />
+          <el-alert v-if="item.description" :title="item.description" type="info" show-icon class="mt-2" :closable="false" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -170,6 +174,7 @@ const state = reactive<PersonalState>({
 const currentTime = computed(() => {
   return formatAxis(new Date());
 });
+const loading = ref(true);
 const switchLoading = ref(false);
 
 const formDialog = reactive({
@@ -185,8 +190,10 @@ const rules = ref({});
 const storagePlatforms = ref<StoragePlatformVO[]>([]);
 // 加载存储平台配置结构
 const loadStoragePlatforms = async () => {
+  loading.value = true;
   const res = await useStorageApi().getStoragePlatformsConfig();
   storagePlatforms.value = res.data;
+  loading.value = false;
 };
 
 const storageSetting = ref<StorageSettingVO>({});
@@ -223,6 +230,7 @@ const handleSave = async () => {
       data.platformIdentifier = currentPlatform.value;
       await useStorageApi().saveStorageSetting(data).finally(() => formDialog.buttonLoading = false);
       ElMessage.success('修改成功');
+      await loadStoragePlatforms();
       formDialog.visible = false;
     }
   })
