@@ -51,10 +51,7 @@ public class StorageController {
     @GetMapping("/setting/check/{identifier}")
     public Result<?> checkConfigByUser(@PathVariable("identifier") String identifier) {
         long userId = StpUtil.getLoginIdAsLong();
-        if (storageSettingsService.checkConfigByUser(userId, identifier)) {
-            return Result.ok();
-        }
-        return Result.error();
+        return Result.ok(storageSettingsService.checkConfigByUser(userId, identifier));
     }
 
     @Operation(summary = "启用禁用配置")
