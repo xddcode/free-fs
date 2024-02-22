@@ -107,6 +107,8 @@ public class StorageSettingsServiceImpl extends ServiceImpl<StorageSettingsMappe
 
     @Override
     public boolean saveOrUpdateConfig(StorageConfigDTO storageConfigDTO) {
+        //TODO 如果是local配置发生了修改，需要动态刷新springboot的静态资源映射
+
         long userId = StpUtil.getLoginIdAsLong();
         StorageSettings storageSettings = new StorageSettings();
         storageSettings.setPlatformIdentifier(storageConfigDTO.getPlatformIdentifier());

@@ -96,4 +96,9 @@ public interface CommonConstant {
      * 存储租户请求头
      */
     String STORAGE_TENANT_REQUEST = "x-storage";
+
+    /**
+     * 本地目录映射
+     */
+    String LOCAL_DIRECTORY_MAPPING = "/upload/";
 }

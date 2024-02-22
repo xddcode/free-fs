@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +25,7 @@ import java.util.Map;
  * @author Yann
  */
 @Slf4j
+@Component
 public class FsWebInvokeTimeInterceptor implements HandlerInterceptor {
 
     private final String prodProfile = "prod";

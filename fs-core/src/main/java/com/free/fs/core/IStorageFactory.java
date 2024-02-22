@@ -3,6 +3,8 @@ package com.free.fs.core;
 import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.common.enums.StorageType;
 import com.free.fs.common.exception.BusinessException;
+import com.free.fs.core.storage.AliyunOssStorage;
+import com.free.fs.core.storage.LocalStorage;
 import com.free.fs.core.storage.MinioStorage;
 import com.free.fs.domain.StoragePlatform;
 import com.free.fs.domain.StorageSettings;
@@ -56,10 +58,9 @@ public class IStorageFactory implements IFileStorageProvider {
         }
         StorageType storageType = StorageType.getStorageType(platformIdentifier);
         return switch (Objects.requireNonNull(storageType)) {
+            case Local -> new LocalStorage(config);
             case Minio -> new MinioStorage(config);
-//            case StorageType.Minio -> new AliyunOssStorage(config);
-//            case StorageType.AliyunOSS -> new AliyunOssStorage(config);
-//            case StorageType.Qiniu -> new AliyunOssStorage(config);
+            case AliyunOSS -> new AliyunOssStorage(config);
             default -> throw new BusinessException("不支持的存储平台");
         };
     }

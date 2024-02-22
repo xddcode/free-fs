@@ -6,6 +6,7 @@ import cn.dev33.satoken.exception.NotRoleException;
 import cn.dev33.satoken.exception.NotSafeException;
 import com.free.fs.common.domain.Result;
 import com.free.fs.common.exception.BusinessException;
+import com.free.fs.common.exception.StorageConfigException;
 import com.free.fs.common.exception.StorageTenantException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -89,6 +90,17 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(StorageTenantException.class)
     public Result<?> handleStorageTenantException(StorageTenantException e) {
+        return defHandler(e.getMessage(), e);
+    }
+
+    /**
+     * StorageConfigException 存储配置异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(StorageConfigException.class)
+    public Result<?> handleStorageConfigException(StorageConfigException e) {
         return defHandler(e.getMessage(), e);
     }
 

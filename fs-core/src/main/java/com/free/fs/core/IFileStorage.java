@@ -26,8 +26,6 @@ public interface IFileStorage {
      */
 
 
-
-
     /**
      * 从文件路径中获取存储桶名称
      *
@@ -82,11 +80,22 @@ public interface IFileStorage {
      */
     void download(String url, HttpServletResponse response);
 
+
+    /**
+     * 获取文件访问地址
+     *
+     * @param objectName 对象名称
+     * @return
+     */
+    String getUrl(String objectName);
+
     /**
      * 获取私有bucket文件访问地址
      *
      * @param url 文件路径
      * @return
      */
-    String getPolicyUrl(String url);
+    default String getPolicyUrl(String url) {
+        return url;
+    }
 }

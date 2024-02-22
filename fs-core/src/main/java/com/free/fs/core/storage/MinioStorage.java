@@ -1,21 +1,20 @@
 package com.free.fs.core.storage;
 
 import cn.hutool.core.io.IoUtil;
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPath;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.domain.FileBo;
-import com.free.fs.core.AbstractFileStorage;
+import com.free.fs.common.exception.StorageConfigException;
+import com.free.fs.common.utils.ResponseUtil;
+import com.free.fs.core.IFileStorage;
 import io.minio.*;
 import io.minio.http.Method;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.params.ClientPNames;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,23 +24,28 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2024/1/25 10:05
  */
 @Slf4j
-public class MinioStorage extends AbstractFileStorage {
+public class MinioStorage implements IFileStorage {
 
     private final MinioClient minioClient;
     private final String endPoint;
     private final String bucket;
 
     public MinioStorage(String config) {
-        JSONObject jsonObject = JSONObject.parseObject(config);
-        String accessKey = jsonObject.getString("accessKey");
-        String secretKey = jsonObject.getString("secretKey");
-        String endPoint = jsonObject.getString("endpoint");
-        String bucket = jsonObject.getString("bucket");
-        System.out.println(jsonObject.toString());
-        this.minioClient = MinioClient.builder()
-                .credentials(accessKey, secretKey)
-                .endpoint(endPoint)
-                .build();
+        String accessKey = (String) JSONPath.eval(config, "$.accessKey");
+        String secretKey = (String) JSONPath.eval(config, "$.secretKey");
+        String endPoint = (String) JSONPath.eval(config, "$.endPoint");
+        String bucket = (String) JSONPath.eval(config, "$.bucket");
+        MinioClient client;
+        try {
+            client = MinioClient.builder()
+                    .credentials(accessKey, secretKey)
+                    .endpoint(endPoint)
+                    .build();
+        } catch (Exception e) {
+            log.error("[Minio] MinioClient build failed: {}", e.getMessage());
+            throw new StorageConfigException("请检查Minio配置是否正确");
+        }
+        this.minioClient = client;
         this.endPoint = endPoint;
         this.bucket = bucket;
     }
@@ -71,7 +75,7 @@ public class MinioStorage extends AbstractFileStorage {
         try {
             return minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
         } catch (Exception e) {
-            log.error("Minio bucketExists Exception:{}", e.getMessage());
+            log.error("[Minio] bucketExists Exception:{}", e.getMessage());
         }
         return false;
     }
@@ -81,20 +85,17 @@ public class MinioStorage extends AbstractFileStorage {
         try {
             if (!bucketExists(bucket)) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
-                log.info("Minio makeBucket success bucketName:{}", bucket);
+                log.info("[Minio] makeBucket success bucketName:{}", bucket);
             }
         } catch (Exception e) {
-            log.error("Minio makeBucket Exception:{}", e.getMessage());
+            log.error("[Minio] makeBucket Exception:{}", e.getMessage());
+            throw new BusinessException("创建存储桶失败");
         }
     }
 
     @Override
     public FileBo upload(MultipartFile file) {
-        //String bucket = properties.getBucket();
-        if (!bucketExists(bucket)) {
-            log.info("Minio bucketName is not creat");
-            makeBucket(bucket);
-        }
+        makeBucket(bucket);
         FileBo fileBo = FileBo.build(file);
         try {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
@@ -104,11 +105,11 @@ public class MinioStorage extends AbstractFileStorage {
                     .contentType(file.getContentType())
                     .build();
             minioClient.putObject(putObjectArgs);
-            String url = endPoint + CommonConstant.DIR_SPLIT + bucket + CommonConstant.DIR_SPLIT + fileBo.getFileName();
+            String url = getUrl(fileBo.getFileName());
             fileBo.setUrl(url);
             return fileBo;
         } catch (Exception e) {
-            log.error("文件上传失败: {}", e.getMessage());
+            log.error("[Minio] file upload failed: {}", e.getMessage());
             throw new BusinessException("文件上传失败");
         }
     }
@@ -127,7 +128,7 @@ public class MinioStorage extends AbstractFileStorage {
                     .build();
             minioClient.removeObject(removeObjectArgs);
         } catch (Exception e) {
-            log.error("Minio文件删除失败: {}", e.getMessage());
+            log.error("[Minio] file delete failed: {}", e.getMessage());
             throw new BusinessException("文件删除失败");
         }
     }
@@ -146,18 +147,19 @@ public class MinioStorage extends AbstractFileStorage {
                     .object(object)
                     .build();
             is = minioClient.getObject(getObjectArgs);
-            // 设置文件ContentType类型，这样设置，会自动判断下载文件类型
-            response.setContentType("application/x-msdownload");
-            response.setCharacterEncoding(CommonConstant.UTF_8);
-            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(object, StandardCharsets.UTF_8));
-            IoUtil.copy(is, response.getOutputStream());
-            log.info("Minio downloadFile success, filePath:{}", url);
+            ResponseUtil.write(is, object, response);
+            log.info("[Minio] file download success, path:{}", url);
         } catch (Exception e) {
-            log.error("Minio文件下载失败: {}", e.getMessage());
+            log.error("[Minio] file download failed: {}", e.getMessage());
             throw new BusinessException("文件下载失败");
         } finally {
             IoUtil.close(is);
         }
+    }
+
+    @Override
+    public String getUrl(String objectName) {
+        return endPoint + CommonConstant.DIR_SPLIT + bucket + CommonConstant.DIR_SPLIT + objectName;
     }
 
     @Override
@@ -175,7 +177,7 @@ public class MinioStorage extends AbstractFileStorage {
                     .object(object)
                     .expiry(10000, TimeUnit.MINUTES).build());
         } catch (Exception e) {
-            log.error("Minio获取policyURL失败 : {}", e.getMessage());
+            log.error("[Minio] failed to obtain policy URL: {}", e.getMessage());
         }
         return policyUrl;
     }
