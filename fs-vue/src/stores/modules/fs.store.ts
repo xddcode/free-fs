@@ -1,28 +1,28 @@
-import {defineStore} from 'pinia';
+import { defineStore } from 'pinia';
 import to from "await-to-js";
 import store from "/@/stores";
-import {useStorageApi} from "/@/api/storage";
-import {StorageDictVo} from "/@/api/storage/types";
+import { useStorageApi } from "/@/api/storage";
+import { StorageDictVo, StoragePlatformVO } from "/@/api/storage/types";
 
 // 支持文件存储的类型
-export const useFsConfig = defineStore('fsConfig', () => {
+export const useFsConfig = defineStore( 'fsConfig', () => {
     // 当前使用的存储平台
-    const fileStorage = ref<String>('');
+    const fileStorage = ref<String>( '' );
     // 支持的存储平台
-    const fileStorageList = ref<Array<StorageDictVo>>([]);
+    const fileStorageList = ref<Array<StorageDictVo>>( [] );
 
     /** 加载文件存储类型 */
     const loadFileStorageList = async () => {
-        const [ err, res ] = await to(useStorageApi().getStorageTypes());
-        if (res) {
+        const [err, res] = await to( useStorageApi().getStorageTypes() );
+        if ( res ) {
             const list = res.data;
             fileStorageList.value = list;
-            if (fileStorage.value === '') {
+            if ( fileStorage.value === '' ) {
                 fileStorage.value = list[0].key
             }
             return Promise.resolve();
         }
-        return Promise.reject(err);
+        return Promise.reject( err );
     }
 
     return {
@@ -32,9 +32,10 @@ export const useFsConfig = defineStore('fsConfig', () => {
     }
 }, {
     persist: true,
-},)
+}, )
 
 export default useFsConfig;
+
 export function useFsConfigHook() {
-    return useFsConfig(store);
+    return useFsConfig( store );
 }

@@ -13,23 +13,7 @@
 <!--			</template>-->
 <!--		</el-dropdown>-->
     <!-- 存储平台 -->
-    <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentStorageChange">
-      <div class="layout-navbars-breadcrumb-user-icon">
-        <i class="iconfont icon-neiqianshujuchucun" :title="$t('message.user.title10')"></i>
-        <span v-for="(item, index) in fileStorageList" :key="index" style="margin-left: 3px; color: #663d74;">
-          <span v-if="item.key === fileStorage">[ {{ item.value }} ]</span>
-        </span>
-      </div>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item v-for="item in fileStorageList"
-                            :command="item.key"
-                            :disabled="fileStorage === item.key"
-                            :key="item.key"
-          >{{ item.value }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+    <storage-platform />
     <!-- 语言切换 -->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
@@ -107,7 +91,6 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import { defineAsyncComponent, ref, unref, computed, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage, ClickOutside as vClickOutside } from 'element-plus';
 import screenfull from 'screenfull';
@@ -115,18 +98,15 @@ import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useUserInfo } from '/@/stores/modules/userInfo';
 import { useThemeConfig } from '/@/stores/modules/themeConfig';
-import { useFsConfig } from '/@/stores/modules/fs.store';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local, Session } from '/@/utils/storage';
 import store from "/@/stores";
-// 存储平台api
-import { useStorageApi } from "/@/api/storage";
-import to from "await-to-js";
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/topBar/search.vue'));
+const StoragePlatform = defineAsyncComponent(() => import('/@/layout/navBars/topBar/storagePlatform.vue'));
 
 // 定义变量内容
 const userNewsRef = ref();
@@ -136,8 +116,6 @@ const router = useRouter();
 const userStores = useUserInfo(store);
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const storeFsConfig = useFsConfig();
-const { fileStorage, fileStorageList } = storeToRefs(storeFsConfig);
 
 const searchRef = ref();
 const state = reactive({
@@ -241,24 +219,6 @@ const onLanguageChange = (lang: string) => {
 const initI18nOrSize = (value: string, attr: string) => {
 	(<any>state)[attr] = Local.get('themeConfig')[value];
 };
-
-// ADD by Yann
-const onComponentStorageChange = async (storage) => {
-  const [ err ] = await to(useStorageApi().checkStorageConfig(storage));
-  if (err) {
-    ElMessageBox.confirm('您好，您正在切换的存储平台暂未配置，请确认是否前往配置？', '提醒',
-        {
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(() => {
-          router.push('/personal');
-        }).catch(() => {})
-  } else {
-    fileStorage.value = storage;
-    window.location.reload();
-  }
-}
 
 // 页面加载时
 onMounted(() => {

@@ -3,6 +3,8 @@ export interface StorageDictVo {
     key: string;
     /** 名称 */
     name: string;
+
+    value: string;
 }
 
 /**
