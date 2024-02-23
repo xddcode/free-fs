@@ -13,6 +13,9 @@ export const useFsConfig = defineStore( 'fsConfig', () => {
 
     /** 加载文件存储类型 */
     const loadFileStorageList = async () => {
+        if (fileStorageList.value.length > 0) {
+            return Promise.resolve();
+        }
         const [err, res] = await to( useStorageApi().getStorageTypes() );
         if ( res ) {
             const list = res.data;

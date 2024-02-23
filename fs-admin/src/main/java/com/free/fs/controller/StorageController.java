@@ -58,10 +58,7 @@ public class StorageController {
     @PutMapping("/setting/{identifier}")
     public Result<?> toggleStoragePlatform(@PathVariable("identifier") String identifier) {
         long userId = StpUtil.getLoginIdAsLong();
-        if (storageSettingsService.toggleStoragePlatform(userId, identifier)) {
-            return Result.ok();
-        }
-        return Result.error();
+        return Result.ok(storageSettingsService.toggleStoragePlatform(userId, identifier));
     }
 
     @Operation(summary = "获取配置明细")

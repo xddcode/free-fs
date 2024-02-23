@@ -11,7 +11,7 @@ const router = useRouter();
 
 const onComponentStorageChange = async (storage) => {
   const [ err, res ] = await to(useStorageApi().checkStorageConfig(storage));
-  if (!res.data) {
+  if (!res?.data) {
     ElMessageBox.confirm('您好，您正在切换的存储平台暂未配置，请确认是否前往配置？', '提醒',
         {
           confirmButtonText: '确认',
@@ -21,8 +21,14 @@ const onComponentStorageChange = async (storage) => {
       router.push('/personal');
     }).catch(() => {})
   } else {
-    fileStorage.value = storage;
-    window.location.reload();
+    // 切换后台配置
+    const [ err ] = await to(useStorageApi().toggleSettingStatus(storage));
+    if (err) {
+      ElMessage.error("存储平台切换失败: " + err.message);
+    } else {
+      fileStorage.value = storage;
+      window.location.reload();
+    }
   }
 }
 
