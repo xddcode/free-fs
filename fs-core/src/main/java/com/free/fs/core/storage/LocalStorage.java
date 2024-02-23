@@ -27,12 +27,17 @@ public class LocalStorage implements IFileStorage {
     private final String nginxUrl;
 
     public LocalStorage(String config) {
-        String directory = (String) JSONPath.eval(config, "$.directory");
-        String endPoint = (String) JSONPath.eval(config, "$.endPoint");
-        String nginxUrl = (String) JSONPath.eval(config, "$.nginxUrl");
-        this.directory = directory;
-        this.endPoint = endPoint;
-        this.nginxUrl = nginxUrl;
+        try {
+            String directory = (String) JSONPath.eval(config, "$.directory");
+            String endPoint = (String) JSONPath.eval(config, "$.endPoint");
+            String nginxUrl = (String) JSONPath.eval(config, "$.nginxUrl");
+            this.directory = directory;
+            this.endPoint = endPoint;
+            this.nginxUrl = nginxUrl;
+        } catch (Exception e) {
+            log.error("[Local] LocalStorage build failed: {}", e.getMessage());
+            throw new BusinessException("请检查本地存储配置是否正确");
+        }
     }
 
     @Override

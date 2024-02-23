@@ -28,20 +28,18 @@ public class AliyunOssStorage implements IFileStorage {
     private final String bucket;
 
     public AliyunOssStorage(String config) {
-        String accessKey = (String) JSONPath.eval(config, "$.accessKey");
-        String secretKey = (String) JSONPath.eval(config, "$.secretKey");
-        String endPoint = (String) JSONPath.eval(config, "$.endPoint");
-        String bucket = (String) JSONPath.eval(config, "$.bucket");
-        OSS client;
         try {
-            client = new OSSClientBuilder().build(endPoint, secretKey, accessKey);
+            String accessKey = (String) JSONPath.eval(config, "$.accessKey");
+            String secretKey = (String) JSONPath.eval(config, "$.secretKey");
+            String endPoint = (String) JSONPath.eval(config, "$.endPoint");
+            String bucket = (String) JSONPath.eval(config, "$.bucket");
+            this.client = new OSSClientBuilder().build(endPoint, secretKey, accessKey);
+            this.endPoint = endPoint;
+            this.bucket = bucket;
         } catch (Exception e) {
             log.error("[AliyunOSS] OSSClient build failed: {}", e.getMessage());
             throw new StorageConfigException("请检查阿里云OSS配置是否正确");
         }
-        this.endPoint = endPoint;
-        this.client = client;
-        this.bucket = bucket;
     }
 
     @Override

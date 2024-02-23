@@ -31,23 +31,21 @@ public class MinioStorage implements IFileStorage {
     private final String bucket;
 
     public MinioStorage(String config) {
-        String accessKey = (String) JSONPath.eval(config, "$.accessKey");
-        String secretKey = (String) JSONPath.eval(config, "$.secretKey");
-        String endPoint = (String) JSONPath.eval(config, "$.endPoint");
-        String bucket = (String) JSONPath.eval(config, "$.bucket");
-        MinioClient client;
         try {
-            client = MinioClient.builder()
+            String accessKey = (String) JSONPath.eval(config, "$.accessKey");
+            String secretKey = (String) JSONPath.eval(config, "$.secretKey");
+            String endPoint = (String) JSONPath.eval(config, "$.endPoint");
+            String bucket = (String) JSONPath.eval(config, "$.bucket");
+            this.minioClient = MinioClient.builder()
                     .credentials(accessKey, secretKey)
                     .endpoint(endPoint)
                     .build();
+            this.endPoint = endPoint;
+            this.bucket = bucket;
         } catch (Exception e) {
             log.error("[Minio] MinioClient build failed: {}", e.getMessage());
             throw new StorageConfigException("请检查Minio配置是否正确");
         }
-        this.minioClient = client;
-        this.endPoint = endPoint;
-        this.bucket = bucket;
     }
 
     @Override
