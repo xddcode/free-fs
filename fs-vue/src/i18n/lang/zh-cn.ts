@@ -76,6 +76,7 @@ export default {
 		layoutIframeViewTwo: '内嵌 iframe2',
 		/** Yann 新增 */
 		files: '文件',
+		viewer: '预览',
 		album: '相册',
 	},
 	staticRoutes: {

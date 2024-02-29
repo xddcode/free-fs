@@ -44,6 +44,14 @@ export function useFilesApi() {
                 url: '/file/' + ids,
                 method: 'delete'
             })
+        },
+        // 获取上传任务
+        getUploadTask: () => {
+
+        },
+        // 创建上传任务
+        initUploadTask: () => {
+
         }
     }
 }

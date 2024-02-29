@@ -78,6 +78,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					icon: 'ele-Files',
 				}
 			},
+            {
+                path: '/comm/viewer',
+                name: 'viewer',
+                component: () => import('/@/views/comm/viewer.vue'),
+                meta: {
+                    title: 'message.router.viewer',
+                    isLink: '',
+                    isHide: true,
+                    isKeepAlive: true,
+                    isAffix: false,
+                    isIframe: false,
+                    roles: ['admin'],
+                    icon: 'ele-Files',
+                }
+            },
 			{
 				path: '/album/all',
 				name: 'album',

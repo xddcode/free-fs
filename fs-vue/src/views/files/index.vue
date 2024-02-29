@@ -84,12 +84,16 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         width="800px"
+        destroy-on-close
     >
-      <file-uploader/>
+      <file-uploader ref="fileUploaderRef" :dir-ids="queryParams.dirId" />
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="cancelUpload">取消</el-button>
           <el-button type="primary" @click="submitUpload" :loading="uploadDialog.uploadLoading">
+            <template #icon>
+              <SvgIcon name="ele-CircleCheck"></SvgIcon>
+            </template>
             确认上传
           </el-button>
         </span>
@@ -98,7 +102,7 @@
 
     <!-- 预览框 -->
     <el-dialog v-model="viewerDialog.visible" title="文件预览" class="viewer-dialog" fullscreen destroy-on-close>
-      <file-viewer :src="viewerValue"></file-viewer>
+      <file-viewer :src="viewerDialog.src" :type="viewerDialog.type"></file-viewer>
     </el-dialog>
   </div>
 </template>
@@ -109,11 +113,13 @@ import TargetBox from "/@/components/fs/targetBox.vue";
 import { useFilesApi } from "/@/api/files";
 import { FileForm, FileQuery, FileVO } from "/@/api/files/types";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 /**  引入文件组件  */
 const FileViewer = defineAsyncComponent(() => import('/@/components/fileViewer/index.vue'))
 const FolderBreadcrumb = defineAsyncComponent(() => import('/@/components/folderBreadcrumb/index.vue'))
-const FileUploader = defineAsyncComponent(() => import('/@/views/files/uploader.vue'));
+const FileUploader = defineAsyncComponent(() => import('/@/components/fileUpload/index.vue'));
 const ContextMenu = defineAsyncComponent(() => import('/@/components/contextMenu/index.vue'))
 const contextMenuRef = ref();
 /** 页面变量 */
@@ -164,8 +170,9 @@ const handleClickBreadcrumb = (pid) => {
 // ****************  文件夹预览  ********************
 const viewerDialog = reactive({
   visible: false,
+  src: '',
+  type: '',
 })
-const viewerValue = ref('')
 // **************************************************
 
 /** 文件拖拽事件 */
@@ -178,9 +185,11 @@ const handleFileDrop = (item: any) => {
 }
 
 /* 手动点击上传 */
+const fileUploaderRef = ref();
 const submitUpload = () => {
-  uploadDialog.visible = false;
+  fileUploaderRef.value.doUpload();
 }
+
 const cancelUpload = () => {
   uploadDialog.visible = false;
 }
@@ -192,7 +201,8 @@ const showFileItemContextMenu = (event, file: FileVO) => {
       id: 1,
       label: "查看",
       event: () => {
-        viewerValue.value = file.url;
+        viewerDialog.src = file.url;
+        viewerDialog.type = file.type;
         viewerDialog.visible = true;
       },
       icon: 'ele-View'
@@ -269,7 +279,7 @@ const showContextMenu = (event) => {
 }
 
 const hideContextMenu = () => {
-  contextMenuRef.value.hide();
+  contextMenuRef.value?.hide();
 }
 
 // 获取文件列表
@@ -287,8 +297,17 @@ const handleClickFileItem = (file: FileVO) => {
     queryParams.value.dirId = file.id;
     loadFileList();
   } else {
-    viewerValue.value = file.url;
-    viewerDialog.visible = true;
+    // viewerDialog.src = file.url;
+    // viewerDialog.type = file.type;
+    // viewerDialog.visible = true;
+    // 切换路由页面方式看看效果
+    router.push({
+      path: '/comm/viewer',
+      query: {
+        src: file.url,
+        type: file.type
+      },
+    });
   }
 }
 
