@@ -4,14 +4,20 @@ import com.alibaba.fastjson2.JSONPath;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.FileBo;
 import com.free.fs.common.exception.BusinessException;
+import com.free.fs.common.utils.ResponseUtil;
 import com.free.fs.common.utils.StringUtil;
 import com.free.fs.core.IFileStorage;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * 本地文件上传
@@ -42,13 +48,9 @@ public class LocalStorage implements IFileStorage {
 
     @Override
     public String getBucketByUrl(String url) {
-        return null;
+        return url;
     }
 
-    @Override
-    public String getObjectNameByUrl(String url) {
-        return null;
-    }
 
     @Override
     public boolean bucketExists(String directory) {
@@ -74,9 +76,8 @@ public class LocalStorage implements IFileStorage {
         makeBucket(directory);
         FileBo fileBo = FileBo.build(file);
         try {
-            String destName = directory + fileBo.getFileName();
-            File dest = new File(destName);
-            file.transferTo(dest);
+            Path targetLocation = Paths.get(directory).resolve(Paths.get(fileBo.getFileName()));
+            file.transferTo(targetLocation);
             String url = getUrl(fileBo.getFileName());
             fileBo.setUrl(url);
             return fileBo;
@@ -88,12 +89,34 @@ public class LocalStorage implements IFileStorage {
 
     @Override
     public void delete(String url) {
-
+        if (StringUtils.isEmpty(url)) {
+            throw new BusinessException("文件删除失败,文件路径为空");
+        }
+        String object = this.getObjectNameByUrl(url);
+        try {
+            Path file = Paths.get(directory).resolve(Paths.get(object));
+            Files.delete(file);
+        } catch (Exception e) {
+            log.error("[Local] file delete failed: {}", e.getMessage());
+            throw new BusinessException("文件删除失败");
+        }
     }
 
     @Override
     public void download(String url, HttpServletResponse response) {
-
+        if (StringUtils.isEmpty(url)) {
+            throw new BusinessException("文件下载失败,文件路径为空");
+        }
+        String object = this.getObjectNameByUrl(url);
+        try {
+            Path file = Paths.get(directory).resolve(Paths.get(object));
+            InputStream is = Files.newInputStream(file);
+            ResponseUtil.write(is, object, response);
+            log.info("[Local] file download success, path:{}", url);
+        } catch (Exception e) {
+            log.error("[Local] file download failed: {}", e.getMessage());
+            throw new BusinessException("文件下载失败");
+        }
     }
 
     @Override

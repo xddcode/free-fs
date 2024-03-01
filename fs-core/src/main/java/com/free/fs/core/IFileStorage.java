@@ -1,7 +1,9 @@
 package com.free.fs.core;
 
+import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.domain.FileBo;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -40,7 +42,13 @@ public interface IFileStorage {
      * @param url 文件路径
      * @return 对象名称
      */
-    String getObjectNameByUrl(String url);
+    default String getObjectNameByUrl(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return "";
+        }
+        url = url.trim();
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
 
     /**
      * 判断存储桶是否在存在

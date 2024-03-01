@@ -1,6 +1,5 @@
 package com.free.fs.core.storage;
 
-import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson2.JSONPath;
 import com.free.fs.common.constant.CommonConstant;
 import com.free.fs.common.exception.BusinessException;
@@ -58,15 +57,6 @@ public class MinioStorage implements IFileStorage {
         return key.substring(0, index);
     }
 
-    @Override
-    public String getObjectNameByUrl(String url) {
-        if (StringUtils.isEmpty(url)) {
-            return "";
-        }
-        String key = url.replace(endPoint + CommonConstant.DIR_SPLIT, "");
-        int index = key.indexOf(CommonConstant.DIR_SPLIT);
-        return key.substring(index + 1);
-    }
 
     @Override
     public boolean bucketExists(String bucket) {
@@ -138,20 +128,17 @@ public class MinioStorage implements IFileStorage {
         }
         String bucket = this.getBucketByUrl(url);
         String object = this.getObjectNameByUrl(url);
-        GetObjectResponse is = null;
         try {
             GetObjectArgs getObjectArgs = GetObjectArgs.builder()
                     .bucket(bucket)
                     .object(object)
                     .build();
-            is = minioClient.getObject(getObjectArgs);
+            GetObjectResponse is = minioClient.getObject(getObjectArgs);
             ResponseUtil.write(is, object, response);
             log.info("[Minio] file download success, path:{}", url);
         } catch (Exception e) {
             log.error("[Minio] file download failed: {}", e.getMessage());
             throw new BusinessException("文件下载失败");
-        } finally {
-            IoUtil.close(is);
         }
     }
 

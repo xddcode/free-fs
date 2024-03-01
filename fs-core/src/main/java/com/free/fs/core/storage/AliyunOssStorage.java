@@ -9,7 +9,6 @@ import com.free.fs.common.domain.FileBo;
 import com.free.fs.common.exception.BusinessException;
 import com.free.fs.common.exception.StorageConfigException;
 import com.free.fs.core.IFileStorage;
-import io.minio.MinioClient;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,10 +46,6 @@ public class AliyunOssStorage implements IFileStorage {
         return null;
     }
 
-    @Override
-    public String getObjectNameByUrl(String url) {
-        return null;
-    }
 
     @Override
     public boolean bucketExists(String bucket) {
