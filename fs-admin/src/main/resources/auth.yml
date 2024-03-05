@@ -3,7 +3,7 @@ auth:
   ignore_urls:
     - /api/v1/captcha
     - /api/v1/auth/**
-    - /uploads/**
+    - /upload/**
     - /assets/**
     - /actuator/**
     - /v3/api-docs/**

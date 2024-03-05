@@ -126,6 +126,6 @@ public class LocalStorage implements IFileStorage {
             return nginxUrl + objectName;
         }
         // 否则使用endPoint, 一般是http://本机ip:本机port/mapping/fileName
-        return endPoint + CommonConstant.DIR_SPLIT + CommonConstant.LOCAL_DIRECTORY_MAPPING + objectName;
+        return endPoint + CommonConstant.LOCAL_DIRECTORY_MAPPING + objectName;
     }
 }

@@ -45,6 +45,15 @@ export function useFilesApi() {
                 method: 'delete'
             })
         },
+        // 下载文件
+        downloadFile: ( url: string | undefined ) => {
+            return request({
+                url: '/file/download',
+                method: 'get',
+                params: { url: url },
+                responseType: 'blob'
+            })
+        },
         // 获取上传任务
         getUploadTask: () => {
 

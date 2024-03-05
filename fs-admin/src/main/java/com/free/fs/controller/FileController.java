@@ -129,7 +129,7 @@ public class FileController {
      */
     @Operation(summary = "文件下载")
     @SaCheckPermission("file:download")
-    @GetMapping("/downLoad")
+    @GetMapping("/download")
     public void downLoad(@RequestParam(value = "url") String url, HttpServletResponse response) {
         fileService.download(url, response);
     }

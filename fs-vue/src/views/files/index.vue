@@ -231,6 +231,14 @@ const showFileItemContextMenu = (event, file: FileVO) => {
     },
     {
       id: 4,
+      label: "下载",
+      event: () => {
+        handleDownloadFile(file);
+      },
+      icon: 'ele-Download'
+    },
+    {
+      id: 5,
       label: "删除",
       event: () => {
         handleDeleteFile(file);
@@ -347,6 +355,11 @@ const handleDeleteFile = (file?: FileVO) => {
     await loadFileList();
   }).catch(() => {
   })
+}
+
+const handleDownloadFile = async (file?: FileVO) => {
+  const _url = file?.url;
+  await useFilesApi().downloadFile(_url);
 }
 
 onMounted(() => {
