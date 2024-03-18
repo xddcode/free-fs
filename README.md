@@ -26,7 +26,7 @@
 #### Vue3版本正在开发中......(敬请期待)
 #### 开发文档： [https://xddcode.gitee.io/free-fs-doc](https://xddcode.gitee.io/free-fs-doc)
 
-#### 体验地址： [https://fs.elites.ink](https://fs.elites.ink)
+#### 体验地址： [https://fs.elites.chat](https://fs.elites.chat)
 
 #### 内置账号
 
