@@ -24,7 +24,7 @@
 
 - 切换至springboot3分支即可
 #### Vue3版本正在开发中......(敬请期待)
-#### 开发文档： [https://dh-free.gitee.io/free-fs-doc](https://dh-free.gitee.io/free-fs-doc)
+#### 开发文档： [https://xddcode.gitee.io/free-fs-doc](https://xddcode.gitee.io/free-fs-doc)
 
 #### 体验地址： [https://fs.elites.ink](https://fs.elites.ink)
 
