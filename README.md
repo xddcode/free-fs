@@ -18,8 +18,8 @@
 
 #### 源码链接：
 
-- Gitee：[https://gitee.com/dh_free/free-fs](https://gitee.com/dh_free/free-fs)
-- Github：[https://github.com/dh-free/free-fs](https://github.com/dh-free/free-fs)
+- Gitee：[https://gitee.com/xddcode/free-fs](https://gitee.com/xddcode/free-fs)
+- Github：[https://github.com/xddcode/free-fs](https://github.com/xddcode/free-fs)
 #### SpringBoot3.x版本
 
 - 切换至springboot3分支即可
