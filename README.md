@@ -5,11 +5,11 @@
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/dh-free/free-fs?logo=github)](https://github.com/dh-free/free-fs/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/dh-free/free-fs?logo=github)](https://github.com/dh-free/free-fs/network)
-[![star](https://gitee.com/dh_free/free-fs/badge/star.svg?theme=dark)](https://gitee.com/dh_free/free-fs/stargazers)
-[![fork](https://gitee.com/dh_free/free-fs/badge/fork.svg?theme=dark)](https://gitee.com/dh_free/free-fs/members)
-[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://gitee.com/dh_free/free-fs/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/xddcode/free-fs?logo=github)](https://github.com/xddcode/free-fs/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/xddcode/free-fs?logo=github)](https://github.com/xddcode/free-fs/network)
+[![star](https://gitee.com/xddcode/free-fs/badge/star.svg?theme=dark)](https://gitee.com/xddcode/free-fs/stargazers)
+[![fork](https://gitee.com/xddcode/free-fs/badge/fork.svg?theme=dark)](https://gitee.com/xddcode/free-fs/members)
+[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://gitee.com/xddcode/free-fs/blob/master/LICENSE)
 </div>
 
 ##  📖 项目简介
