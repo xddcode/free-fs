@@ -489,7 +489,7 @@ layui.config({
     $('#open').click(function () {
         //使用kkFileView预览文件
         var url = mUrl;
-        window.open('https://fs.elites.ink/preview/onlinePreview?url=' + encodeURIComponent(Base64.encode(url)));
+        window.open('https://fs.elites.chat/preview/onlinePreview?url=' + encodeURIComponent(Base64.encode(url)));
     });
 
     //移动按钮点击事件

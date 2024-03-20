@@ -60,7 +60,7 @@ fs:
       uploadDir: /data/free-fs/upload/
       uploadMapping: /uploads
       # 生产环境请填写公网地址或者域名，如果不写，默认http://127.0.0.1:8081/
-      #domain: https://fs.elites.ink
+      domain: https://fs.elites.chat
     #如配置七牛，需在QiniuAutoConfigure.java配置类中指定自己的七牛云机房区域
     qiniu:
       accessKey: xxxxxxxxxxxxxxxxxxx
@@ -81,13 +81,13 @@ justauth:
   enabled: true
   type:
     GITEE:
-      client-id: 9430a180ea8axxxxxxxxxxxxxxxxxxxxxx07c38d22be88xxxxxxdfb8c
-      client-secret: b10aexxxxxxe2c16b50b56869460741f04xxxxxxxxxxxxxxxxxxxdb409ee
-      redirect-uri: http://xxxxxxxx/oauth/callback/gitee
+      client-id: 9430a180ea8a8xxxxxxxxxxxxxxxxxxxxxd22be88e13adfb8c
+      client-secret: b10ae06a129xxxxxxxxxxxxxxxxb2fd4db409ee
+      redirect-uri: https://fs.elites.chat/oauth/callback/gitee
     GITHUB:
-      client-id: ea6f9xxxxxx03f5b0fd
-      client-secret: c60524386xxxxxx9cbef3caa7cxxxxxxxxxxe71474d
-      redirect-uri: http://xxxxxx/oauth/callback/github
+      client-id: ea6fxxxxxxxxxxxxxxxxxxx5b0fd
+      client-secret: 99b180dxxxxxxxxxxxxxxxxx2b0973ce5a
+      redirect-uri: https://fs.elites.chat/oauth/callback/github
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
