@@ -2,7 +2,7 @@ version: '1.0'
 name: pipeline-20240321
 displayName: free-fs流水线
 triggers:
-  trigger: manual
+  trigger: auto
   push:
     branches:
       precise:
