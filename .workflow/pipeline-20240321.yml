@@ -9,7 +9,7 @@ triggers:
         - mester
 stages:
   - name: stage-390a9f8b
-    displayName: 未命名
+    displayName: 构建
     strategy: naturally
     trigger: auto
     executor: []
@@ -45,7 +45,7 @@ stages:
         strategy:
           retry: '0'
   - name: stage-87621411
-    displayName: 未命名
+    displayName: 部署
     strategy: naturally
     trigger: manual
     executor: []
@@ -65,9 +65,9 @@ stages:
         script:
           - '# 功能：部署脚本会在部署主机组的每台机器上执行'
           - '# 使用场景：先将制品包解压缩到指定目录中，再执行启动脚本deploy.sh，脚本示例地址：https://gitee.com/gitee-go/spring-boot-maven-deploy-case/blob/master/deploy.sh'
-          - '# mkdir -p /data/free-fs'
-          - '# tar zxvf ~/gitee_go/deploy/output.tar.gz -C /data/free-fs'
-          - '# sh /data/free-fs/deploy.sh restart'
+          - mkdir -p /data/free-fs
+          - tar zxvf ~/gitee_go/deploy/output.tar.gz -C /data/free-fs
+          - sh /data/free-fs/deploy.sh restart
         notify: []
         strategy:
           retry: '0'
