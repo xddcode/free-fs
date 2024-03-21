@@ -47,7 +47,7 @@ stages:
   - name: stage-87621411
     displayName: 部署
     strategy: naturally
-    trigger: manual
+    trigger: auto
     executor: []
     steps:
       - step: deploy@agent
@@ -67,6 +67,9 @@ stages:
           - '# 使用场景：先将制品包解压缩到指定目录中，再执行启动脚本deploy.sh，脚本示例地址：https://gitee.com/gitee-go/spring-boot-maven-deploy-case/blob/master/deploy.sh'
           - mkdir -p /data/free-fs
           - tar zxvf ~/gitee_go/deploy/output.tar.gz -C /data/free-fs
+          - ''
+          - mv /data/free-fs/target/* /data/free-fs/
+          - ''
           - sh /data/free-fs/deploy.sh restart
         notify: []
         strategy:
