@@ -79,10 +79,10 @@ fs:
     #minio配置
     minio:
       access-key: kNKaJVWM36fP2xewIC3G
-      secret-key: n3BTy9ntg4nmlJa6Y81dZkh7r9kyoL75VVdTZFMH
-      endpoint: http://116.62.112.146:9000
+      secret-key: xxxxxxxxxxxxxxxxxx
+      endpoint: http://xxxxxxx:9000
       bucket: test
-      path: http://116.62.112.146:9000/test
+      path: http://xxxxxxxx:9000/test
 
 # 第三方登录配置
 justauth:
