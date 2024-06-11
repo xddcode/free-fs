@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -17,12 +17,12 @@
         <div class="layui-form-item layui-input-icon-group">
             <i class="layui-icon layui-icon-username"></i>
             <input class="layui-input" name="username" placeholder="请输入登录账号" autocomplete="off"
-                   lay-verType="tips" lay-verify="required" required/>
+                   lay-verType="tips" lay-verify="required" required value="admin"/>
         </div>
         <div class="layui-form-item layui-input-icon-group">
             <i class="layui-icon layui-icon-password"></i>
             <input class="layui-input" name="password" placeholder="请输入登录密码" type="password"
-                   lay-verType="tips" lay-verify="required" required/>
+                   lay-verType="tips" lay-verify="required" required value="admin" />
         </div>
         <div class="layui-form-item">
             <input type="checkbox" name="remember" title="记住我" lay-skin="primary">

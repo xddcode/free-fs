@@ -52,52 +52,6 @@ layui.config({
 
     renderList();
 
-    // 右键菜单
-    contextMenu.bind('.file-list', [{
-        icon: 'layui-icon layui-icon-app',
-        name: '新建文件夹',
-        click: function (e, event) {
-            console.log(e);
-            console.log(event);
-            layer.open({
-                type: 1,
-                area: ['450px', '200px'],
-                title: '新建文件夹',
-                content: $("#addFolderModel").html(),
-                shade: 0,
-                closeBtn: 2,
-                success: function (layero, index) {
-                    //重置表单
-                    $("#addFolderForm")[0].reset();
-                    //新增文件夹监听提交
-                    form.on('submit(addFolderBtn)', function (data) {
-                        var name = $('#folderName').val();
-                        var dirIds = $('#tvFPId').text();
-                        layer.load(2);
-                        $.post('/file/addFolder', {
-                            name: name,
-                            dirIds: dirIds
-                        }, function (res) {
-                            layer.closeAll('loading');
-                            if (res.code === 200) {
-                                layer.closeAll();
-                                layer.msg(res.msg, {icon: 1});
-                                renderList();
-                            } else {
-                                layer.msg(res.msg, {icon: 2});
-                            }
-                        });
-                        return false;
-                    });
-                    //新增文件夹取消按钮事件
-                    $('#closeFolderBtn').click(function () {
-                        layer.close(index);
-                    });
-                }
-            });
-        }
-    }]);
-
     // 上传文件事件
     var proIndex;
     upload.render({
@@ -452,7 +406,92 @@ layui.config({
         //         e.stopPropagation();
         //     }
         // }
+    }).on('contextmenu', '.file-list', function (e) {
+        //TODO
+        // 禁用浏览器默认的右键菜单
+        e.preventDefault();
+        // 获取鼠标所在的元素
+        var targetElement = $(e.target);
+        var fileItem = targetElement.closest('.file-list-item');
+        console.log(fileItem);
+        var x = e.clientX + 10;
+        var y = e.clientY + 5;
+
+        if (fileItem.length > 0) {
+            //再次判断是文件夹还是文件
+            var isDir = fileItem.data('dir');
+            if (isDir) {
+                showDirContextMenu(x, y, e);
+            } else {
+                showFileContextMenu(x, y, e);
+            }
+
+        } else {
+            showEmptyAreaContextMenu(x, y, e);
+        }
     });
+
+    function showDirContextMenu(x, y, e) {
+
+    }
+
+    function showFileContextMenu(x, y, e) {
+        var $target = $(e).find('.file-list-img');
+        $('#dropdownFile').css({
+            'top': $target.clientX + 90,
+            'left': $target.clientY + 25
+        }).addClass('dropdown-opened');
+        if (e !== void 0) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
+    function showEmptyAreaContextMenu(x, y, e) {
+        contextMenu.show([{
+            icon: 'layui-icon layui-icon-app',
+            name: '新建文件夹',
+            click: function (e, event) {
+                layer.open({
+                    type: 1,
+                    area: ['450px', '200px'],
+                    title: '新建文件夹',
+                    content: $("#addFolderModel").html(),
+                    shade: 0,
+                    closeBtn: 2,
+                    success: function (layero, index) {
+                        //重置表单
+                        $("#addFolderForm")[0].reset();
+                        //新增文件夹监听提交
+                        form.on('submit(addFolderBtn)', function (data) {
+                            var name = $('#folderName').val();
+                            var dirIds = $('#tvFPId').text();
+                            layer.load(2);
+                            $.post('/file/addFolder', {
+                                name: name,
+                                dirIds: dirIds
+                            }, function (res) {
+                                layer.closeAll('loading');
+                                if (res.code === 200) {
+                                    layer.closeAll();
+                                    layer.msg(res.msg, {icon: 1});
+                                    renderList();
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                            });
+                            return false;
+                        });
+                        //新增文件夹取消按钮事件
+                        $('#closeFolderBtn').click(function () {
+                            layer.close(index);
+                        });
+                    }
+                });
+            }
+        }], x, y, e)
+
+    }
 
     //获取目录
     function getDirs(id) {
@@ -529,8 +568,9 @@ layui.config({
                             DirDTree.setDisabledNodes(nodeIds);
                         }
                         if (first) {
-                            $("#searchMoveTreeBtn").unbind("click");
-                            $("#searchMoveTreeBtn").click(function () {
+                            var $searchMoveTreeBtn = $("#searchMoveTreeBtn");
+                            $searchMoveTreeBtn.unbind("click");
+                            $searchMoveTreeBtn.click(function () {
                                 var value = $("#searchMoveInput").val();
                                 if (value) {
                                     var flag = DirDTree.searchNode(value);
