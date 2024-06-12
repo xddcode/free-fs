@@ -3,7 +3,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://101.43.253.49:3306/free-fs?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
-    password: Dinghao2134593
+    password: xxxxxxxxx
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 数据源配置
     hikari:
