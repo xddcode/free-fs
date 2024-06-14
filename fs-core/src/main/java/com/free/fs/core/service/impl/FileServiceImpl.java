@@ -115,7 +115,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
             // 文件目录id
             String dirId = dirIds.substring(dirIds.lastIndexOf(CommonConstant.DIR_SPLIT) + 1);
             if (CommonConstant.DIR_SPLIT.equals(dirId)
-                || StringUtils.isEmpty(dirId)) {
+                    || StringUtils.isEmpty(dirId)) {
                 fileInfo.setParentId(CommonConstant.ROOT_PARENT_ID);
             } else {
                 FileInfo f = this.getById(Long.parseLong(dirId));
@@ -240,15 +240,18 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         if (dto.getName().equals(dto.getRename())) {
             throw new BusinessException("当前名称与原始名称相同，请修改后重试！");
         }
+        // 获取文件信息
         FileInfo fileInfo = this.getById(dto.getId());
-        //TODO BUG
+        if (fileInfo == null) {
+            throw new BusinessException("文件不存在！");
+        }
         long count = this.count(new QueryWrapper()
                 .where(FILE_INFO.NAME.eq(dto.getRename()))
                 .and(FILE_INFO.IS_DIR.eq(fileInfo.getIsDir()))
                 .and(FILE_INFO.PARENT_ID.eq(fileInfo.getParentId()))
                 .and(FILE_INFO.USER_ID.eq(fileInfo.getUserId()))
         );
-        if (count > 1) {
+        if (count > 0) {
             throw new BusinessException("当前目录已存在该名称,请修改名称！");
         }
         FileInfo updInfo = new FileInfo();
