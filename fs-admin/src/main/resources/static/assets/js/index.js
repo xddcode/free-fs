@@ -394,26 +394,16 @@ layui.config({
         if (isDir) {
             getDirs(id);
         }
-        //else {
-        //     var $target = $(this).find('.file-list-img');
-        //     $('#dropdownFile').css({
-        //         'top': $target.offset().top + 90,
-        //         'left': $target.offset().left + 25
-        //     });
-        //     $('#dropdownFile').addClass('dropdown-opened');
-        //     if (e !== void 0) {
-        //         e.preventDefault();
-        //         e.stopPropagation();
-        //     }
-        // }
     }).on('contextmenu', '.file-list', function (e) {
-        //TODO
         // 禁用浏览器默认的右键菜单
         e.preventDefault();
         // 获取鼠标所在的元素
         var targetElement = $(e.target);
         var fileItem = targetElement.closest('.file-list-item');
-        console.log(fileItem);
+        name = fileItem.data('name');
+        id = fileItem.data('id');
+        mUrl = fileItem.data('url');
+
         var x = e.clientX + 10;
         var y = e.clientY + 5;
 
@@ -421,9 +411,9 @@ layui.config({
             //再次判断是文件夹还是文件
             var isDir = fileItem.data('dir');
             if (isDir) {
-                showDirContextMenu(x, y, e);
+                showDirContextMenu(targetElement, e);
             } else {
-                showFileContextMenu(x, y, e);
+                showFileContextMenu(targetElement, e);
             }
 
         } else {
@@ -431,16 +421,35 @@ layui.config({
         }
     });
 
-    function showDirContextMenu(x, y, e) {
-
+    function showDirContextMenu(targetElement, e) {
+        var fileItem = targetElement.closest('.file-list-item');
+        var top = fileItem.offset().top;
+        var left = fileItem.offset().left;
+        $('#dropdownFile').css({
+            'top': top + 90,
+            'left': left + 25
+        }).addClass('dropdown-opened');
+        //文件夹右键隐藏不需要的按钮
+        $('#open').hide();
+        $('#copy').hide();
+        $('#download').hide();
+        if (e !== void 0) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }
 
-    function showFileContextMenu(x, y, e) {
-        var $target = $(e).find('.file-list-img');
+    function showFileContextMenu(targetElement, e) {
+        var fileItem = targetElement.closest('.file-list-item');
+        var top = fileItem.offset().top;
+        var left = fileItem.offset().left;
         $('#dropdownFile').css({
-            'top': $target.clientX + 90,
-            'left': $target.clientY + 25
+            'top': top + 90,
+            'left': left + 25
         }).addClass('dropdown-opened');
+        $('#open').show();
+        $('#copy').show();
+        $('#download').show();
         if (e !== void 0) {
             e.preventDefault();
             e.stopPropagation();
@@ -667,8 +676,9 @@ layui.config({
                         data: JSON.stringify(data.field),
                         dataType: 'json',
                         success: function (res) {
+                            layer.closeAll('loading');
+                            layer.close(index);
                             if (200 === res.code) {
-                                layer.close(index);
                                 layer.msg(res.msg, {icon: 1});
                                 if (DTree) {
                                     DTree.refreshTree();
