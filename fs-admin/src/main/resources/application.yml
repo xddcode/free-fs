@@ -30,6 +30,10 @@ spring:
 #    resources:
 #      static-locations: classpath:/static
 
+--- # 日志配置
+logging:
+  config: classpath:/fs-logback.xml
+
 --- # mybatis-flex配置
 mybatis-flex:
   # 搜索指定包别名
