@@ -2,7 +2,6 @@ package com.free.fs.core.mapper;
 
 import com.free.fs.core.domain.RolePermission;
 import com.mybatisflex.core.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
  * @Author: hao.ding@insentek.com
  * @Date: 2024/6/7 11:06
  */
-@Mapper
 public interface RolePermissionMapper extends BaseMapper<RolePermission> {
 
     /**
