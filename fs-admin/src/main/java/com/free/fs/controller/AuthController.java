@@ -45,7 +45,7 @@ public class AuthController {
         return Result.error("登录失败");
     }
 
-    @PostMapping("/reg")
+    @PostMapping("/register")
     @ResponseBody
     public Result<?> register(@Valid UserDTO dto) {
         if (userService.addUser(dto)) {
@@ -59,6 +59,7 @@ public class AuthController {
         StpUtil.logout();
         return "redirect:login";
     }
+
 
     /**
      * 完善密码

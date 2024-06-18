@@ -7,7 +7,13 @@ layui.use(['jquery', 'layer', 'form'], function () {
 
     // 校验两次密码是否一致
     form.verify({
-        confirmPass: function (value) {
+        password: function (value) {
+            // 6到12位
+            if (!/^[\S]{6,12}$/.test(value)) {
+                return '密码必须6到12位，不能包含空格';
+            }
+        },
+        confirmPassword: function (value) {
             if ($('input[name=password]').val() !== value)
                 return '两次密码输入不一致！';
         }
@@ -46,7 +52,7 @@ layui.use(['jquery', 'layer', 'form'], function () {
     // 注册表单提交
     form.on('submit(regSubmit)', function (obj) {
         layer.load(2);
-        $.post('reg', obj.field, function (res) {
+        $.post('register', obj.field, function (res) {
             if (200 === res.code) {
                 layer.msg(res.msg, {icon: 1, time: 1500}, function () {
                     location.replace('/login');
@@ -54,7 +60,6 @@ layui.use(['jquery', 'layer', 'form'], function () {
             } else {
                 layer.closeAll('loading');
                 layer.msg(res.msg, {icon: 5});
-                // $('img.login-captcha').trigger('click');
             }
         }, 'JSON');
         return false;
@@ -64,7 +69,6 @@ layui.use(['jquery', 'layer', 'form'], function () {
     form.on('submit(informationPassSubmit)', function (obj) {
         layer.load(2);
         obj.field.avatar = $('#avatar').attr('src');
-        console.log(obj.field);
         $.post('/informationPass', obj.field, function (res) {
             if (200 === res.code) {
                 layer.msg(res.msg, {icon: 1, time: 1500}, function () {

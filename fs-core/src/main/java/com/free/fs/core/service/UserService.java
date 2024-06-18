@@ -2,6 +2,7 @@ package com.free.fs.core.service;
 
 import com.free.fs.core.domain.dto.LoginBody;
 import com.free.fs.core.domain.User;
+import com.free.fs.core.domain.dto.UpdatePasswordDTO;
 import com.free.fs.core.domain.dto.UserDTO;
 import com.mybatisflex.core.service.IService;
 
@@ -27,4 +28,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean addUser(UserDTO dto);
+
+    /**
+     * 修改密码
+     *
+     * @param dto
+     * @return
+     */
+    boolean updatePassword(UpdatePasswordDTO dto);
 }

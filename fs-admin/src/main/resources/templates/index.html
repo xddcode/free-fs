@@ -41,6 +41,9 @@
                 <cite th:utext="${loginUser.nickname}"/>
             </a>
             <dl class="layui-nav-child">
+                <dd lay-unselect><a id="updatePwd"><i
+                        class="layui-icon layui-icon-logout"></i>修改密码</a>
+                </dd>
                 <dd lay-unselect><a href="javascript:void(0)" id="logout" data-url="/logout"><i
                         class="layui-icon layui-icon-logout"></i>退出</a>
                 </dd>
@@ -74,7 +77,8 @@
                         class="layui-btn layui-btn-sm layui-btn-normal icon-btn"><i class="layui-icon">&#xe681;</i>上传文件
                 </button>
                 <button sa:hasPermission="file:upload" id="btnUploadSharding"
-                        class="layui-btn layui-btn-sm layui-btn-normal icon-btn layui-btn-disabled"><i class="layui-icon">&#xe681;</i>分片上传
+                        class="layui-btn layui-btn-sm layui-btn-normal icon-btn layui-btn-disabled"><i
+                        class="layui-icon">&#xe681;</i>分片上传
                 </button>
                 <button style="display: none" id="btnDilaog" class="layui-btn layui-btn-sm layui-btn-primary icon-btn">
                     <i class="layui-icon">&#xe634;</i>弹窗选择
@@ -232,6 +236,38 @@
         <div class="layui-form-item form-text-right">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="moveSubmitBtn">立即提交</button>
             <button type="button" class="layui-btn layui-btn-primary" id="moveCloseBtn">取消</button>
+        </div>
+    </form>
+</script>
+
+<!--修改密码表单模态框-->
+<script type="text/html" id="updatePwdModel">
+    <form class="layui-form my-form" id="updatePwdForm" lay-filter="updatePwdForm">
+        <input type="hidden" name="id" th:value="${loginUser.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">原密码</label>
+            <div class="layui-input-block">
+                <input class="layui-input" name="password" placeholder="请输出原密码" autocomplete="off"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-block">
+                <input class="layui-input" name="newPassword" placeholder="请输入新密码" autocomplete="off"
+                       lay-verType="tips" lay-verify="required|password" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-block">
+                <input class="layui-input" name="confirmPassword" placeholder="请输入确认密码" autocomplete="off"
+                       lay-verType="tips" lay-verify="required|password|confirmPassword" required/>
+            </div>
+        </div>
+        <div class="layui-form-item form-text-right">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="submitUpdatePwd">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="closeUpdatePwdBtn">取消</button>
         </div>
     </form>
 </script>

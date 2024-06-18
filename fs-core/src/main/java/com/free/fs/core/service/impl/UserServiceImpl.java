@@ -7,6 +7,7 @@ import com.free.fs.common.exception.BusinessException;
 import com.free.fs.core.domain.User;
 import com.free.fs.core.domain.UserRole;
 import com.free.fs.core.domain.dto.LoginBody;
+import com.free.fs.core.domain.dto.UpdatePasswordDTO;
 import com.free.fs.core.domain.dto.UserDTO;
 import com.free.fs.core.mapper.UserMapper;
 import com.free.fs.core.service.RoleService;
@@ -17,6 +18,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.free.fs.core.domain.table.UserTableDef.USER;
 
@@ -38,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean doLogin(LoginBody body) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.where(USER.USERNAME.ge(body.getUsername()));
+        queryWrapper.where(USER.USERNAME.eq(body.getUsername()));
         User user = this.getOne(queryWrapper);
         if (user == null) {
             throw new BusinessException("用户不存在");
@@ -50,6 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return true;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean addUser(UserDTO dto) {
         long count = this.count(new QueryWrapper().where(USER.USERNAME.eq(dto.getUsername())));
@@ -70,5 +73,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException("用户新增失败");
         }
         return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updatePassword(UpdatePasswordDTO dto) {
+        if (dto.getId() == 1) {
+            throw new BusinessException("ADMIN用户密码不允许修改");
+        }
+        User user = this.getById(dto.getId());
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        if (!SaSecureUtil.sha256(dto.getPassword()).equals(user.getPassword())) {
+            throw new BusinessException("原密码不正确");
+        }
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            throw new BusinessException("两次密码不一致");
+        }
+        user.setPassword(SaSecureUtil.sha256(dto.getNewPassword()));
+        return this.updateById(user);
     }
 }

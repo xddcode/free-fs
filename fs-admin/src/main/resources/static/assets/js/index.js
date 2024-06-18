@@ -30,6 +30,19 @@ layui.config({
         }
     };
 
+    form.verify({
+        password: function (value) {
+            // 6到12位
+            if (!/^[\S]{6,12}$/.test(value)) {
+                return '密码必须6到12位，不能包含空格';
+            }
+        },
+        confirmPassword: function (value) {
+            if ($('input[name=newPassword]').val() !== value)
+                return '两次密码输入不一致！';
+        }
+    });
+
     // 渲染文件列表
     function renderList(dirIds) {
         if (!dirIds) {
@@ -59,7 +72,6 @@ layui.config({
         url: '/file',
         accept: 'file',
         multiple: true,
-        size: 1024 * 20,
         data: {
             dirIds: function () {
                 return $('#tvFPId').text();
@@ -134,6 +146,43 @@ layui.config({
         });
     }
 
+    //修改密码
+    $('#updatePwd').click(function () {
+        layer.open({
+            type: 1,
+            area: ['450px', '300px'],
+            title: '修改密码',
+            content: $("#updatePwdModel").html(),
+            closeBtn: 2,
+            success: function (layero, index) {
+                //重命名表单提交
+                form.on('submit(submitUpdatePwd)', function (data) {
+                    layer.load(2);
+                    $.ajax({
+                        url: '/password',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data.field),
+                        dataType: 'json',
+                        success: function (res) {
+                            layer.closeAll('loading');
+                            if (200 === res.code) {
+                                layer.close(index);
+                                layer.msg(res.msg, {icon: 1});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }
+                    });
+                    return false;
+                });
+                //重命名表单取消按钮事件
+                $('#closeUpdatePwdBtn').click(function () {
+                    layer.close(index);
+                });
+            }
+        });
+    })
 
     $('#btnUploadSharding').click(function () {
         //TODO 分片上传暂不开发，还有问题

@@ -25,6 +25,7 @@ public class IndexController {
             return "redirect:/login";
         }
         Long userId = StpUtil.getLoginIdAsLong();
+        System.out.println(userId);
         User loginUser = userService.getById(userId);
         // 登录用户信息
         model.addAttribute("loginUser", loginUser);
