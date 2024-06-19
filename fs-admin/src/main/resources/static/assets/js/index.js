@@ -82,53 +82,14 @@ layui.config({
         },
         before: function (obj) {
             layer.load(2);
-            /*         proIndex = layer.open({
-                         type: 1,
-                         title: "上传进度",
-                         //closeBtn: 0, //不显示关闭按钮
-                         skin: 'layui-layer-demo',
-                         area: ['420px', 'auto'],
-                         content: '' +
-                             '<div style="margin: 10px 20px;">' +
-                             '   <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadfile">' +
-                             '       <div class="layui-progress-bar" lay-percent="0%" id="uploadfile"></div>' +
-                             '   </div>' +
-                             '   <p>' +
-                             '       <span id="uploadfilemsg">正在上传</span>' +
-                             '   </p>' +
-                             '</div>',
-                         success: function (layero, index) {
-                             layer.setTop(layero); //重点2
-                         }
-                     });
-                     element.render();*/
-        }, /*progress: function (n, elem) {
-            //查询上传进度
-            var intervalId = setInterval(function () {
-                $.get('/file/percent', {}, function (data) {
-                    var percent = data;
-                    if (percent >= 100) {
-                        clearInterval(intervalId);
-                        percent = 100;
-                    }
-                    $("#uploadfile").attr("lay-percent", data + '%');
-                    element.render();
-                });
-            }, 100);
-        },*/
+        },
         done: function (res, index, upload) {
             layer.closeAll('loading');
             if (res.code !== 200) {
                 layer.msg(res.msg, {icon: 2});
-                // layer.close(proIndex);
-                // $("#uploadfilemsg").text("上传失败");
             } else {
                 layer.msg(res.msg, {icon: 1});
-                //$("#uploadfilemsg").text("上传完成");
-                // layer.close(proIndex);
                 renderList();
-                //重置进度条
-                //resetPercent();
             }
         },
         error: function () {
@@ -137,7 +98,6 @@ layui.config({
             layer.msg('上传失败', {icon: 2});
         }
     });
-
 
     //重置进度条
     function resetPercent() {
@@ -461,6 +421,8 @@ layui.config({
         var y = e.clientY + 5;
 
         if (fileItem.length > 0) {
+            //移除空白处右键菜单
+            contextMenu.remove();
             //再次判断是文件夹还是文件
             var isDir = fileItem.data('dir');
             if (isDir) {
@@ -468,8 +430,10 @@ layui.config({
             } else {
                 showFileContextMenu(targetElement, e);
             }
-
         } else {
+            //空白处右键，隐藏文件上的下拉菜单
+            $('#copy').attr('data-clipboard-text', '');
+            $('#dropdownFile').removeClass('dropdown-opened');
             showEmptyAreaContextMenu(x, y, e);
         }
     });
@@ -552,7 +516,6 @@ layui.config({
                 });
             }
         }], x, y, e)
-
     }
 
     //获取目录
