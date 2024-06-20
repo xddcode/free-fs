@@ -24,7 +24,7 @@ layui.use(['jquery', 'layer', 'form'], function () {
         obj.field.rememberMe = !!obj.field.remember;
         layer.load(2);
         $.ajax({
-            url: 'login',
+            url: ctxPath + 'login',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(obj.field),
@@ -52,7 +52,7 @@ layui.use(['jquery', 'layer', 'form'], function () {
     // 注册表单提交
     form.on('submit(regSubmit)', function (obj) {
         layer.load(2);
-        $.post('register', obj.field, function (res) {
+        $.post(ctxPath + 'register', obj.field, function (res) {
             if (200 === res.code) {
                 layer.msg(res.msg, {icon: 1, time: 1500}, function () {
                     location.replace('/login');
@@ -69,7 +69,7 @@ layui.use(['jquery', 'layer', 'form'], function () {
     form.on('submit(informationPassSubmit)', function (obj) {
         layer.load(2);
         obj.field.avatar = $('#avatar').attr('src');
-        $.post('/informationPass', obj.field, function (res) {
+        $.post(ctxPath + 'informationPass', obj.field, function (res) {
             if (200 === res.code) {
                 layer.msg(res.msg, {icon: 1, time: 1500}, function () {
                     location.replace('/index');

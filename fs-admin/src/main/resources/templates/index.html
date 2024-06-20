@@ -10,7 +10,9 @@
     <link rel="stylesheet" th:href="@{/assets/modules/dtree/font/dtreefont.css}">
     <link rel="stylesheet" th:href="@{/assets/css/common.css}">
 </head>
-
+<script th:inline="javascript" type="text/javascript">
+    var ctxPath  = [[@{/}]];
+</script>
 <body>
 
 <div class="header">
@@ -44,7 +46,7 @@
                 <dd lay-unselect><a id="updatePwd"><i
                         class="layui-icon layui-icon-logout"></i>修改密码</a>
                 </dd>
-                <dd lay-unselect><a href="javascript:void(0)" id="logout" data-url="/logout"><i
+                <dd lay-unselect><a href="javascript:void(0)" id="logout" data-url="logout"><i
                         class="layui-icon layui-icon-logout"></i>退出</a>
                 </dd>
             </dl>

@@ -1,5 +1,5 @@
 layui.config({
-    base: '../assets/modules/'
+    base: 'assets/modules/'
 }).extend({
     contextMenu: 'contextMenu',
     dtree: 'dtree/dtree'
@@ -49,7 +49,7 @@ layui.config({
             dirIds = $('#tvFPId').text();
         }
         layer.load(2);
-        $.get('/file', {
+        $.get(ctxPath + 'file', {
             dirIds: dirIds
         }, function (res) {
             layer.closeAll('loading');
@@ -69,7 +69,7 @@ layui.config({
     var proIndex;
     upload.render({
         elem: '#btnUpload',
-        url: '/file',
+        url: ctxPath + 'file',
         accept: 'file',
         multiple: true,
         data: {
@@ -101,7 +101,7 @@ layui.config({
 
     //重置进度条
     function resetPercent() {
-        $.get('/file/percent/reset', {}, function (res) {
+        $.get(ctxPath + 'file/percent/reset', {}, function (res) {
             console.log("重置进度条");
         });
     }
@@ -270,7 +270,7 @@ layui.config({
                     width: "86%",
                     height: "500",
                     method: "get",
-                    url: "/file/getTree",
+                    url: ctxPath + "file/getTree",
                     record: true,
                     toolbar: true,
                     toolbarShow: [],
@@ -326,7 +326,7 @@ layui.config({
                                         btn: ['想好了', '再想想']
                                     }, function () {
                                         layer.load(2);
-                                        $.post('/file/deleteByIds', {id: node.nodeId}, function (res) {
+                                        $.post(ctxPath + 'file/deleteByIds', {id: node.nodeId}, function (res) {
                                             layer.closeAll('loading');
                                             if (res.code === 200) {
                                                 layer.msg(res.msg, {icon: 1});
@@ -344,7 +344,7 @@ layui.config({
                                         btn: ['确认', '取消']
                                     }, function () {
                                         layer.load(2);
-                                        $.post('/file/deleteByIds', {id: node.nodeId}, function (res) {
+                                        $.post(ctxPath + 'file/deleteByIds', {id: node.nodeId}, function (res) {
                                             layer.closeAll('loading');
                                             if (res.code === 200) {
                                                 layer.msg(res.msg, {icon: 1});
@@ -493,7 +493,7 @@ layui.config({
                             var name = $('#folderName').val();
                             var dirIds = $('#tvFPId').text();
                             layer.load(2);
-                            $.post('/file/addFolder', {
+                            $.post(ctxPath + 'file/addFolder', {
                                 name: name,
                                 dirIds: dirIds
                             }, function (res) {
@@ -520,7 +520,7 @@ layui.config({
 
     //获取目录
     function getDirs(id) {
-        $.get('/file/getDirs', {id: id}, function (res) {
+        $.get(ctxPath + 'file/getDirs', {id: id}, function (res) {
             $('#tvFP').text(res.data.dirs === '' ? '/' : res.data.dirs);
             $('#tvFPId').text(res.data.dirIds === '' ? '/' : res.data.dirIds);
             renderList(res.data.dirIds);
@@ -580,7 +580,7 @@ layui.config({
                     obj: $(layero).find("#moveDirTree"),
                     width: "86%",
                     height: "500",
-                    url: "/file/getDirTree",
+                    url: ctxPath + "file/getDirTree",
                     method: "get",
                     checkbar: true,
                     record: true,
@@ -633,7 +633,7 @@ layui.config({
                         "parentId": params[0].nodeId
                     };
                     layer.load(2);
-                    $.post('/file/move', jsonStr, function (res) {
+                    $.post(ctxPath + 'file/move', jsonStr, function (res) {
                         layer.closeAll('loading');
                         if (res.code === 200) {
                             layer.close(index);
@@ -659,7 +659,7 @@ layui.config({
 
     //下载
     $('#download').click(function () {
-        window.location.href = "/file/downLoad?url=" + mUrl;
+        window.location.href = ctxPath + "file/downLoad?url=" + mUrl;
     });
 
     //重命名
@@ -686,7 +686,7 @@ layui.config({
                 form.on('submit(editTreeNodeBtn)', function (data) {
                     layer.load(2);
                     $.ajax({
-                        url: '/file/updateByName',
+                        url: ctxPath + 'file/updateByName',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(data.field),
@@ -723,7 +723,7 @@ layui.config({
     $('#del').click(function () {
         layer.confirm('确定要删除此文件吗？', function () {
             layer.load(2);
-            $.post('/file/deleteFile', {
+            $.post(ctxPath + 'file/deleteFile', {
                 url: mUrl
             }, function (res) {
                 layer.closeAll('loading');
