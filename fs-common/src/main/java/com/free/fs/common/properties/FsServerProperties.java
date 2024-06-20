@@ -25,22 +25,22 @@ public class FsServerProperties {
     /**
      * 本地上传配置
      */
-    LocalProperties local = new LocalProperties();
+    private LocalProperties local;
 
     /**
      * 七牛配置
      */
-    QiniuProperties qiniu = new QiniuProperties();
+    private QiniuProperties qiniu;
 
     /**
      * oss配置
      */
-    AliyunOssProperties aliyunOss = new AliyunOssProperties();
+    private AliyunOssProperties aliyunOss;
 
     /**
      * minio配置
      */
-    MinioProperties minio = new MinioProperties();
+    private MinioProperties minio;
 
 
     @Data
@@ -63,8 +63,6 @@ public class FsServerProperties {
         private String endpoint;
 
         private String bucket;
-
-        private String path;
     }
 
     @Data
