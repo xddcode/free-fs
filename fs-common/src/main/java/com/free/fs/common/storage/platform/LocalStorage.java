@@ -118,7 +118,10 @@ public class LocalStorage implements IFileStorage {
     public String getUrl(String objectName) {
         // 如果配置了nginxUrl则使用nginxUrl
         if (StringUtil.isNotBlank(nginxUrl)) {
-            return nginxUrl + objectName;
+            if (nginxUrl.endsWith("/")) {
+                return nginxUrl + objectName;
+            }
+            return nginxUrl + "/" + objectName;
         }
         // 否则使用endPoint, 一般是http://本机ip:本机port/mapping/fileName
         return endPoint + CommonConstant.LOCAL_DIRECTORY_MAPPING + objectName;
