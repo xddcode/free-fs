@@ -11,6 +11,7 @@ import com.mybatisflex.core.mybatis.FlexConfiguration;
 import com.mybatisflex.core.query.QueryColumnBehavior;
 import com.mybatisflex.spring.boot.ConfigurationCustomizer;
 import com.mybatisflex.spring.boot.MyBatisFlexCustomizer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,15 +24,16 @@ import org.springframework.context.annotation.Configuration;
  * @Author: hao.ding@insentek.com
  * @Date: 2024/1/24 15:52
  */
+@Slf4j
 @Configuration
 @MapperScan("${mybatis-flex.mapper-package}")
 public class MybatisFlexAutoConfigure implements ConfigurationCustomizer, MyBatisFlexCustomizer {
 
-    @Value("${mybatis-flex.audit_enable}")
-    private Boolean enableAudit = false;
+    @Value("${mybatis-flex.audit_enable:false}")
+    private Boolean enableAudit;
 
-    @Value("${mybatis-flex.sql_print}")
-    private Boolean sqlPrint = false;
+    @Value("${mybatis-flex.sql_print:false}")
+    private Boolean sqlPrint;
 
     static {
         QueryColumnBehavior.setIgnoreFunction(QueryColumnBehavior.IGNORE_BLANK);

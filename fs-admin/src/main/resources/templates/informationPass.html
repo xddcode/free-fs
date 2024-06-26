@@ -10,7 +10,9 @@
     <link rel="stylesheet" th:href="@{/assets/css/login.css}">
 </head>
 <body>
-
+<script th:inline="javascript" type="text/javascript">
+    var ctxPath  = [[@{/}]];
+</script>
 <div class="login-wrapper layui-anim layui-anim-scale layui-hide">
     <form class="layui-form">
         <h2>请完善个人信息</h2>
