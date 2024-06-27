@@ -28,7 +28,7 @@
         <skipTests>true</skipTests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.3.0</spring-boot.version>
-        <mybatis-flex.version>1.9.2</mybatis-flex.version>
+        <mybatis-flex.version>1.9.3</mybatis-flex.version>
         <HikariCP.version>5.0.1</HikariCP.version>
         <hutool.version>5.8.28</hutool.version>
         <fastjson2.version>2.0.51</fastjson2.version>
