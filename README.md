@@ -19,7 +19,8 @@
 #### 源码链接：
 
 - Gitee：[https://gitee.com/xddcode/free-fs](https://gitee.com/xddcode/free-fs)
-- Github：[https://github.com/xddcode/free-fs](https://github.com/xddcode/free-fs)
+- GitHub：[https://github.com/xddcode/free-fs](https://github.com/xddcode/free-fs)
+- GitCode：[https://gitcode.com/Fr2ed/free-fs](https://gitcode.com/Fr2ed/free-fs)
 
 #### SpringBoot2.x jdk1.8 版本后续不再维护，如需使用请切换至[jdk1.8](https://gitee.com/xddcode/free-fs/tree/jdk1.8/)分支
 
