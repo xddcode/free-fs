@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.free.fs.core.domain.User;
 import com.free.fs.core.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
 
     private final UserService userService;
+
+    @Value("${fs.preview.endpoint}")
+    private String previewEndpoint;
 
     /**
      * 主页
@@ -29,6 +33,8 @@ public class IndexController {
         User loginUser = userService.getById(userId);
         // 登录用户信息
         model.addAttribute("loginUser", loginUser);
+        //向前端传递kkfileview的部署服务地址
+        model.addAttribute("previewEndpoint", previewEndpoint);
         return "index";
     }
 

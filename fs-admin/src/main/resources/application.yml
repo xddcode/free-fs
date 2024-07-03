@@ -66,7 +66,7 @@ mybatis-flex:
 fs:
   files-server:
     # 文件上传模式，local 本地，qiniu 七牛云，aliyunOss 阿里云OSS，minio MinIO
-    type: minio
+    type: local
     local:
       # 本地存储目录
       directory: E:/data/free-fs/upload
@@ -82,17 +82,19 @@ fs:
       path: xxxxxxxxxxxxxxxxxxx
     #aliyunOss配置
     aliyunOss:
-      accessKey: xxxxxxxxxxx
-      secretKey: xxxxxxxxxxxx
-      endPoint: oss-cn-beijing.aliyuncs.com
-      bucket: xxxxxxx
-      path: xxxxxxxxx
+      accessKey: xxxxxxxxxxxxxxxxxxxxx
+      secretKey: xxxxxxxxxxxxxxxxxxxx
+      endPoint: oss-cn-hangzhou.aliyuncs.com
+      bucket: free-fs
     #minio配置
     minio:
       accessKey: dfgfdg23423dfgdfgfd211
       secretKey: dinghao2222111333@!
       endpoint: http://127.0.0.1:9000
       bucket: test
+  #文件预览地址，这里配置的是kkfileview的部署地址，https://kkfileview.keking.cn/
+  preview:
+    endpoint: http://127.0.0.8888/onlinePreview
 
 # 第三方登录配置
 justauth:

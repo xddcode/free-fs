@@ -556,7 +556,11 @@ layui.config({
     $('#open').click(function () {
         //使用kkFileView预览文件
         var url = mUrl;
-        window.open('https://fs.elites.chat/preview/onlinePreview?url=' + encodeURIComponent(Base64.encode(url)));
+        if (typeof previewEndpoint === 'undefined' || previewEndpoint === null || previewEndpoint.trim() === '') {
+            layer.msg("无法预览，未配置kkFileView的预览地址！", {icon: 5});
+            return;
+        }
+        window.open(previewEndpoint + '?url=' + encodeURIComponent(Base64.encode(url)));
     });
 
     //移动按钮点击事件
