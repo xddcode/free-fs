@@ -26,7 +26,7 @@
 
 #### Vue3版本正在开发中......(敬请期待)
 
-#### 开发文档： [文档](https://xddcode.github.io/fs-doc/)
+#### 在线文档： [前往在线文档](https://doc.elites.chat)
 
 #### 体验地址： [https://fs.elites.chat](https://fs.elites.chat)
 
