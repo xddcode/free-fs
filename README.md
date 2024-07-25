@@ -13,18 +13,24 @@
 </div>
 
 ##  📖 项目简介
+✨Free-Fs 开源文件管理系统：基于 SpringBoot3.x + MyBatis Flex + MySQL + Sa-Token + Layui 等搭配阿里云Oss、Minio、七牛云等各种云存储实现的云存储管理系统。
 ✨Free-Fs 开源文件管理系统：基于 SpringBoot3.x + MyBatis Flex + MySQL + Sa-Token + Layui 等搭配阿里云OSS、Minio、七牛云等各种云存储实现的云存储管理系统。
 包含文件上传、删除、在线预览、云资源列表查询、下载、文件移动、重命名、目录管理、登录、注册、以及权限控制等功能。
 
 #### 源码链接：
 
 - Gitee：[https://gitee.com/xddcode/free-fs](https://gitee.com/xddcode/free-fs)
-- Github：[https://github.com/xddcode/free-fs](https://github.com/xddcode/free-fs)
+- GitHub：[https://github.com/xddcode/free-fs](https://github.com/xddcode/free-fs)
+- GitCode：[https://gitcode.com/Fr2ed/free-fs](https://gitcode.com/Fr2ed/free-fs)
+
 #### SpringBoot3.x版本
+
+#### SpringBoot2.x jdk1.8 版本后续不再维护，如需使用请切换至[jdk1.8](https://gitee.com/xddcode/free-fs/tree/jdk1.8/)分支
 
 - 切换至springboot3分支即可
 #### Vue3版本正在开发中......(敬请期待)
-#### 开发文档： [文档](https://xddcode.github.io/fs-doc/)
+
+#### 在线文档： [前往在线文档](https://doc.elites.chat)
 
 #### 体验地址： [https://fs.elites.chat](https://fs.elites.chat)
 
@@ -39,15 +45,20 @@
 
 后端：
 
+- 核心框架：Spring Boot 3.3.0
+- ORM: MyBatis Flex 1.9.3
+- 数据库：MySQL 8.0+
+- 权限安全控制：Sa-Token 1.38.0
 - 核心框架：Spring Boot 2.6.6
 - orm: MyBatis Plus
 - 数据库：MySQL 8.0
 - 权限安全控制：Sa-Token
 - 本地缓存：Ehcache
+- 存储平台支持：本地存储、Qiniu云、阿里云Oss、Minio、腾讯云Cos、AWS S3
 - 文件上传：本地、七牛云、阿里云OSS
 - 第三方登录：JustAuth
 - 模板渲染：Thymeleaf
-- 
+-
 前端：
 
 - Layui v2.5.5
@@ -63,6 +74,7 @@
 ![](https://dh_free.gitee.io/images/img/1616399886.png "1616399886.png")
 
 ##  💻 项目开发环境
+- 操作系统：Windows 11、MacOS
 - 操作系统：Windows 11、macOS
 - 构建工具：Maven 3.8.1
 - 开发工具：Intellij IDEA
@@ -70,40 +82,20 @@
 - 接口测试工具：Postman
 - 压力测试工具：Apache JMeter
 - 版本控制工具：Github、Gitee
+- Java 版本：17+
 - Java 版本：8+
 - idea开发插件: lombok
 
+##  📁 项目模块结构说明
+
 ##  📁 项目结构
 ```
-- sql                         项目数据库文件
-- src
-  - main
-    - java
-    - com.free.fs
-      - common                公共模块
-        - annotation          自定义注解
-        - aop                 自定义切面
-        - config              系统基本配置，web跨域和七牛云配置
-        - constant            系统常量
-        - domain              公共领域对象
-        - exception           全局异常处理和自定义异常
-        - properties          资源读取类
-        - utils               系统工具类
-      - controller            控制层
-      - mapper                mapper接口层
-      - model                 实体模型层
-      - service               业务接口
-        -impl                 业务接口实现
-      - xxApplication.java    启动类
-  - resources
-    - mapper                  mybatis mapper.xml
-    - static                  静态资源包存放js css 第三方插件
-    - templates               静态页面 html
-    - application.yml         配置文件
-    - application-dev.yml     开发环境配置
-    - application-pro.yml     生产环境配置
-
+  - fs-admin              web管理模块，主要包括对外的api和web配置
+  - fs-common             公共模块，包括自定义注解，全局异常处理，公共对象，ORM配置，存储平台sdk的封装，工具类等
+  - fs-core               核心模块，包括业务逻辑处理，数据库操作，存储操作等
+  - sql                   项目SQL脚本文件
 ```
+
 ##  👀 界面预览
 登录页：
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/141545_ecc0619a_4951941.png "login.png")
@@ -123,9 +115,6 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/141929_f5dc52ec_4951941.png "move.png")
 删除文件：
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/141941_f77cd13e_4951941.png "delete.png")
-
-##  ❤ 特别鸣谢
-- 感谢 [synchronized](https://eleadmin.com/) 大佬提供的前端模板
 
 ##  🔗 友情链接
 - [EleAdmin](https://eleadmin.com/) 通用型后台管理模板，界面美观、开箱即用拥有丰富的扩展组件和模板页面，适合各类中后台应用。
