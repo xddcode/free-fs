@@ -139,5 +139,7 @@
 - **加之前请动动小手点一个star，您的支持是我长期维护的动力！**
   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/145547_114a3b71_4951941.jpeg "wechat.jpg")
 
-## 支持捐赠
-![输入图片说明](fs-admin/src/main/resources/static/assets/img/pay.jpg)
+## ❤ 捐赠支持
+如果你认为free-fs项目可以为你提供帮助，或者给你带来方便和灵感，或者你认同这个项目，可以为我的付出赞助一下哦！
+
+<img src="fs-admin/src/main/resources/static/assets/img/pay.jpg" style="width:400px;height:500px;" alt="描述文字">
