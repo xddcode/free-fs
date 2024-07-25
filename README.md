@@ -139,3 +139,5 @@
 - **加之前请动动小手点一个star，您的支持是我长期维护的动力！**
   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0317/145547_114a3b71_4951941.jpeg "wechat.jpg")
 
+## 支持捐赠
+![输入图片说明](fs-admin/src/main/resources/static/assets/img/pay.jpg)
